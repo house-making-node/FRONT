@@ -11,7 +11,7 @@ const NavbarContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   background-color: white;
-  padding: 20px;
+  padding: 10px;
   width: 100vw;
   z-index: 1000;
 `;

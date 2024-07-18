@@ -1,17 +1,17 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./component/header/Navbar";
-import Main1 from "./component/main/main1";
-import Main2 from "./component/main/main2";
-import Main3 from "./component/main/main3";
+import MainPage from "./page/MainPage";
+import QuestionBoard from "./component/inquiry/questionBoard";
 
 function App() {
   return (
     <div>
       <BrowserRouter>
         <Navbar />
-        <Main1 />
-        <Main2 />
-        <Main3 />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/faq" element={<QuestionBoard />} />
+        </Routes>
       </BrowserRouter>
     </div>
   );
