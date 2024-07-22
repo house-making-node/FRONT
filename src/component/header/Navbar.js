@@ -32,24 +32,36 @@ const NavItem = styled.span`
   color: ${(props) => (props.selected ? "#CA904B" : "black")};
 `;
 
+const NavItemWithDropdown = styled(NavItem)`
+  &::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 105%;
+    background-color: #ca904b;
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    transform: scaleX(
+      ${(props) => (props.selected || props.isHovered ? 1 : 0)}
+    );
+    transition: transform 0.3s ease;
+  }
+`;
+
 const SubNav = styled.ul`
   position: absolute;
   top: 100%;
   left: 0;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: none;
+  display: ${(props) => (props.isVisible ? "flex" : "none")};
   list-style-type: none;
   padding: 0;
-  margin: 5px 0;
+  margin-top: 10px;
   min-width: 300px;
+  flex-direction: row;
   justify-content: center;
-  font-weight: 400;
-  font-size: 10px;
-  ${NavItem}:hover & {
-    display: flex;
-    flex-direction: row;
-  }
   right: ${(props) => (props.rightAligned ? "0" : "auto")};
   left: ${(props) => (props.rightAligned ? "auto" : "0")};
 `;
@@ -72,10 +84,22 @@ const NavItemsContainer = styled.div`
 function Navbar() {
   const navigate = useNavigate();
   const [selectedNavItem, setSelectedNavItem] = useState(null);
+  const [visibleSubNav, setVisibleSubNav] = useState(null);
+  const [hoveredNavItem, setHoveredNavItem] = useState(null);
 
   const handleNavItemClick = (path, item) => {
     setSelectedNavItem(item);
     navigate(path);
+  };
+
+  const handleMouseEnter = (item) => {
+    setVisibleSubNav(item);
+    setHoveredNavItem(item);
+  };
+
+  const handleMouseLeave = () => {
+    setVisibleSubNav(null);
+    setHoveredNavItem(null);
   };
 
   return (
@@ -88,12 +112,16 @@ function Navbar() {
         }}
       />
       <NavItemsContainer>
-        <NavItem
-          selected={selectedNavItem === "매거진"}
-          onClick={() => setSelectedNavItem("매거진")}
+        <NavItemWithDropdown
+          selected={
+            selectedNavItem === "자취레터" || selectedNavItem === "공유레터"
+          }
+          onMouseEnter={() => handleMouseEnter("매거진")}
+          onMouseLeave={handleMouseLeave}
+          isHovered={hoveredNavItem === "매거진"}
         >
           매거진
-          <SubNav>
+          <SubNav isVisible={visibleSubNav === "매거진"}>
             <SubItem
               onClick={() => handleNavItemClick("/homeletter", "자취레터")}
             >
@@ -105,7 +133,7 @@ function Navbar() {
               공유레터
             </SubItem>
           </SubNav>
-        </NavItem>
+        </NavItemWithDropdown>
         <NavItem
           selected={selectedNavItem === "인테리어 컨설팅"}
           onClick={() => handleNavItemClick("/consulting", "인테리어 컨설팅")}
@@ -120,20 +148,27 @@ function Navbar() {
         >
           로그인
         </NavItem>
-        <NavItem
-          selected={selectedNavItem === "문의"}
-          onClick={() => setSelectedNavItem("문의")}
+        <NavItemWithDropdown
+          selected={
+            selectedNavItem === "FAQ 게시판" ||
+            selectedNavItem === "1대1 문의하기"
+          }
+          onMouseEnter={() => handleMouseEnter("문의")}
+          onMouseLeave={handleMouseLeave}
+          isHovered={hoveredNavItem === "문의"}
         >
           문의
-          <SubNav rightAligned>
-            <SubItem onClick={() => handleNavItemClick("/faq", "문의")}>
+          <SubNav rightAligned isVisible={visibleSubNav === "문의"}>
+            <SubItem onClick={() => handleNavItemClick("/faq", "FAQ 게시판")}>
               FAQ 게시판
             </SubItem>
-            <SubItem onClick={() => handleNavItemClick("/question", "문의")}>
+            <SubItem
+              onClick={() => handleNavItemClick("/question", "1대1 문의하기")}
+            >
               1대1 문의하기
             </SubItem>
           </SubNav>
-        </NavItem>
+        </NavItemWithDropdown>
       </NavItemsContainer>
     </NavbarContainer>
   );

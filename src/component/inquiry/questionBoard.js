@@ -5,13 +5,13 @@ import closeBtn from "../img/closeBtn.png";
 import { useNavigate } from "react-router-dom";
 
 const Board = styled.div`
-  width: 100vw;
-  position: absolute;
+  //width: 100vw;
+  //position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 140px;
-  justify-content: flex-start;
+  //justify-content: space-between;
 `;
 const Wrapper = styled.div`
   display: flex;
