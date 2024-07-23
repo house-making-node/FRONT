@@ -20,6 +20,7 @@ const Button = styled.button`
     height: 68px;
     padding: 10px;
     background-color: #CA904B69;
+;
     border: none;
     color: white;
     border-radius: 6px;
@@ -27,6 +28,7 @@ const Button = styled.button`
     margin-top: 121px;
     font-size: 20px;
     font-weight: 400;
+    margin-left: -18px;
 
     &:hover {
         background-color: #CA904B72;
@@ -39,14 +41,13 @@ const SignupTitle = styled.h1`
    margin-top: 150px;
    font-weight: 400;
    color: black;
-   margin-bottom: 138px;
+   margin-bottom: 49px;
 `;
 
 const Description = styled.div`
    color: black;
    font-size: 20px;
    text-align: center;
-   margin-top: 48px;
 `;
 
 const Story = styled.div`
@@ -56,6 +57,7 @@ const Story = styled.div`
    margin-top: 132px;
    width: 812px;
    text-align: left;
+   margin-left: 30px;
    line-height: 1.8; /* 줄 간격을 조정하여 텍스트의 가독성을 높임 */
 
    & br {
@@ -81,7 +83,7 @@ const HouseImage = styled.img`
 const ShareLetter1 = styled.img`
   width: 332px; /* Adjust the size as needed */
   height: 293px;
-  margin-top: 150px;
+  margin-top: 60px;
   margin-bottom: 16px;
   margin-right: 152px;
 `;
@@ -89,13 +91,13 @@ const ShareLetter1 = styled.img`
 const ShareLetter2 = styled.img`
   width: 332px; /* Adjust the size as needed */
   height: 293px;
-  margin-top: 150px;
+  margin-top: 60px;
   margin-bottom: 16px;
 `;
 
 
 const HorizontalLine = styled.hr`
-  width: 100%;
+  width: 818px;
   border: 0;
   height: 2px;
   background: #b3b3b3;
@@ -103,30 +105,44 @@ const HorizontalLine = styled.hr`
 `;
 
 const ImageWrapper = styled.div`
-  text-align: center;
-  margin: 0; /* Adjust the margin between images */
+  text-align: left; /* Adjust the margin between images */
+  font-size: 20px;
+  margin-left: -50px;
 `;
 
 const ImageDescription = styled.div`
   margin-top: 16px;
+  font-size: 20px;
+  color: black;
+  width: 298px;
+`;
+
+const ImageDay = styled.div`
+  margin-top: 18px;
   font-size: 16px;
   color: black;
 `;
+
 
 
 const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px; /* Adjust the margin to reduce space between text and images */
+  padding-left: 95px;
+ /* Adjust the margin to reduce space between text and images */
 `;
 
 const ShareLetterStory = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    navigate('/share-letter-story');
+  const handleButtonClick1 = () => {
+    navigate('/share-letter-send');
+  };
+
+  const handleButtonClick2 = () => {
+    navigate('/share-letter-save');
   };
 
   return (
@@ -154,16 +170,19 @@ const ShareLetterStory = () => {
         <ImageContainer>
         <ImageWrapper>
         <ShareLetter1 src={shareletter1} alt="ShareLetter1"/>
-        <ImageDescription>이미지1</ImageDescription>
+        <ImageDescription>일주일에 두 번 0원 쓰기, 지출 감소에 효과가 있을까 ?</ImageDescription>
+        <ImageDay>2024년 05월 21일</ImageDay>
+        <Button onClick={handleButtonClick1}>의견 보내기</Button>
         </ImageWrapper>
         <ImageWrapper>
         <ShareLetter2 src={shareletter2} alt="ShareLetter2"/>
-        <ImageDescription>이미지1</ImageDescription>
+        <ImageDescription>식물 덕후가 알려주는 키우기 좋은 식물들 🪴
+        <ImageDay>2024년 05월 22일</ImageDay>
+        </ImageDescription>
+        <Button onClick={handleButtonClick2}>공유레터 저장하기</Button>
         </ImageWrapper>
         </ImageContainer>
       </MessageContainer>
-
-      <Button onClick={handleButtonClick}>자취레터 보러가기</Button>
     </PageContainer>
   );
 };
