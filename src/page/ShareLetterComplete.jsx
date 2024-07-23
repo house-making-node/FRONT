@@ -23,7 +23,7 @@ const Button = styled.button`
     border-radius: 6px;
     cursor: pointer;
     margin-top: 121px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
 
     &:hover {
@@ -33,7 +33,7 @@ const Button = styled.button`
 
 const SignupTitle = styled.h1`
    color: #7d5959;
-   font-size: 30px; 
+   font-size: 20px; 
    margin-top: 20px;
    font-weight: 400;
    color: black;
@@ -42,8 +42,9 @@ const SignupTitle = styled.h1`
 
 const Description = styled.div`
    color: black;
-   font-size: 25px;
+   font-size: 20px;
    text-align: center;
+   font-weight: 260;
 `;
 
 const MessageContainer = styled.div`

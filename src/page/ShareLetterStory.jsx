@@ -26,7 +26,7 @@ const Button = styled.button`
     border-radius: 6px;
     cursor: pointer;
     margin-top: 121px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
     margin-left: -18px;
 
@@ -37,7 +37,7 @@ const Button = styled.button`
 
 const SignupTitle = styled.h1`
    color: #7d5959;
-   font-size: 30px; 
+   font-size: 20px; 
    margin-top: 150px;
    font-weight: 400;
    color: black;

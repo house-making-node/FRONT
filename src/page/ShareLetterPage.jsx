@@ -38,7 +38,7 @@ const Input = styled.input`
     margin-bottom: 30px;
     border: 1px solid #b3b3b3;
     box-sizing: border-box;
-    font-size: 25px;
+    font-size: 18px;
     padding-left: 17px;
     &::placeholder {
       color: #D9D9D9B0; /* 회색으로 placeholder 텍스트 색상 설정 */
@@ -82,7 +82,7 @@ const ErrorMessage = styled.p`
 
 const SignupTitle = styled.h1`
    color: #7d5959;
-   font-size: 30px; 
+   font-size: 20px; 
    margin-top: 20px;
    font-weight: 400;
    color: black;
@@ -90,7 +90,7 @@ const SignupTitle = styled.h1`
 
 const Description = styled.div`
    color: black;
-   font-size: 13px;
+   font-size: 18px;
    text-align: center;
    margin-top: 18px;
 `;
