@@ -20,7 +20,7 @@ const Text = styled.span`
   text-align: center;
   white-space: nowrap;
   font-family: Freesentation;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 260;
   line-height: 23.38px;
 `;

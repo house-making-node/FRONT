@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 const HeadTitle = styled.div`
   font-family: Freesentation;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 400;
   line-height: 35.07px;
   text-align: left;
@@ -45,6 +45,7 @@ const Input = styled.input`
   width: 25px;
   height: 25px;
   border: 1px solid rgba(179, 179, 179, 1);
+  margin: 0px 15px;
   cursor: pointer;
 
   &:checked {
