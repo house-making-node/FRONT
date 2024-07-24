@@ -29,7 +29,7 @@ const QuestionContainer = styled.div`
 `;
 const Question = styled.div`
   font-weight: bold;
-  font-size: 24px;
+  font-size: 18px;
   text-align: left;
   margin-bottom: 10px;
   flex: 1;
@@ -49,7 +49,7 @@ const Icon = styled.img`
 const Answer = styled.div`
   background-color: rgba(239, 214, 187, 0.5);
   padding: 15px;
-  font-size: 18px;
+  font-size: 14px;
   white-space: normal;
   display: ${(props) => (props.show ? "block" : "none")};
 `;
@@ -73,14 +73,14 @@ export default function QuestionBoard() {
   };
   const questions = [
     "Q. 인테리어 컨설팅은 어떤 서비스를 제공하나요 ?",
-    "Q. 인테리어 컨설팅에 의뢰했는데, 언제 답변을 받을 수 있나요 ?",
+    "Q. 컨설팅 신청 중간에 페이지를 나가버렸어요. 어느 단계까지 진행 했는지 알 수 있을까요 ?",
     "Q. 매거진 서비스는 어떻게 이용하나요 ?",
     "Q. 자취레터, 공유레터는 어떤 내용을 다루나요 ?",
     "Q. 서비스에 대해 궁금한 점이 있어요. 어디로 연락을 하면 될까요 ?",
   ];
   const answers = [
     "집꾸의 인테리어 컨설팅은 공간 분석, 디자인 제안, 가구 및 소품 추천 등의 종합적인 인테리어 솔루션을 제공합니다.",
-    "평균적으로 2주 정도 소요 됩니다. 혹시 더 지연 된다면, 카카오톡 메시지로 지연 알림을 드립니다.",
+    "마이페이지 - 내 프로젝트에서 현재 진행 단계를 확인할 수 있습니다.",
     "집꾸 홈페이지 - 상단 ‘매거진'을 클릭하여 이용할 수 있습니다. 상세한 내용은 구독자 분들에 한하여 제공되니, 이 점 참고 부탁드립니다.",
     "자취레터는 ‘똑똑한' 자취에 초점을 둔 정보를, 공유레터는 ‘행복한' 자취에 초점을 둔 독자들의 에피소드를 공유합니다.",
     <>
