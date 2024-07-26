@@ -8,7 +8,7 @@ const Container = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center; /* 수평 중앙 정렬 */
-	height: 100vh; /* 전체 화면 높이 */
+	height: 105vh; /* 전체 화면 높이 */
 `;
 
 const TitleContainer = styled.div`
@@ -51,6 +51,7 @@ const Box = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center; /* 수평 중앙 정렬 */
+	margin-left:15px;
 `;
 
 const MoodLabel = styled.label`
@@ -134,6 +135,7 @@ const ButtonContainer = styled.div`
 	margin-top: 30px; /* 버튼과 Box 간의 간격 추가 */
 	margin-bottom: 40px; /* 버튼과 페이지 아래 끝 간의 간격 추가 */
 	padding-bottom: 50px;
+	margin-left:15px;
 `;
 
 const StyledButton = styled.button`
