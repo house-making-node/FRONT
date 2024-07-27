@@ -3,6 +3,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./component/header/Navbar";
 import MainPage from "./page/MainPage";
 import QuestionBoard from "./component/inquiry/questionBoard";
+import Step1Page from './component/consulting/step1Page';
+import Step2Page from './component/consulting/step2Page';
+import Step3Page from './component/consulting/step3Page';
+import Step4Page from './component/consulting/step4Page';
 import PersonalBoard from "./component/inquiry/personalBoard";
 import MyProject from "./component/mypage/myProject";
 import Myscrap from "./component/mypage/scrap";
@@ -21,6 +25,10 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/faq" element={<QuestionBoard />} />
+          <Route path="/consulting/step1Page" element={<Step1Page />} />
+          <Route path="/consulting/step2Page" element={<Step2Page />} />
+          <Route path="/consulting/step3Page" element={<Step3Page />} />
+          <Route path="/consulting/step4Page" element={<Step4Page />} />
           <Route path="/question" element={<PersonalBoard />} />
           <Route path="/mypage" element={<MyProject />} />
           <Route path="/myscrap/homeletter" element={<Myscrap />} />
