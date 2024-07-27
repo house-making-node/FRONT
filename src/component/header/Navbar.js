@@ -2,7 +2,6 @@ import styled from "styled-components";
 import logo from "../img/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import React from 'react';
 
 const Nav = styled.nav`
   position: fixed;
@@ -107,7 +106,7 @@ export default function Navbar() {
         <NavItem
           selected={selected === "자취레터" || selected === "공유레터"}
           onMouseEnter={() => handleMouseEnter("매거진")}
-          onClick={handleMouseLeave}
+          onMouseLeave={handleMouseLeave}
         >
           매거진
         </NavItem>
