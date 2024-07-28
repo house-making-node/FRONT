@@ -6,6 +6,7 @@ import Step1Page from './component/consulting/step1Page';
 import Step2Page from './component/consulting/step2Page';
 import Step3Page from './component/consulting/step3Page';
 import Step4Page from './component/consulting/step4Page';
+import ConsultLoading from './component/consulting/consultLoading';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/consulting/step2Page" element={<Step2Page />} />
           <Route path="/consulting/step3Page" element={<Step3Page />} />
           <Route path="/consulting/step4Page" element={<Step4Page />} />
+          <Route path="/consulting/consultLoading" element={<ConsultLoading />} />
         </Routes>
       </BrowserRouter>
     </div>
