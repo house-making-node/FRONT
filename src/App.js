@@ -16,6 +16,8 @@ import ShareLetterStory from './page/ShareLetterStory';
 import ShareLetterSave from './page/ShareLetterSave';
 import ShareLetterSend from './page/ShareLetterSend';
 import ShareLetterSendComplete from './page/ShareLetterSendComplete';
+import Main from "./component/main/Mainpage";
+import Homeletter from "./component/sendletter/HomeLetter";
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
           <Route path="/share-letter-send" element={<ShareLetterSend />} />
           <Route path="/share-letter-save" element={<ShareLetterSave />} />
           <Route path="/share-letter-send-complete" element={<ShareLetterSendComplete />} />
+          <Route path="/" element={<Main />} />
+          <Route path="/homeletter" element={<Homeletter />} />
         </Routes>
       </BrowserRouter>
     </div>
