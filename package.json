@@ -1,5 +1,5 @@
 {
-  "name": "gipggu",
+  "name": "housemaking",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,7 +10,8 @@
     "react-dom": "^18.3.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.25.0",
-    "react-scripts": "5.0.1",
+    "react-hook-form": "^7.52.1",
+    "react-scripts": "^3.0.1",
     "styled-components": "^6.1.11",
     "web-vitals": "^2.1.4"
   },
