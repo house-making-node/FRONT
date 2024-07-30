@@ -102,7 +102,7 @@ const StyledButton = styled.button`
 	background: #ca904b69; /* 버튼의 배경색 설정 */
 	font-size: 24px; /* 글씨 크기 설정 */
 	font-weight: 400; /* 글씨 두께 설정 */
-	line-height: 28.06px; /* 글씨 줄 높이 설정 */
+	line-height: 23.38px; /* 글씨 줄 높이 설정 */
 	color: #ffffff; /* 글씨 색상 설정 */
 	border: none; /* 버튼의 테두리 제거 */
 	cursor: pointer; /* 마우스를 올렸을 때 커서 변경 */
@@ -164,7 +164,7 @@ function Step4Page() {
 					<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
 						나가기
 					</StyledButton>
-					<StyledButton type="button" onClick={() => navigate("/consulting/step5Page")}>
+					<StyledButton type="button" onClick={() => navigate("/consulting/consultLoading")}>
 						제출하기
 					</StyledButton>
 				</ButtonContainer>
