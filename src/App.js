@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./component/header/Navbar";
 import MainPage from "./page/MainPage";
@@ -19,7 +19,13 @@ import Step3Page from "./component/consulting/step3Page";
 import Step4Page from "./component/consulting/step4Page";
 import ConsultLoading from "./component/consulting/consultLoading";
 
-function App() {
+const App = () => {
+	const [scraps, setScraps] = useState([]);
+  
+	const addScrap = (scrap) => {
+	  setScraps([...scraps, scrap]);
+	};
+
 	return (
 		<div>
 			<BrowserRouter>
@@ -34,11 +40,11 @@ function App() {
 
 					<Route path="/question" element={<PersonalBoard />} />
 					<Route path="/mypage" element={<MyProject />} />
-					<Route path="/myscrap/homeletter" element={<Myscrap />} />
-					<Route path="/myscrap/shareletter" element={<Myscrap />} />
+					<Route path="/myscrap/homeletter" element={<Myscrap scraps={scraps} />} />
+					<Route path="/myscrap/shareletter" element={<Myscrap scraps={scraps} />} />
 					<Route path="/shareletter" element={<ShareLetterPage />} />
 					<Route path="/share-letter-complete" element={<ShareLetterComplete />} />
-					<Route path="/share-letter-story" element={<ShareLetterStory />} />
+					<Route path="/share-letter-story" element={<ShareLetterStory addScrap={addScrap} />} />
 					<Route path="/share-letter-send" element={<ShareLetterSend />} />
 					<Route path="/share-letter-save" element={<ShareLetterSave />} />
 					<Route path="/share-letter-send-complete" element={<ShareLetterSendComplete />} />

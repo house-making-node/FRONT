@@ -1,7 +1,7 @@
-import styled, { css } from "styled-components";
-import Outline from "../../page/myoutline";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import styled, { css } from 'styled-components';
+import Outline from '../../page/myoutline';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 const Type = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ const ItemWrapper = styled.div`
   flex-direction: row;
 `;
 const ItemBox = styled.div`
-  //margin: 10px;
+  margin: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,61 +58,58 @@ const TitleText = styled.span`
   display: block;
   width: 100%;
 `;
-export default function Myscrap() {
+
+const Myscrap = ({ scraps }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [selected, setSelected] = useState("자취레터");
+  const [selected, setSelected] = useState('자취레터');
 
   useEffect(() => {
-    if (location.pathname.includes("shareletter")) {
-      setSelected("공유레터");
+    if (location.pathname.includes('shareletter')) {
+      setSelected('공유레터');
     } else {
-      setSelected("자취레터");
+      setSelected('자취레터');
     }
   }, [location.pathname]);
 
   const getBasePath = (type) => {
-    return type === "자취레터" ? "homeletter" : "shareletter";
+    return type === '자취레터' ? 'homeletter' : 'shareletter';
   };
+
   const handleTypeClick = (type) => {
     setSelected(type);
     navigate(`/myscrap/${getBasePath(type)}`);
   };
+
   const handleClick = (id) => {
     navigate(`/scrap/${getBasePath(selected)}/${id}`);
   };
-  const userScraps = [
-    {
-      id: 1,
-      title: "이미 구매한 물건을 또 구매하고 있다면 !",
-    },
-    // more projects
-  ];
+
   return (
     <Outline>
       <Type>
         <TypeOption
-          selected={selected === "자취레터"}
-          onClick={() => handleTypeClick("자취레터")}
+          selected={selected === '자취레터'}
+          onClick={() => handleTypeClick('자취레터')}
         >
           자취레터
         </TypeOption>
         <TypeOption
-          selected={selected === "공유레터"}
-          onClick={() => handleTypeClick("공유레터")}
+          selected={selected === '공유레터'}
+          onClick={() => handleTypeClick('공유레터')}
         >
           공유레터
         </TypeOption>
       </Type>
       <div className="border-t-2 border-gray-200"></div>
       <div className="flex row text-lg font-medium p-4 ml-10">
-        All <ProjectCount>{userScraps.length}</ProjectCount>
+        All <ProjectCount>{scraps.length}</ProjectCount>
       </div>
       <ItemWrapper>
-        {userScraps.map((project) => (
-          <ItemBox key={project.id} onClick={() => handleClick(project.id)}>
+        {scraps.map((scrap) => (
+          <ItemBox key={scrap.id} onClick={() => handleClick(scrap.id)}>
             <Title>
-              <TitleText>{project.title}</TitleText>
+              <TitleText>{scrap.title}</TitleText>
             </Title>
             <img className="w-64 h-44 m-2 bg-mypageGray" />
           </ItemBox>
@@ -120,4 +117,6 @@ export default function Myscrap() {
       </ItemWrapper>
     </Outline>
   );
-}
+};
+
+export default Myscrap;
