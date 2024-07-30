@@ -57,6 +57,7 @@ const HouseImage = styled.img`
   height: 65px;
   margin-top: 150px;
   margin-bottom: 16px;
+  margin-left: 130px;
 `;
 
 const ShareLetterComplete = () => {
