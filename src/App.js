@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./component/header/Navbar";
 import MainPage from "./page/MainPage";
+import InteriorConsultingPage from "./component/interiorconsult/InteriorConsultingPage";
 import QuestionBoard from "./component/inquiry/questionBoard";
 import PersonalBoard from "./component/inquiry/personalBoard";
 import MyProject from "./component/mypage/myProject";
@@ -19,6 +20,7 @@ import Step3Page from "./component/consulting/step3Page";
 import Step4Page from "./component/consulting/step4Page";
 import ConsultLoading from "./component/consulting/consultLoading";
 
+
 const App = () => {
 	const [scraps, setScraps] = useState([]);
   
@@ -32,11 +34,14 @@ const App = () => {
 				<Navbar />
 				<Routes>
 					<Route path="/" element={<MainPage />} />
+          <Route path="/consulting" element={<InteriorConsultingPage />} />
 					<Route path="/faq" element={<QuestionBoard />} />
 					<Route path="/consulting/step1Page" element={<Step1Page />} />
 					<Route path="/consulting/step2Page" element={<Step2Page />} />
 					<Route path="/consulting/step3Page" element={<Step3Page />} />
 					<Route path="/consulting/step4Page" element={<Step4Page />} />
+
+        
 
 					<Route path="/question" element={<PersonalBoard />} />
 					<Route path="/mypage" element={<MyProject />} />
