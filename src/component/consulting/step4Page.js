@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../header/Navbar";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -99,24 +99,35 @@ const StyledButton = styled.button`
 	width: 150px; /* 버튼의 너비 설정 */
 	height: 55px; /* 버튼의 높이 설정 */
 	border-radius: 6px; /* 버튼의 모서리 둥글게 설정 */
-	background: #ca904b69; /* 버튼의 배경색 설정 */
+	background: ${(props) => (props.disabled ? "#d3d3d3" : "#ca904b69")}; /* 비활성화 시 회색 배경 */
 	font-size: 24px; /* 글씨 크기 설정 */
 	font-weight: 400; /* 글씨 두께 설정 */
 	line-height: 23.38px; /* 글씨 줄 높이 설정 */
 	color: #ffffff; /* 글씨 색상 설정 */
 	border: none; /* 버튼의 테두리 제거 */
-	cursor: pointer; /* 마우스를 올렸을 때 커서 변경 */
+	cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")}; /* 비활성화 시 커서 변경 */
 `;
 
 function Step4Page() {
 	const navigate = useNavigate();
+	const [interiorConcern, setInteriorConcern] = useState(""); // 텍스트 영역 상태 추가
 
 	useEffect(() => {
 		const userName = localStorage.getItem("userName");
 		if (userName) {
 			document.getElementById("userNameFinal").innerText = userName;
 		}
+		// 이전 상태 복원
+		const savedConcern = localStorage.getItem("interiorConcern");
+		if (savedConcern) {
+			setInteriorConcern(savedConcern); // 저장된 상태로 설정
+		}
 	}, []);
+
+	const handleTextChange = (event) => {
+		setInteriorConcern(event.target.value); // 텍스트 영역 내용 업데이트
+		localStorage.setItem("interiorConcern", event.target.value); // 상태 저장
+	};
 
 	const clearText = (element) => {
 		if (element.placeholder === "여기를 클릭해 주세요") {
@@ -136,41 +147,43 @@ function Step4Page() {
 			<Container>
 				<TitleContainer>
 					<Title>STEP 04</Title>
-					<StepBoxes>
-						{[1, 2, 3, 4].map((step, index) => (
-							<StepBox key={index} active={step === 4} index={index} />
-						))}
-					</StepBoxes>
-				</TitleContainer>
-				<Box>
-					<form id="step4Form">
-						<Option>
-							<Label id="finalLabel">
-								<span id="userNameFinal"></span>님, 가지고 있는 인테리어 관련 고민을 자유롭게 작성해 주세요.
-							</Label>
-							<TextArea
-								id="interiorConcern"
-								placeholder="여기를 클릭해 주세요"
-								onClick={(e) => clearText(e.target)}
-								onBlur={(e) => restorePlaceholder(e.target)}
-							/>
-						</Option>
-					</form>
-				</Box>
-				<ButtonContainer>
-					<StyledButton type="button" onClick={() => navigate("/consulting/step3Page")}>
-						이전
-					</StyledButton>
-					<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
-						나가기
-					</StyledButton>
-					<StyledButton type="button" onClick={() => navigate("/consulting/consultLoading")}>
-						제출하기
-					</StyledButton>
-				</ButtonContainer>
-			</Container>
-		</div>
-	);
-}
+						<StepBoxes>
+							{[1, 2, 3, 4].map((step, index) => (
+								<StepBox key={index} active={step === 4} index={index} />
+							))}
+						</StepBoxes>
+					</TitleContainer>
+					<Box>
+						<form id="step4Form">
+							<Option>
+								<Label id="finalLabel">
+									<span id="userNameFinal"></span>님, 가지고 있는 인테리어 관련 고민을 자유롭게 작성해 주세요.
+								</Label>
+								<TextArea
+									id="interiorConcern"
+									placeholder="여기를 클릭해 주세요"
+									onClick={(e) => clearText(e.target)}
+									onBlur={(e) => restorePlaceholder(e.target)}
+									onChange={handleTextChange} // 내용 변경 핸들러 추가
+									value={interiorConcern} // 상태 값 설정
+								/>
+							</Option>
+						</form>
+					</Box>
+					<ButtonContainer>
+						<StyledButton type="button" onClick={() => navigate("/consulting/step3Page")}>
+							이전
+						</StyledButton>
+						<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
+							나가기
+						</StyledButton>
+						<StyledButton type="button" onClick={() => navigate("/consulting/consultLoading")} disabled={!interiorConcern.trim()}> {/* 내용이 있을 때만 활성화 */}
+							제출하기
+						</StyledButton>
+					</ButtonContainer>
+				</Container>
+			</div>
+		);
+	}
 
-export default Step4Page;
+	export default Step4Page;

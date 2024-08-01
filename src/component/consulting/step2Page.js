@@ -36,7 +36,7 @@ const StepBoxes = styled.div`
 const StepBox = styled.div`
 	width: 111px;
 	height: 21px;
-	background-color: ${(props) => (props.active ? "#CA904B69" : "#E0E0E0")}; /* 활���화된 StepBox 배경색 설정 */
+	background-color: ${(props) => (props.active ? "#CA904B69" : "#E0E0E0")}; /* 활성화된 StepBox 배경색 설정 */
 	color: #c7b199;
 	margin-left: ${(props) => (props.index > 0 ? "30px" : "0")}; /* 첫 번째 StepBox는 간격 없음 */
 `;
@@ -51,6 +51,7 @@ const Box = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center; /* 수평 중앙 정렬 */
+	margin-left : 15px;
 `;
 
 const MoodLabel = styled.label`
@@ -134,23 +135,25 @@ const ButtonContainer = styled.div`
 	margin-top: 30px; /* 버튼과 Box 간의 간격 추가 */
 	margin-bottom: 40px; /* 버튼과 페이지 아래 끝 간의 간격 추가 */
 	padding-bottom: 50px;
+	margin-left : 15px;
 `;
 
 const StyledButton = styled.button`
 	width: 150px; /* 버튼의 너비 설정 */
 	height: 55px; /* 버튼의 높이 설정 */
 	border-radius: 6px; /* 버튼의 모서리 둥글게 설정 */
-	background: #ca904b69; /* 버튼의 배경색 설정 */
+	background: ${(props) => (props.disabled ? "#d0d0d0" : "#ca904b69")}; /* 비활성화 상태일 때 회색 배경 */
 	font-size: 24px; /* 글씨 크기 설정 */
 	font-weight: 400; /* 글씨 두께 설정 */
 	line-height: 28.06px; /* 글씨 줄 높이 설정 */
 	color: #ffffff; /* 글씨 색상 설정 */
 	border: none; /* 버튼의 테두리 제거 */
-	cursor: pointer; /* 마우스를 올렸을 때 커서 변경 */
+	cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")}; /* 비활성화 상태일 때 커서 변경 */
 `;
 
 function Step2Page() {
 	const navigate = useNavigate();
+	const [isNextEnabled, setIsNextEnabled] = React.useState(false); // 버튼 활성화 상태 관리
 
 	useEffect(() => {
 		const userName = localStorage.getItem("userName");
@@ -158,6 +161,21 @@ function Step2Page() {
 			document.getElementById("userNameMood").innerText = userName;
 		}
 	}, []);
+
+	const handleOptionChange = () => {
+		const selectedOption = document.querySelector('input[name="mood"]:checked');
+		setIsNextEnabled(!!selectedOption); // 옵션이 선택되면 true
+	};
+
+	const handleNext = () => {
+		const selectedOption = document.querySelector('input[name="mood"]:checked');
+
+		if (!selectedOption) {
+			alert("옵션을 선택해 주세요."); // 옵션 선택을 요구하는 경고 메시지
+			return;
+		}
+		navigate("/consulting/step3Page"); // 모든 옵션이 선택된 경우 페이지 이동
+	};
 
 	return (
 		<div>
@@ -179,36 +197,36 @@ function Step2Page() {
 							</MoodLabel>
 						</div>
 						<OptionsContainer>
-							<HiddenRadio type="radio" id="option1" name="mood" value="깔끔한 화이트톤" />
+							<HiddenRadio type="radio" id="option1" name="mood" value="깔끔한 화이트톤" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option1">
 								<span>깔끔한 화이트톤</span>
 							</OptionBox>
-							<HiddenRadio type="radio" id="option2" name="mood" value="따뜻한 우드톤" />
+							<HiddenRadio type="radio" id="option2" name="mood" value="따뜻한 우드톤" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option2">
 								<span>따뜻한 우드톤</span>
 							</OptionBox>
-							<HiddenRadio type="radio" id="option3" name="mood" value="모던한 블랙, 그레이" />
+							<HiddenRadio type="radio" id="option3" name="mood" value="모던한 블랙, 그레이" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option3">
 								<span>모던한 블랙, 그레이</span>
 							</OptionBox>
-							<HiddenRadio type="radio" id="option4" name="mood" value="기타" />
+								<HiddenRadio type="radio" id="option4" name="mood" value="기타" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option4">
 								<span>기타</span>
 							</OptionBox>
 						</OptionsContainer>
-					</form>
-				</Box>
-				<ButtonContainer>
-					<StyledButton type="button" onClick={() => navigate("/consulting/step1Page")}>
-						이전
-					</StyledButton>
-					<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
-						나가기
-					</StyledButton>
-					<StyledButton type="button" onClick={() => navigate("/consulting/step3Page")}>
-						다음
-					</StyledButton>
-				</ButtonContainer>
+						</form>
+						</Box>
+						<ButtonContainer>
+							<StyledButton type="button" onClick={() => navigate("/consulting/step1Page")}>
+								이전
+							</StyledButton>
+							<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
+								나가기
+							</StyledButton>
+							<StyledButton type="button" onClick={handleNext} disabled={!isNextEnabled}>
+								다음
+							</StyledButton>
+						</ButtonContainer>
 			</Container>
 		</div>
 	);

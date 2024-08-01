@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
@@ -128,13 +128,13 @@ const StyledButton = styled.button`
 	width: 150px; /* 버튼의 너비 설정 */
 	height: 55px; /* 버튼의 높이 설정 */
 	border-radius: 6px; /* 버튼의 모서리 둥글게 설정 */
-	background: #ca904b69; /* 버튼의 배경색 설정 */
+	background: ${(props) => (props.disabled ? "#d3d3d3" : "#ca904b69")}; /* 비활성화 시 회색 배경 */
 	font-size: 24px; /* 글씨 크기 설정 */
 	font-weight: 400; /* 글씨 두께 설정 */
 	line-height: 28.06px; /* 글씨 줄 높이 설정 */
 	color: #ffffff; /* 글씨 색상 설정 */
 	border: none; /* 버튼의 테두리 제거 */
-	cursor: pointer; /* 마우스를 올렸을 때 커서 변경 */
+	cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")}; /* 비활성화 시 커서 변경 */
 `;
 
 const SpecialButton = styled.button`
@@ -166,6 +166,8 @@ const LabelWithButton = styled.div`
 
 function Step3Page() {
 	const navigate = useNavigate();
+	const [isPhotoUploaded, setIsPhotoUploaded] = useState(false); // 사진 업로드 상태
+	const [isBlueprintUploaded, setIsBlueprintUploaded] = useState(false); // 도면 업로드 상태
 
 	useEffect(() => {
 		const userName = localStorage.getItem("userName");
@@ -174,6 +176,14 @@ function Step3Page() {
 			document.getElementById("userNameBlueprint").innerText = userName;
 		}
 	}, []);
+
+	const handlePhotoChange = () => {
+		setIsPhotoUploaded(true); // 사진이 업로드되면 상태 변경
+	};
+
+	const handleBlueprintChange = () => {
+		setIsBlueprintUploaded(true); // 도면이 업로드되면 상태 변경
+	};
 
 	return (
 		<div>
@@ -195,7 +205,7 @@ function Step3Page() {
 							</Label>
 							<FileButton>
 								<FileButtonText>파일 선택</FileButtonText>
-								<HiddenInput type="file" id="photoUpload" name="photoUpload" />
+								<HiddenInput type="file" id="photoUpload" name="photoUpload" onChange={handlePhotoChange} />
 							</FileButton>
 						</Option>
 					</HalfBox>
@@ -211,7 +221,7 @@ function Step3Page() {
 							</LabelContainer>
 							<FileButton>
 								<FileButtonText>파일 선택</FileButtonText>
-								<HiddenInput type="file" id="blueprintUpload" name="blueprintUpload" />
+								<HiddenInput type="file" id="blueprintUpload" name="blueprintUpload" onChange={handleBlueprintChange} />
 							</FileButton>
 						</Option>
 					</HalfBox>
@@ -223,7 +233,7 @@ function Step3Page() {
 					<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
 						나가기
 					</StyledButton>
-					<StyledButton type="button" onClick={() => navigate("/consulting/step4Page")}>
+					<StyledButton type="button" onClick={() => navigate("/consulting/step4Page")} disabled={!(isPhotoUploaded && isBlueprintUploaded)}>
 						다음
 					</StyledButton>
 				</ButtonContainer>
