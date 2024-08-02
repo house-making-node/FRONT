@@ -1,10 +1,18 @@
 .HomeLetter {
-  padding-top: 134px; /* Navbar의 높이(94px) + 추가 여백 */
+  padding-top: 140px;
+  max-width: 1920px;
+  max-height: 1548px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+
 }
 
 .HomeLetter-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  background: linear-gradient(to bottom, rgba(239, 214, 187, 0.5) ,rgba(255, 255, 255,0.7) );
 }
 
 .header-content {
@@ -13,9 +21,19 @@
   align-items: center;
 }
 
+.HomeLetter-header img {
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+  margin-bottom:0px;
+  margin-top:160px;
+}
+
 .HomeLetter-header h1 {
+  padding-top: 15px;
   font-size: 24px;
   margin-bottom: 10px;
+  margin-top:0px;
 }
 
 .HomeLetter-header p {
@@ -35,31 +53,150 @@
 .thumbnails {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  margin: 20px;
+  gap: 20px; /* 썸네일 사이의 간격 조정 */
+  justify-content: space-between; /* 썸네일 사이의 공간을 균등하게 분배 */
+  width: 816px; /* 컨테이너 너비 고정 */
+  height: 847px; /* 컨테이너 높이 고정 */
+  overflow: auto; /* 컨테이너의 내용이 넘칠 경우 스크롤 가능 */
+  margin: 0 auto; /* 중앙 정렬을 위한 여백 설정 */
+  box-sizing: border-box; /* 패딩과 보더를 포함한 크기 계산 */
 }
 
 .thumbnail {
-  width: 200px;
-  margin: 10px;
-  text-align: left;
+  width: 332px;
+  height: 293px; 
+  box-sizing: border-box;
+  position: relative;
+  /* overflow: hidden; */
 }
 
-.thumbnail img {
+.thumbnail-image-container {
+  position: relative;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
+
+@media (min-width: 700px) {
+  .thumbnails {
+    gap: 152px;
+  }
+}
+
+.thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  display: block;
+}
+
+.thumbnail-description {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.bookmark-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  z-index: 2;
+  padding: 2px; 
+}
+
+/* .bookmark-button::before {
+  content: url('../img/bookmark.png') no-repeat center center;
+  background-size: cover; 
+  font-size: 24px; /* 아이콘 크기 */
+  /* color: rgb(250, 246, 246); /* 기본 아이콘 색상 */
+/* } */ */
+
+/* .bookmark-button.bookmarked::before {
+  content:  '\2661';
+  background-size: cover;
+  color: rgb(188, 34, 34); 
+} */ */
 
 .modal {
   position: absolute;
+  width: 400px;
   top: 50%;
   left: 50%;
   right: auto;
   bottom: auto;
   transform: translate(-50%, -50%);
-  background: white;
+  color: white;
   padding: 20px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1005;
+}
+
+.modal-outer {
+  background: white;
+  padding: 30px;
+  width: 500px;
+}
+
+.modal-content {
+  text-align: left;
+}
+  
+.modal h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #666;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
   border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  text-emphasis-color: red;
+}
+
+.checkbox-group input {
+  margin-right: 10px;
+}
+
+.checkbox-group label {
+  font-size: 12px;
+  color: #666;
+}
+
+.submit-button {
+  width: 100%;
+  background-color: #e6c793;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.submit-button:hover {
+  background-color: #d9b57d;
 }
 
 .overlay {
@@ -68,5 +205,106 @@
   left: 0;
   right: 0;
   bottom: 0;
+  background-color: rgba(204, 204, 204, 0.708);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  width: 600px;
+  height: 150px;
+  position: absolute;
+  top: 120px;
+  left: 382px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 0px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+}
+
+.privacy-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.confirmPopup {
+  width: 500px;
+  height: 400px;
+  max-width: 90%;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(100, 97, 97, 0.2);
+  z-index: 2001;
+  position: relative;
+}
+
+.popup-content {
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.popup-content h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.popup-content p {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.privacy-confirm-button {
+  padding: 10px 20px;
+  background-color: #e6c793;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  align-self: center;
+}
+
+
+.confirm-button {
+  position: absolute;
+  margin-top: 10px;
+  padding: 5px 15px;
+  background-color:#dcb88d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  bottom: 20px;
+  right: 20px;
 }

@@ -5,6 +5,7 @@ import Thumbnail from "./Thumbnail";
 import mirror from "../img/mirror.png";
 import running from "../img/running.png";
 import room from "../img/room.png";
+import house from "../img/house.png";
 
 function HomeLetter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -20,6 +21,7 @@ function HomeLetter() {
   return (
     <div className="HomeLetter">
       <header className="HomeLetter-header">
+        <img src={house} alt='house'/>
         <h1>똑똑한 자취를 위한, 자취레터</h1>
         <p>다양한 자취와 관련된 정보를 찾아보세요.</p>
         <button onClick={openModal} className="subscribe-button">
