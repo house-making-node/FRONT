@@ -2,10 +2,10 @@ import styled from "styled-components";
 import main3Img from "../img/main3.jpeg";
 
 const Wrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
   display: flex;
   align-items: center;
+  margin-top: 100px;
+  margin-left: 100px;
 `;
 
 const Img3 = styled.img`

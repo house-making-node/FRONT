@@ -2,11 +2,9 @@ import styled from "styled-components";
 import main1Img from "../img/main1.jpeg";
 
 const Wrapper = styled.div`
-  width: 100vw;
   position: relative;
 `;
 const Img1 = styled.img`
-  //width: 1440px;
   width: 100%;
   height: 800px;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.25);
