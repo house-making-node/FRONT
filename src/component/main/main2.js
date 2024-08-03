@@ -1,24 +1,11 @@
 import styled from "styled-components";
 import main2Img from "../img/main2.jpeg";
 
-/*
 const Wrapper = styled.div`
-  max-width: 100vw;
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  margin: 200px 10px 200px 100px;
-  background-color: rgba(255, 255, 255, 1);
-  align-items: center;
-  overflow-x: hidden;
-  overflow-y: auto;
-`;
-*/
-const Wrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
   display: flex;
   align-items: center;
+  margin-top: 100px;
+  margin-left: 100px;
 `;
 const Img2 = styled.img`
   width: 100%;
