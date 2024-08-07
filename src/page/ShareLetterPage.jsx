@@ -104,7 +104,7 @@ const HouseImage = styled.img`
   width: 81px; /* Adjust the size as needed */
   height: 65px;
   margin-top: 40px;
-  margin-left: 230px;
+  margin-left: 180px;
 `;
 
 const FileInput = styled.input`
