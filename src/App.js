@@ -28,6 +28,7 @@ import ConsultLoading from "./component/consulting/consultLoading";
 import KakaoLogin from "./component/interiorconsult/KakaoLogin";
 import KakaoAgreement from "./component/interiorconsult/KakaoAgreement";
 import KakaoWelcome from "./component/interiorconsult/KakaoWelcome";
+import MemberHomeletter from './component/sendletter/HomeLetterRegister';
 
 const App = () => {
 	const [scraps, setScraps] = useState([]);
@@ -55,6 +56,7 @@ const App = () => {
 					<Route path="/question" element={<PersonalBoard />} />
 					<Route path="/mypage" element={<MyProject />} />
 					<Route path="/myscrap/homeletter" element={<Myscrap scraps={scraps} />} />
+					<Route path="/member-home-letter" element={<MemberHomeletter />} />
 					<Route path="/myscrap/shareletter" element={<Myscrap scraps={scraps} />} />
 					<Route path="/share-letter-page" element={<ShareLetterPage />} />
 					<Route path="/shareletter" element={<ShareLetter />} />
