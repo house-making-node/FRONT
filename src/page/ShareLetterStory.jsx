@@ -91,7 +91,7 @@ const ShareLetter2 = styled.img`
   width: 332px;
   height: 293px;
   margin-top: 60px;
-  margin-bottom: 16px;
+  margin-bottom: 46px;
 `;
 
 const HorizontalLine = styled.hr`
