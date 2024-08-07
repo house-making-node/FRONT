@@ -12,7 +12,7 @@
 .HomeLetter-header {
   text-align: center;
   margin-bottom: 20px;
-  background: linear-gradient(to bottom, rgba(239, 214, 187, 0.5) ,rgba(255, 255, 255,0.7) );
+  background: linear-gradient(to bottom, rgba(239, 214, 187, 0.25) ,rgba(255, 255, 255, 0.5) );
 }
 
 .header-content {
@@ -30,7 +30,7 @@
 }
 
 .HomeLetter-header h1 {
-  padding-top: 15px;
+  padding-top: 20px;
   font-size: 24px;
   margin-bottom: 10px;
   margin-top:0px;
@@ -38,7 +38,7 @@
 
 .HomeLetter-header p {
   font-size: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 100px;
 }
 
 .subscribe-button {
@@ -53,13 +53,13 @@
 .thumbnails {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; /* 썸네일 사이의 간격 조정 */
-  justify-content: space-between; /* 썸네일 사이의 공간을 균등하게 분배 */
-  width: 816px; /* 컨테이너 너비 고정 */
-  height: 847px; /* 컨테이너 높이 고정 */
-  overflow: auto; /* 컨테이너의 내용이 넘칠 경우 스크롤 가능 */
-  margin: 0 auto; /* 중앙 정렬을 위한 여백 설정 */
-  box-sizing: border-box; /* 패딩과 보더를 포함한 크기 계산 */
+  gap: 20px; 
+  justify-content: space-between;
+  width: 816px; 
+  height: 847px;
+  overflow: auto;
+  margin: 0 auto; 
+  box-sizing: border-box; 
 }
 
 .thumbnail {
@@ -91,6 +91,8 @@
 
 .thumbnail-description {
   margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
   text-align: center;
 }
 
