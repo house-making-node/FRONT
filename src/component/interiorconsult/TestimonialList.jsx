@@ -13,19 +13,19 @@ const testimonials = [
     before: before1,
     after: after1,
     username: "다나",
-    text: "오직 자취생을 위한 인테리어 컨설팅을 해주신다는 점에 끌려서 선택했어요. 컨설턴트 분이 제 취향과 니즈를 반영해서 제품 추천, 공간 활용 방법을 알려주셔서 좋았어요. 앞으로도 잘 채워 나가볼게요!",
+    text: `"\n오직 자취생을 위한 인테리어 컨설팅을 해주신다는 점에\n끌려서 선택했어요.\n\n컨설턴트 분이 제 취향과 니즈를 반영해서 제품 추천, 공\n간 활용 방법을 알려주셔서 좋았어요.\n\n앞으로도 잘 채워 나가볼게요!\n"`,
   },
   {
     before: before2,
     after: after2,
     username: "모나",
-    text: "집꾸가 저희 자취방에 정말 큰 변화를 줬어요. 빠르게 리모델링할 수 있어서 좋았어요. 취향을 잘 반영해줘서 기뻐요!",
+    text: `"\n꿈만 꾸던 자취방이\n집꾸의 컨설팅 덕분에 \n현실이 되었어요.\n\n빠르고 꼼꼼한 의견을 주신 덕분에 제 취향을 발견할 수\n도 있었어요!\n\n"`,
   },
   {
     before: before3,
     after: after3,
     username: "조영",
-    text: "좁고 높은 자취방이라 휴식을 방해할 수 있겠다고 생각했어요. 그런데 집꾸는 집에 변화를 주기 위해 저희 요구를 귀기울여 듣고, 놀라운 변화를 만들어 주셨어요.",
+    text: `"\n좁고 낡은 자취방이라\n 솔루션을 받을 수 있을까 망설였어요. \n\n 그러나 결과는 정반대였죠.\n 저희 집이 가진 분위기를 살려서 인테리어를 할 수 있도\n록 도와주셨어요.\n\n 정말 감사합니다!\n"`,
   }
 ];
 
@@ -65,6 +65,7 @@ const Indicators = styled.div`
 
 const Indicator = styled.span`
   display: inline-block;
+  
   width: 10px;
   height: 10px;
   background: #ccc;
@@ -73,6 +74,12 @@ const Indicator = styled.span`
   &.active {
     background: #333;
   }
+    
+`;
+
+const WhiteSpace = styled.div`
+  background-color: white;
+  height: 150px;
 `;
 
 const TestimonialList = () => {
@@ -108,6 +115,7 @@ const TestimonialList = () => {
         ))}
       </Indicators>
     </TestimonialListContainer>
+    
   );
 };
 

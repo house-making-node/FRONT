@@ -41,7 +41,7 @@ const Home = () => {
       <MainContent>
         <Overlay>
           <Title>인테리어 컨설팅</Title>
-          <Subtitle>인스타에서 봤던 예쁜 집,<br /> 더 이상 부러워 하지 마세요.<br />집꾸가 공간 활용 방법과 취향을 찾아드릴게요.</Subtitle>
+          <Subtitle>인스타에서 봤던 예쁜 집, <br/> 더 이상 부러워 하지 마세요.<br />집꾸가 공간 활용 방법과 취향을 찾아드릴게요.</Subtitle>
         </Overlay>
       </MainContent>
       <TestimonialList />
