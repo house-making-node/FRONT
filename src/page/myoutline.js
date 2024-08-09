@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
+import axios from "axios";
 
 const Wrapper = styled.div`
   display: flex;
@@ -63,6 +64,12 @@ export default function Outline({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [selected, setSelected] = useState(null);
+  const [formData, setFormData] = useState({
+    user_id: 1,
+    user_name: "",
+    email: "",
+    created_at: "",
+  });
 
   useEffect(() => {
     if (location.pathname === "/mypage") {
@@ -72,7 +79,23 @@ export default function Outline({ children }) {
     } else if (location.pathname === "/myscrap/shareletter") {
       setSelected("스크랩");
     }
-  });
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const response = await axios.get(
+          `https://2e11c037-d78e-48a6-af32-ce12efc7101e.mock.pstmn.io/user/profile/{user_id}`
+        );
+        setFormData(response.data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    getProfile();
+  }, []);
+
   const handleClick = (path, item) => {
     setSelected(item);
     navigate(path);
@@ -83,8 +106,8 @@ export default function Outline({ children }) {
         <ProfileBox>
           <div className="text-xl">My Profile</div>
           <div className="w-48 h-40 rounded-full bg-white"></div>
-          <div className="text-lg">이름</div>
-          <div className="text-lg">이메일</div>
+          <div className="text-lg">{formData.user_name}</div>
+          <div className="text-lg">{formData.email}</div>
           <div className="border-t-2 border-gray-200 w-72"></div>
         </ProfileBox>
         <Sort>
