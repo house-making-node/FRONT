@@ -67,7 +67,7 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate('/member-home-letter');
+    navigate('/member-home-letter', {state: { subscriptionCompleted: true}});
   };
 
   return (
