@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from 'styled-components';
 import "./letter.css";
 import SubscriptionModal from "./SubscriptionalModal";
@@ -8,28 +8,80 @@ import mirror from "../img/mirror.png";
 import running from "../img/running.png";
 import room from "../img/room.png";
 import house from "../img/house.png";
+import { BsFillExclamationDiamondFill } from "react-icons/bs";
 
 const Button = styled.button`
-    width: 217px;
-    height: 68px;
-    padding: 10px;
-    background-color: #CA904B69;
-    border: none;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 200px;
-    font-size: 18px;
-    font-weight: 400;
-    margin-left: 600px;
+  width: 217px;
+  height: 68px;
+  padding: 10px;
+  background-color: #CA904B69;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 200px;
+  font-size: 18px;
+  font-weight: 400;
+  margin-left: 600px;
 
-    &:hover {
-        background-color: #CA904B72;
-    }
+  &:hover {
+      background-color: #CA904B72;
+      }
+  `;
+
+  const PopupOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+`;
+
+const PopupContainer = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+`;
+
+const PopupMessage = styled.p`
+  margin-bottom: 20px;
+  font-size: 18px;
+`;
+
+const CloseButton = styled.button`
+  background-color: #e6c793;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #CA904B72;
+  }
 `;
 
 function MemberHomeletter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showSubscriptionCompletedPopup, setShowSubscriptionCompletedPopup] = useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("Location state:", location.state);
+    if (location.state?.subscriptionCompleted) {
+      console.log("Popup should be displayed");
+      setShowSubscriptionCompletedPopup(true);
+    }
+  }, [location.state]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -39,10 +91,12 @@ function MemberHomeletter() {
     setModalIsOpen(false);
   };
 
-  const navigate = useNavigate();
-
   const handleButtonClick = () => {
     navigate('/home-letter-page');
+  };
+
+  const closeSubscriptionCompletedPopup = () => {
+    setShowSubscriptionCompletedPopup(false);
   };
 
 
@@ -79,6 +133,14 @@ function MemberHomeletter() {
       <Button onClick={handleButtonClick} className="subscribe-button">
           내 고민 보내기
       </Button>
+      {showSubscriptionCompletedPopup && (
+        <PopupOverlay>
+          <PopupContainer>
+            <PopupMessage>구독이 완료되었습니다!</PopupMessage>
+            <CloseButton onClick={closeSubscriptionCompletedPopup}>확인</CloseButton>
+          </PopupContainer>
+        </PopupOverlay>
+      )}
     </div>
   );
 }
