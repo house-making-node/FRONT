@@ -30,7 +30,7 @@ const Title = styled.div`
 const StepBoxes = styled.div`
 	display: flex;
 	margin-left: 37px; /* Title과의 간격 */
-	margin-top: 40px;
+	margin-top: 15px;
 `;
 
 const StepBox = styled.div`
