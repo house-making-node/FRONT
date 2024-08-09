@@ -4,7 +4,7 @@ import Navbar from "../header/Navbar";
 import styled from "styled-components";
 
 const Container = styled.div`
-  padding-top: 140px; /* Navbar 높이 + 여백 */
+  margin-top: 140px; /* Navbar 높이 + 여백 */
   display: flex;
   flex-direction: column;
   align-items: center; /* 수평 중앙 정렬 */
@@ -30,7 +30,7 @@ const Title = styled.div`
 const StepBoxes = styled.div`
   display: flex;
   margin-left: 37px; /* Title과의 간격 */
-  margin-top: 40px;
+  margin-top: 15px;
 `;
 
 const StepBox = styled.div`
@@ -45,7 +45,7 @@ const StepBox = styled.div`
 
 const Box = styled.div`
   width: 1078px;
-  height: 582px;
+  height: 637px;
   border-radius: 15px;
   border: 1px solid #b0b0b0;
   padding: 10px;
@@ -178,6 +178,10 @@ function Step1Page() {
     navigate("/consulting/step2Page"); // 모든 옵션이 선택된 경우 페이지 이동
   };
 
+  const handleExit = () => {
+    navigate("/");
+  };
+
   return (
     <div>
       <Navbar />
@@ -269,7 +273,7 @@ function Step1Page() {
           </form>
         </Box>
         <ButtonContainer>
-          <StyledButton type="button" onClick={() => navigate("/")}>
+          <StyledButton type="button" onClick={handleExit}>
             나가기
           </StyledButton>
           <StyledButton

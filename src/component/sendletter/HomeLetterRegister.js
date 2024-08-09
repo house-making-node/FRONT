@@ -27,27 +27,22 @@ const Button = styled.button`
         background-color: #CA904B72;
     }
 `;
-function HomeLetter() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const navigate = useNavigate();
 
-  const isLoggedIn = localStorage.getItem('access_token') ? true : false;
+function MemberHomeletter() {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
     setModalIsOpen(true);
   };
 
-  // const openModal = () => {
-  //   if (isLoggedIn){
-  //     setModalIsOpen(true);
-  //   }
-  //   else{
-  //     navigate('/login');
-  //   }
-  // };
-
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate('/home-letter-page');
   };
 
 
@@ -56,10 +51,7 @@ function HomeLetter() {
       <header className="HomeLetter-header">
         <img src={house} alt='house'/>
         <h1>똑똑한 자취를 위한, 자취레터</h1>
-        <p>다양한 자취와 관련된 정보를 찾아보세요.</p>
-        <button onClick={openModal} className="subscribe-button">
-          구독하기
-        </button>
+        <p>고민상담부터 생활 지식까지 매주 금요일에 만나요.</p>
         <SubscriptionModal isOpen={modalIsOpen} onRequestClose={closeModal} />
       </header>
       <div className="thumbnails">
@@ -84,8 +76,11 @@ function HomeLetter() {
           description="이미 구매한 물건을 또 구매하고 있다면 !"
         />
       </div>
+      <Button onClick={handleButtonClick} className="subscribe-button">
+          내 고민 보내기
+      </Button>
     </div>
   );
 }
 
-export default HomeLetter;
+export default MemberHomeletter;

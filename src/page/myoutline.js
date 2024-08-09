@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   padding: 10px;
   font-family: Freesentation;
 `;
+
 const Profile = styled.div`
   width: 300px;
   height: 600px;
@@ -22,6 +23,7 @@ const Profile = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
 const ProfileBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -29,6 +31,7 @@ const ProfileBox = styled.div`
   height: 400px;
   justify-content: space-evenly;
 `;
+
 const Sort = styled.div`
   font-family: Freesentation;
   font-size: 18px;
@@ -38,6 +41,7 @@ const Sort = styled.div`
   width: 300px;
   padding-top: 0px;
 `;
+
 const Item = styled.div`
   height: 50px;
   cursor: pointer;
@@ -84,22 +88,35 @@ export default function Outline({ children }) {
   useEffect(() => {
     const getProfile = async () => {
       try {
+        console.log("Requesting profile for user_id:", formData.user_id);
         const response = await axios.get(
-          `https://2e11c037-d78e-48a6-af32-ce12efc7101e.mock.pstmn.io/user/profile/{user_id}`
+          `http://3.36.240.5:3000/user/profile/${formData.user_id}`
         );
-        setFormData(response.data);
+        console.log("Response data:", response.data);
+        setFormData(response.data.data);
       } catch (error) {
-        console.error("Error:", error);
+        if (error.response) {
+          // 서버 응답이 2xx가 아닌 경우
+          console.error("Server responded with status:", error.response.status);
+          console.error("Response data:", error.response.data);
+        } else if (error.request) {
+          // 요청이 만들어졌으나 서버 응답이 없음
+          console.error("No response received from server:", error.request);
+        } else {
+          // 요청을 만들던 중 발생한 오류
+          console.error("Error in request setup:", error.message);
+        }
       }
     };
 
     getProfile();
-  }, []);
+  }, [formData.user_id]);
 
   const handleClick = (path, item) => {
     setSelected(item);
     navigate(path);
   };
+
   return (
     <Wrapper>
       <Profile>
