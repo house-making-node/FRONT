@@ -4,7 +4,7 @@ import Navbar from "../header/Navbar";
 import styled from "styled-components";
 
 const Container = styled.div`
-	padding-top: 140px; /* Navbar 높이 + 여백 */
+	margin-top: 140px; /* Navbar 높이 + 여백 */
 	display: flex;
 	flex-direction: column;
 	align-items: center; /* 수평 중앙 정렬 */

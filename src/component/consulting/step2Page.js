@@ -2,9 +2,13 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
+import whiteToneImg from "../img/whiteTone.jpeg";
+import blackToneImg from "../img/blackTone.jpeg";
+import woodToneImg from "../img/woodTone.jpeg";
+import excImg from "../img/etc....jpeg";
 
 const Container = styled.div`
-	padding-top: 140px; /* Navbar 높이 + 여백 */
+	margin-top: 140px; /* Navbar 높이 + 여백 */
 	display: flex;
 	flex-direction: column;
 	align-items: center; /* 수평 중앙 정렬 */
@@ -111,8 +115,10 @@ const OptionBox = styled.label`
 	&::before {
 		content: "";
 		width: 100%;
-		height: 80%; /* 이미지 영역 높이 */
-		background-color: black; /* 이미지 대신 검은색으로 색칠 */
+		height: 80%; /* 이미지 영역 높이를 박스에 맞춤 */
+		background-image: ${(props) => props.image}; /* 이미지로 변경 */
+		background-size: cover; /* 이미지 크기를 박스에 맞게 조정 */
+		background-position: center; /* 이미지 중앙 정렬 */
 		border-top-left-radius: 10px; /* 테두리 반경 일치 */
 		border-top-right-radius: 10px; /* 테두리 반경 일치 */
 		position: absolute;
@@ -202,19 +208,19 @@ function Step2Page() {
 						</div>
 						<OptionsContainer>
 							<HiddenRadio type="radio" id="option1" name="mood" value="깔끔한 화이트톤" onChange={handleOptionChange} />
-							<OptionBox htmlFor="option1">
+							<OptionBox htmlFor="option1" image={`url(${whiteToneImg})`}>
 								<span>깔끔한 화이트톤</span>
 							</OptionBox>
 							<HiddenRadio type="radio" id="option2" name="mood" value="따뜻한 우드톤" onChange={handleOptionChange} />
-							<OptionBox htmlFor="option2">
+							<OptionBox htmlFor="option2" image={`url(${woodToneImg})`}>
 								<span>따뜻한 우드톤</span>
 							</OptionBox>
 							<HiddenRadio type="radio" id="option3" name="mood" value="모던한 블랙, 그레이" onChange={handleOptionChange} />
-							<OptionBox htmlFor="option3">
+							<OptionBox htmlFor="option3" image={`url(${blackToneImg})`}>
 								<span>모던한 블랙, 그레이</span>
 							</OptionBox>
 								<HiddenRadio type="radio" id="option4" name="mood" value="기타" onChange={handleOptionChange} />
-							<OptionBox htmlFor="option4">
+							<OptionBox htmlFor="option4" image={`url(${excImg})`}>
 								<span>기타</span>
 							</OptionBox>
 						</OptionsContainer>

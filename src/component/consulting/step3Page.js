@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
+import floorPlanImg from "../img/floorPlan.png";
 
 const Container = styled.div`
-	padding-top: 140px; /* Navbar 높이 + 여백 */
+	margin-top: 140px; /* Navbar 높이 + 여백 */
 	display: flex;
 	flex-direction: column;
 	align-items: center; /* 수평 중앙 정렬 */
@@ -36,7 +37,7 @@ const StepBoxes = styled.div`
 const StepBox = styled.div`
 	width: 111px;
 	height: 21px;
-	background-color: ${(props) => (props.active ? "#CA904B69" : "#E0E0E0")}; /* 활성화된 StepBox 배경�� 설정 */
+	background-color: ${(props) => (props.active ? "#CA904B69" : "#E0E0E0")}; /* 활성화된 StepBox 배경 설정 */
 	margin-left: ${(props) => (props.index > 0 ? "30px" : "0")}; /* 첫 번째 StepBox는 간격 없음 */
 `;
 
@@ -60,6 +61,7 @@ const HalfBox = styled.div`
 	flex-direction: column;
 	justify-content: center; /* 수직 중앙 정렬 */
 	align-items: center; /* 수평 중앙 정렬 */
+	position: relative; /* 상대 위치 설정 */
 	&:first-of-type {
 		margin-top: 70px; /* 기존 간격에서 줄임 */
 	}
@@ -148,6 +150,7 @@ const SpecialButton = styled.button`
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	box-shadow: 0px 4px 10px #78440640; /* 버튼 주변에 그림자 추가 */
 `;
 
 const LabelContainer = styled.div`
@@ -168,6 +171,7 @@ function Step3Page() {
 	const navigate = useNavigate();
 	const [isPhotoUploaded, setIsPhotoUploaded] = useState(false); // 사진 업로드 상태
 	const [isBlueprintUploaded, setIsBlueprintUploaded] = useState(false); // 도면 업로드 상태
+	const [showFloorPlan, setShowFloorPlan] = useState(false); // floorPlanImg 표시 상태
 
 	useEffect(() => {
 		const userName = localStorage.getItem("userName");
@@ -188,6 +192,24 @@ function Step3Page() {
 	const handleExit = () => {
 		navigate('/'); // MainPage로 이동
 	};
+
+	const handleShowFloorPlan = () => {
+		setShowFloorPlan((prev) => !prev); // 버튼 클릭 시 상태 토글
+	};
+
+	// 추가: 다른 곳 클릭 시 이미지 숨기기
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (showFloorPlan && !event.target.closest('.floor-plan-container') && !event.target.closest('.special-button')) {
+				setShowFloorPlan(false); // 이미지 숨기기
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [showFloorPlan]);
 
 	return (
 		<div>
@@ -220,9 +242,25 @@ function Step3Page() {
 									<span id="userNameBlueprint"></span>님, 도면을 업로드해 주세요.
 								</Label>
 								<LabelWithButton>
-									<SpecialButton>?</SpecialButton>
+									<SpecialButton className="special-button" onClick={handleShowFloorPlan}>?</SpecialButton>
 								</LabelWithButton>
 							</LabelContainer>
+								{showFloorPlan && (
+									<div className="floor-plan-container">
+										<img 
+											src={floorPlanImg} 
+											alt="Floor Plan" 
+											style={{ 
+												position: 'absolute', 
+												top: '40%', 
+												left: '80%', 
+												transform: 'translate(-50%, -50%)', 
+												width: '20%', 
+												maxWidth: '600px' 
+											}} 
+										/>
+									</div>
+								)}
 							<FileButton>
 								<FileButtonText>파일 선택</FileButtonText>
 								<HiddenInput type="file" id="blueprintUpload" name="blueprintUpload" onChange={handleBlueprintChange} />
