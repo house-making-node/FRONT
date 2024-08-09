@@ -42,7 +42,7 @@ const StepBox = styled.div`
 
 const Box = styled.div`
 	width: 1078px;
-	height: 582px;
+	height: 637px;
 	border-radius: 15px;
 	border: 1px solid #b0b0b0;
 	padding: 10px;
@@ -141,6 +141,10 @@ function Step4Page() {
 		}
 	};
 
+	const handleExit = () => {
+		navigate('/'); // MainPage로 이동
+	};
+
 	return (
 		<div>
 			<Navbar />
@@ -174,7 +178,7 @@ function Step4Page() {
 						<StyledButton type="button" onClick={() => navigate("/consulting/step3Page")}>
 							이전
 						</StyledButton>
-						<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
+						<StyledButton type="button" onClick={handleExit}>
 							나가기
 						</StyledButton>
 						<StyledButton type="button" onClick={() => navigate("/consulting/consultLoading")} disabled={!interiorConcern.trim()}> {/* 내용이 있을 때만 활성화 */}

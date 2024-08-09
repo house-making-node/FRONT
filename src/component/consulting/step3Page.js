@@ -36,13 +36,13 @@ const StepBoxes = styled.div`
 const StepBox = styled.div`
 	width: 111px;
 	height: 21px;
-	background-color: ${(props) => (props.active ? "#CA904B69" : "#E0E0E0")}; /* 활성화된 StepBox 배경색 설정 */
+	background-color: ${(props) => (props.active ? "#CA904B69" : "#E0E0E0")}; /* 활성화된 StepBox 배경�� 설정 */
 	margin-left: ${(props) => (props.index > 0 ? "30px" : "0")}; /* 첫 번째 StepBox는 간격 없음 */
 `;
 
 const Box = styled.div`
 	width: 1078px;
-	height: 582px;
+	height: 637px;
 	border-radius: 15px;
 	border: 1px solid #b0b0b0;
 	padding: 10px;
@@ -185,6 +185,10 @@ function Step3Page() {
 		setIsBlueprintUploaded(true); // 도면이 업로드되면 상태 변경
 	};
 
+	const handleExit = () => {
+		navigate('/'); // MainPage로 이동
+	};
+
 	return (
 		<div>
 			<Navbar />
@@ -230,7 +234,7 @@ function Step3Page() {
 					<StyledButton type="button" onClick={() => navigate("/consulting/step2Page")}>
 						이전
 					</StyledButton>
-					<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
+					<StyledButton type="button" onClick={handleExit}>
 						나가기
 					</StyledButton>
 					<StyledButton type="button" onClick={() => navigate("/consulting/step4Page")} disabled={!(isPhotoUploaded && isBlueprintUploaded)}>

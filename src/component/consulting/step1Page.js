@@ -43,7 +43,7 @@ const StepBox = styled.div`
 
 const Box = styled.div`
 	width: 1078px;
-	height: 582px;
+	height: 637px;
 	border-radius: 15px;
 	border: 1px solid #b0b0b0;
 	padding: 10px;
@@ -166,6 +166,10 @@ function Step1Page() {
 		navigate("/consulting/step2Page"); // 모든 옵션이 선택된 경우 페이지 이동
 	};
 
+	const handleExit = () => {
+		navigate('/');
+	};
+
 	return (
 		<div>
 			<Navbar />
@@ -221,7 +225,7 @@ function Step1Page() {
 					</form>
 				</Box>
 				<ButtonContainer>
-					<StyledButton type="button" onClick={() => navigate("/")}>
+					<StyledButton type="button" onClick={handleExit}>
 						나가기
 					</StyledButton>
 					<StyledButton type="button" onClick={handleNext} disabled={!isNextEnabled}>

@@ -177,6 +177,10 @@ function Step2Page() {
 		navigate("/consulting/step3Page"); // 모든 옵션이 선택된 경우 페이지 이동
 	};
 
+	const handleExit = () => {
+		navigate('/'); // MainPage로 이동
+	};
+
 	return (
 		<div>
 			<Navbar />
@@ -184,9 +188,9 @@ function Step2Page() {
 				<TitleContainer>
 					<Title>STEP 02</Title>
 					<StepBoxes>
-						{[1, 2, 3, 4].map((step, index) => (
-							<StepBox key={index} active={step === 2} index={index} />
-						))}
+							{[1, 2, 3, 4].map((step, index) => (
+								<StepBox key={index} active={step === 2} index={index} />
+							))}
 					</StepBoxes>
 				</TitleContainer>
 				<Box>
@@ -220,7 +224,7 @@ function Step2Page() {
 							<StyledButton type="button" onClick={() => navigate("/consulting/step1Page")}>
 								이전
 							</StyledButton>
-							<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
+							<StyledButton type="button" onClick={handleExit}>
 								나가기
 							</StyledButton>
 							<StyledButton type="button" onClick={handleNext} disabled={!isNextEnabled}>
