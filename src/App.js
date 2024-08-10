@@ -29,7 +29,7 @@ import KakaoLogin from "./component/interiorconsult/KakaoLogin";
 import KakaoAgreement from "./component/interiorconsult/KakaoAgreement";
 import KakaoWelcome from "./component/interiorconsult/KakaoWelcome";
 import MemberHomeletter from './component/sendletter/HomeLetterRegister';
-
+import MemberShareletter from './page/ShareLetterRegister';
 const App = () => {
 	const [scraps, setScraps] = useState([]);
   
@@ -71,7 +71,7 @@ const App = () => {
 					<Route path="/home-letter-story" element={<HomeLetterStory />} />
 					<Route path="/home-letter-send" element={<HomeLetterSend />} />
 					<Route path="/home-letter-send-complete" element={<HomeLetterSendComplete />} />
-
+					<Route path="member-share-letter" element={<MemberShareletter />} />
 					<Route path="/consulting/consultLoading" element={<ConsultLoading />} />
 				</Routes>
 			</BrowserRouter>

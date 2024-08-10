@@ -1,9 +1,28 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import "./letter1.css";
 import { useState, useEffect } from "react";
 import { PrivacyPopup1 } from "./privacypopup1";
+import styled from 'styled-components';
 
+
+const Button = styled.button`
+    width: 100%;
+    background-color: #e6c793;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+
+    &:hover {
+        background-color: #CA904B72;
+    }
+`;
+    
 Modal.setAppElement("#root");
 
 function SubscriptionModal1({ isOpen, onRequestClose }) {
@@ -45,6 +64,12 @@ function SubscriptionModal1({ isOpen, onRequestClose }) {
     setShowMarketingPopup(false);
   };
 
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate('/member-share-letter', {state: { subscriptionCompleted: true}});
+  };
+
   return (
     <>
       <Modal
@@ -73,7 +98,7 @@ function SubscriptionModal1({ isOpen, onRequestClose }) {
               <input type="checkbox" id="marketing" name="marketing" checked={marketingChecked} onChange={handleMarketingChange} />
               <label htmlFor="marketing" style={{color:"red"}}>(필수) 마케팅 정보 수신에 동의합니다</label>
             </div>
-            <button type="submit" className="submit-button">구독하기</button>
+            <Button onClick={handleButtonClick} className="submit-button">구독하기</Button>
           </form>
         </div>
       </div>
