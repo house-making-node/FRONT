@@ -4,7 +4,7 @@ import Navbar from "../header/Navbar";
 import styled from "styled-components";
 
 const Container = styled.div`
-	padding-top: 140px; /* Navbar 높이 + 여백 */
+	margin-top: 140px; /* Navbar 높이 + 여백 */
 	display: flex;
 	flex-direction: column;
 	align-items: center; /* 수평 중앙 정렬 */
@@ -30,7 +30,7 @@ const Title = styled.div`
 const StepBoxes = styled.div`
 	display: flex;
 	margin-left: 37px; /* Title과의 간격 */
-	margin-top: 40px;
+	margin-top: 15px;
 `;
 
 const StepBox = styled.div`
@@ -43,7 +43,7 @@ const StepBox = styled.div`
 
 const Box = styled.div`
 	width: 1078px;
-	height: 582px;
+	height: 637px;
 	border-radius: 15px;
 	border: 1px solid #b0b0b0;
 	padding: 10px;
@@ -66,13 +66,13 @@ const StyledButton = styled.button`
 	width: 150px; /* 버튼의 너비 설정 */
 	height: 55px; /* 버튼의 높이 설정 */
 	border-radius: 6px; /* 버튼의 모서리 둥글게 설정 */
-	background: #ca904b69; /* 버튼의 배경색 설정 */
+	background: ${(props) => (props.disabled ? "#d0d0d0" : "#ca904b69")}; /* 비활성화 상태일 때 회색 배경 */
 	font-size: 24px; /* 글씨 크기 설정 */
 	font-weight: 400; /* 글씨 두께 설정 */
 	line-height: 28.06px; /* 글씨 줄 높이 설정 */
 	color: #ffffff; /* 글씨 색상 설정 */
 	border: none; /* 버튼의 테두리 제거 */
-	cursor: pointer; /* 마우스를 올렸을 때 커서 변경 */
+	cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")}; /* 비활성화 상태일 때 커서 변경 */
 `;
 
 const Label = styled.label`
@@ -132,6 +132,7 @@ const HiddenRadio = styled.input`
 
 function Step1Page() {
 	const navigate = useNavigate();
+	const [isNextEnabled, setIsNextEnabled] = React.useState(false); // 버튼 활성화 상태 관리
 
 	useEffect(() => {
 		const userName = localStorage.getItem("userName");
@@ -147,6 +148,27 @@ function Step1Page() {
 			document.getElementById("userNameRooms").innerText = userName;
 		}
 	}, []);
+
+	const handleOptionChange = () => {
+		const selectedPyeong = document.querySelector('input[name="pyeong"]:checked');
+		const selectedRooms = document.querySelector('input[name="rooms"]:checked');
+		setIsNextEnabled(!!selectedPyeong && !!selectedRooms); // 모든 옵션이 선택되면 true
+	};
+
+	const handleNext = () => {
+		const selectedPyeong = document.querySelector('input[name="pyeong"]:checked');
+		const selectedRooms = document.querySelector('input[name="rooms"]:checked');
+
+		if (!selectedPyeong || !selectedRooms) {
+			alert("모든 옵션을 선택해 주세요."); // 옵션 선택을 요구하는 경고 메시지
+			return;
+		}
+		navigate("/consulting/step2Page"); // 모든 옵션이 선택된 경우 페이지 이동
+	};
+
+	const handleExit = () => {
+		navigate('/');
+	};
 
 	return (
 		<div>
@@ -168,15 +190,15 @@ function Step1Page() {
 							</Label>
 						</div>
 						<OptionContainer>
-							<HiddenRadio type="radio" id="option1" name="pyeong" value="8평 ~ 10평" />
+							<HiddenRadio type="radio" id="option1" name="pyeong" value="8평 ~ 10평" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option1">
 								<span>8평 ~ 10평</span>
 							</OptionBox>
-							<HiddenRadio type="radio" id="option2" name="pyeong" value="10평 ~ 15평" />
+							<HiddenRadio type="radio" id="option2" name="pyeong" value="10평 ~ 15평" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option2">
 								<span>10평 ~ 15평</span>
 							</OptionBox>
-							<HiddenRadio type="radio" id="option3" name="pyeong" value="기타" />
+							<HiddenRadio type="radio" id="option3" name="pyeong" value="기타" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option3">
 								<span>기타</span>
 							</OptionBox>
@@ -187,15 +209,15 @@ function Step1Page() {
 							</Label>
 						</div>
 						<OptionContainer>
-							<HiddenRadio type="radio" id="option4" name="rooms" value="1개" />
+							<HiddenRadio type="radio" id="option4" name="rooms" value="1개" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option4">
 								<span>1개</span>
 							</OptionBox>
-							<HiddenRadio type="radio" id="option5" name="rooms" value="2개" />
+							<HiddenRadio type="radio" id="option5" name="rooms" value="2개" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option5">
 								<span>2개</span>
 							</OptionBox>
-							<HiddenRadio type="radio" id="option6" name="rooms" value="기타" />
+							<HiddenRadio type="radio" id="option6" name="rooms" value="기타" onChange={handleOptionChange} />
 							<OptionBox htmlFor="option6">
 								<span>기타</span>
 							</OptionBox>
@@ -203,10 +225,10 @@ function Step1Page() {
 					</form>
 				</Box>
 				<ButtonContainer>
-					<StyledButton type="button" onClick={() => navigate("/")}>
+					<StyledButton type="button" onClick={handleExit}>
 						나가기
 					</StyledButton>
-					<StyledButton type="button" onClick={() => navigate("/consulting/step2Page")}>
+					<StyledButton type="button" onClick={handleNext} disabled={!isNextEnabled}>
 						다음
 					</StyledButton>
 				</ButtonContainer>

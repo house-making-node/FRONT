@@ -14,7 +14,6 @@ const Nav = styled.nav`
   padding: 10px;
   width: 100vw;
   z-index: 1000;
-  //font-family: Freesentation;
 `;
 const NavItemContainer = styled.div`
   display: flex;
@@ -76,9 +75,9 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const [dropDownVisible, setDropDownVisible] = useState(false);
-
+  const [hovered, setHovered] = useState("");
   const handleMouseEnter = (item) => {
-    setSelected(item);
+    setHovered(item);
     setDropDownVisible(true);
   };
 
@@ -136,7 +135,7 @@ export default function Navbar() {
       </NavItemContainer>
 
       <DropDownContainer
-        visible={selected === "매거진" && dropDownVisible}
+        visible={hovered === "매거진" && dropDownVisible}
         onMouseEnter={() => setDropDownVisible(true)}
         onMouseLeave={handleMouseLeave}
         alignRight={false}
@@ -149,7 +148,7 @@ export default function Navbar() {
         </DropDownItem>
       </DropDownContainer>
       <DropDownContainer
-        visible={selected === "문의" && dropDownVisible}
+        visible={hovered === "문의" && dropDownVisible}
         onMouseEnter={() => setDropDownVisible(true)}
         onMouseLeave={handleMouseLeave}
         alignRight={true}

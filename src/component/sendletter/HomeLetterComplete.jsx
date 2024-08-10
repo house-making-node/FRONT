@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
-import houseimage from "../component/img/house.png";
+import houseimage from "../img/house.png";
 
 const PageContainer = styled.div`
   background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.2) 40.77%);
@@ -57,24 +57,25 @@ const HouseImage = styled.img`
   height: 65px;
   margin-top: 150px;
   margin-bottom: 16px;
-  margin-left: 100px;
+  margin-left: 130px;
 `;
 
-const ShareLetterComplete = () => {
+const HomeLetterComplete = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate('/share-letter-story');
+    navigate('/home-letter-story');
   };
 
   return (
     <PageContainer>
       <MessageContainer>
         <HouseImage src={houseimage} alt="House"/>
-        <SignupTitle>행복한 자취를 위한, 공유레터</SignupTitle>
-        <Description>00님의 자취 생활 공유하기가 완료되었어요.
-        <br />공유해주셔서 감사해요!</Description>
+        <SignupTitle>똑똑한 자취를 위한,  자취레터</SignupTitle>
+        <Description>제출이 완료 되었어요.
+        <br />보내주신 고민에 명확한 솔루션을 드리도록
+        <br />집꾸 팀이 노력할게요 !</Description>
       </MessageContainer>
 
       <Button onClick={handleButtonClick}>자취레터 보러가기</Button>
@@ -82,4 +83,4 @@ const ShareLetterComplete = () => {
   );
 };
 
-export default ShareLetterComplete;
+export default HomeLetterComplete;

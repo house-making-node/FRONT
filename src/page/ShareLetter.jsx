@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
-import "./letter.css";
-import SubscriptionModal from "./SubscriptionalModal";
-import Thumbnail from "./Thumbnail";
-import mirror from "../img/mirror.png";
-import running from "../img/running.png";
-import room from "../img/room.png";
-import house from "../img/house.png";
+import SubscriptionModal from "./SubscriptionalModal1";  // 올바른 경로로 수정
+import Thumbnail from "./Thumbnail1";
+import mirror from "../component/img/mirror.png";
+import running from "../component/img/running.png";
+import room from "../component/img/room.png";
+import house from "../component/img/house.png";
+import "./letter1.css"
 
 const Button = styled.button`
     width: 217px;
@@ -27,7 +27,8 @@ const Button = styled.button`
         background-color: #CA904B72;
     }
 `;
-function HomeLetter() {
+
+function ShareLetter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -51,16 +52,15 @@ function HomeLetter() {
   };
 
   const handleThumbnailClick = (id) => {
-    navigate('/home-letter-story');
+    navigate('/share-letter-story');
   }
 
-
   return (
-    <div className="HomeLetter">
-      <header className="HomeLetter-header">
+    <div className="ShareLetter">
+      <header className="ShareLetter-header">
         <img src={house} alt='house'/>
-        <h1>똑똑한 자취를 위한, 자취레터</h1>
-        <p>다양한 자취와 관련된 정보를 찾아보세요.</p>
+        <h1>행복한 자취를 위한, 공유레터</h1>
+        <p>다양한 독자들의 자취 이야기들, 매주 수요일에 만나요.</p>
         <button onClick={openModal} className="subscribe-button">
           구독하기
         </button>
@@ -70,25 +70,25 @@ function HomeLetter() {
         <Thumbnail
           id={1}
           src={mirror}
-          description="독자님의 가장 큰 인테리어 고민은 무엇인가요 ?"
+          description="자취를 시작하고 000이 생겼다 ?! "
           onClick={() => handleThumbnailClick(1)}
         />
         <Thumbnail
           id={2}
           src={running}
-          description="똑똑한 자취, OO이 필수라고 ?"
+          description="내가 사려고 모아둔, 다이소 꿀템 추천 모음집 📝"
           onClick={() => handleThumbnailClick(2)}
         />
         <Thumbnail
           id={3}
           src={mirror}
-          description="자취생을 위한 돈 관리 방법"
+          description="일주일에 두 번 0원 쓰기, 지출 감소에 효과가 있을까 ?"
           onClick={() => handleThumbnailClick(3)}
         />
         <Thumbnail
           id={4}
           src={room}
-          description="이미 구매한 물건을 또 구매하고 있다면 !"
+          description="식물 덕후가 알려주는 키우기 좋은 식물들 🪴"
           onClick={() => handleThumbnailClick(4)}
         />
       </div>
@@ -96,4 +96,4 @@ function HomeLetter() {
   );
 }
 
-export default HomeLetter;
+export default ShareLetter;
