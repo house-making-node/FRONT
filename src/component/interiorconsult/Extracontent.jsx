@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import extra1 from '../img/extra1.jpg';
-import extra2 from '../img/extra2.jpg';
-import extra3 from '../img/extra3.jpg';
+import React from "react";
+import styled from "styled-components";
+import extra1 from "../img/extra1.jpg";
+import extra2 from "../img/extra2.jpg";
+import extra3 from "../img/extra3.jpg";
 
 const ExtraContentSection = styled.div`
   background-color: #f7f0e7;

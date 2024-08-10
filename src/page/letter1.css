@@ -1,5 +1,5 @@
-.HomeLetter {
-  -top: 140px;
+.ShareLetter {
+  margin-top: 300px;
   max-width: 1920px;
   max-height: 1548px;
   margin: 0 auto;
@@ -9,7 +9,7 @@
 
 }
 
-.HomeLetter-header {
+.ShareLetter-header {
   text-align: center;
   margin-bottom: 20px;
   background: linear-gradient(to bottom, rgba(239, 214, 187, 0.25) ,rgba(255, 255, 255, 0.5) );
@@ -21,7 +21,7 @@
   align-items: center;
 }
 
-.HomeLetter-header img {
+.ShareLetter-header img {
   display: inline-block;
   margin-right: 10px;
   vertical-align: middle;
@@ -29,14 +29,14 @@
   margin-top:160px;
 }
 
-.HomeLetter-header h1 {
+.ShareLetter-header h1 {
   padding-top: 20px;
   font-size: 24px;
   margin-bottom: 10px;
   margin-top:0px;
 }
 
-.HomeLetter-header p {
+.ShareLetter-header p {
   font-size: 16px;
   margin-bottom: 100px;
 }
@@ -44,7 +44,7 @@
 .subscribe-button {
   margin-top: -40px;
   margin-bottom: 50px;
-  padding-right: 0px;
+  padding-right: 20px;
   background-color: white;
   border-style: solid;
   border-color: #c7b1997d;

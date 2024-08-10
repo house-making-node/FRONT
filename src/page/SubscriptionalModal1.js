@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
-import "./letter.css";
+import "./letter1.css";
 import { useState, useEffect } from "react";
-import { PrivacyPopup } from "./privacypopup";
+import { PrivacyPopup1 } from "./privacypopup1";
 import styled from 'styled-components';
 
 
@@ -25,7 +25,7 @@ const Button = styled.button`
     
 Modal.setAppElement("#root");
 
-function SubscriptionModal({ isOpen, onRequestClose }) {
+function SubscriptionModal1({ isOpen, onRequestClose }) {
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [marketingChecked, setMarketingChecked] = useState(false);
   const [showPrivacyPopup, setShowPrivacyPopup] = useState(false);
@@ -67,7 +67,7 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate('/member-home-letter', {state: { subscriptionCompleted: true}});
+    navigate('/member-share-letter', {state: { subscriptionCompleted: true}});
   };
 
   return (
@@ -102,13 +102,13 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
           </form>
         </div>
       </div>
-      <PrivacyPopup
+      <PrivacyPopup1
         isOpen={showPrivacyPopup}
         onClose={closePrivacyPopup}
           title="개인정보 수집 및 이용"
           content="자취레터 발송을 위한 최소한의 개인정보를 수집하고 이용합니다. 수집된 정보는 발송 외 다른 목적으로 이용되지 않으며, 서비스가 종료되거나 구독을 해지할 경우 즉시 파기됩니다."
       />
-      <PrivacyPopup
+      <PrivacyPopup1
         isOpen={showMarketingPopup}
         onClose={closeMarketingPopup}
         title="광고성 정보 수신."
@@ -121,4 +121,4 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
   );
 }
 
-export default SubscriptionModal;
+export default SubscriptionModal1;

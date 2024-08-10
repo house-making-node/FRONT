@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import {BsBookmark, BsBookmarkFill} from "react-icons/bs";
 
-function Thumbnail({ id, src, description, onClick }) {
+function Thumbnail1({ id, src, description, onClick }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
@@ -47,4 +47,4 @@ function Thumbnail({ id, src, description, onClick }) {
   );
 }
 
-export default Thumbnail;
+export default Thumbnail1;

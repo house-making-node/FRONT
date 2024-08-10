@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
-import houseimage from "../component/img/house.png";
+import houseimage from "../img/house.png";
 
 const PageContainer = styled.div`
   background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.2) 40.77%);
@@ -104,7 +104,7 @@ const HouseImage = styled.img`
   width: 81px; /* Adjust the size as needed */
   height: 65px;
   margin-top: 40px;
-  margin-left: 180px;
+  margin-left: 90px;
 `;
 
 const FileInput = styled.input`
@@ -148,7 +148,7 @@ const CompletionText = styled.p`
   color: black;
 `;
 
-const ShareLetterPage = () => {
+const HomeLetterPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm({ mode: "onChange" });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
@@ -156,7 +156,7 @@ const ShareLetterPage = () => {
   const onSubmit = (data) => {
     setIsSubmitted(true);
     console.log(data);
-    navigate('/share-letter-complete');
+    navigate('/home-letter-complete');
   };
 
   return (
@@ -165,9 +165,9 @@ const ShareLetterPage = () => {
         <>
           <MessageContainer>
             <HouseImage src={houseimage} alt="House"/>
-            <SignupTitle>똑똑한 정보 공유를 위한, 공유레터</SignupTitle>
-            <Description>도시재생 관련 생활 정보를 공유해주세요.
-            <br />나만 아는 특이한 장소, 편리한 꿀팁, 기타 기억에 남는 경험 등을 적어 주세요.</Description>
+            <SignupTitle>똑똑한 자취를 위한,  자취레터</SignupTitle>
+            <Description>자취를 하며 생긴 고민이 있으신가요 ?  
+            <br />사연을 선정해 솔루션을 드릴게요 !</Description>
           </MessageContainer>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Label htmlFor="name">닉네임</Label>
@@ -191,7 +191,7 @@ const ShareLetterPage = () => {
             />
             {errors.age && <ErrorMessage>{errors.age.message}</ErrorMessage>}
 
-            <Label htmlFor="experience">독자님이 공유하고 싶은 경험을 상세히 적어주세요.</Label>
+            <Label htmlFor="experience">독자님의 고민을 상세히 적어주세요.</Label>
             <TextArea 
               placeholder="여기를 클릭해주세요"
               {...register("experience", { required: "경험을 상세히 적어주세요." })} 
@@ -199,7 +199,7 @@ const ShareLetterPage = () => {
             />
             {errors.experience && <ErrorMessage>{errors.experience.message}</ErrorMessage>}
 
-            <Label htmlFor="thumbnail">썸네일로 사용될 사진을 첨부해주세요. (경험을 나타내는 사진, 그냥 좋아하는 사진 무엇이든 좋습니다.)</Label>
+            <Label htmlFor="thumbnail">썸네일로 사용될 사진을 첨부해주세요. (고민을 나타내는 사진, 그냥 좋아하는 사진 무엇이든 좋습니다.)</Label>
             <FileInput 
               {...register("thumbnail", { required: "파일을 첨부해주세요." })} 
               type="file"
@@ -207,7 +207,15 @@ const ShareLetterPage = () => {
             />
             {errors.thumbnail && <ErrorMessage>{errors.thumbnail.message}</ErrorMessage>}
 
-            <Label htmlFor="wishes">그 외 집꾸 팀에게 하고 싶은 말</Label>
+            <Label htmlFor="wishes">레터의 제목을 작성해주세요.</Label>
+            <TextArea 
+              placeholder="여기를 클릭해주세요"
+              {...register("wishes", { required: "말씀을 적어주세요." })} 
+              rows="4"
+            />
+            {errors.wishes && <ErrorMessage>{errors.wishes.message}</ErrorMessage>}
+
+            <Label htmlFor="wishes">고민 외에 집꾸 팀에게 하고싶은 말</Label>
             <TextArea 
               placeholder="여기를 클릭해주세요"
               {...register("wishes", { required: "말씀을 적어주세요." })} 
@@ -221,11 +229,11 @@ const ShareLetterPage = () => {
       ) : (
         <CompletionContainer>
           <CompletionTitle>행복한 자취를 위한, 공유레터</CompletionTitle>
-          <CompletionText>00님의 자취 생활 공유하기가 완료 되었어요.<br />공유 해주셔서 감사해요!</CompletionText>
+          <CompletionText>제출이 완료 되었어요.<br />보내주신 고민에 명확한 솔루션을 드리도록<br />집꾸 팀이 노력할게요 !</CompletionText>
         </CompletionContainer>
       )}
     </PageContainer>
   );
 }
 
-export default ShareLetterPage;
+export default HomeLetterPage;
