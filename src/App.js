@@ -44,7 +44,7 @@ const App = () => {
 					<Route path="/consulting/step3Page" element={<Step3Page />} />
 					<Route path="/consulting/step4Page" element={<Step4Page />} />
           <Route path="/login" element={<KakaoLogin />} />
-          <Route path="/agreement" element={<KakaoAgreement />} />
+            <Route path="/agreement" element={<KakaoAgreement />} />
 					<Route path="/welcome" element={<KakaoWelcome />} />
 					<Route path="/question" element={<PersonalBoard />} />
 					<Route path="/mypage" element={<MyProject />} />
