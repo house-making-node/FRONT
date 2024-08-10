@@ -11,6 +11,22 @@ const ExtraContentSection = styled.div`
   margin-top: 2em;
 `;
 
+const TitleContainer = styled.div`
+  margin-bottom: 1em;
+`;
+
+const MainTitle = styled.h2`
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+`;
+
+const SubTitle = styled.h3`
+  margin: 0;
+  font-size: 1em;
+  color: #999;
+`;
+
 const ExtraContentContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -21,44 +37,53 @@ const ExtraContentContainer = styled.div`
 `;
 
 const ExtraContentItem = styled.div`
-  flex: 1 1 200px;
+  position: relative;
+  flex: 1;
   margin: 0.5em;
   text-align: center;
+  overflow: hidden;
+  max-width: 400px; /* 최대 너비를 400px로 설정 */
 `;
 
 const ExtraContentImage = styled.img`
   width: 100%;
-  height: auto;
+  height: 250px; /* 모든 이미지의 높이를 동일하게 설정 */
   border-radius: 10px;
+  object-fit: cover;
 `;
 
 const ExtraContentText = styled.p`
-  margin-top: 0.5em;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  margin: 0;
   font-size: 1em;
-  color: #333;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.5em;
+  border-radius: 5px;
 `;
 
 const ExtraContent = () => {
   return (
     <ExtraContentSection>
-      <h2>스타일별 인테리어</h2>
+      <TitleContainer>
+        <SubTitle>Homestyling</SubTitle>
+        <MainTitle>스타일별 인테리어</MainTitle>
+      </TitleContainer>
       <ExtraContentContainer>
         <ExtraContentItem>
           <ExtraContentImage src={extra1} alt="extra1" />
-          <ExtraContentText>심플한 화이트 인테리어</ExtraContentText>
+          <ExtraContentText>심플하고 깔끔한 화이트톤</ExtraContentText>
         </ExtraContentItem>
         <ExtraContentItem>
           <ExtraContentImage src={extra2} alt="extra2" />
-          <ExtraContentText>모던한 그레이 인테리어</ExtraContentText>
+          <ExtraContentText>따듯하고 아늑한 우드톤</ExtraContentText>
         </ExtraContentItem>
         <ExtraContentItem>
           <ExtraContentImage src={extra3} alt="extra3" />
-          <ExtraContentText>아늑한 베이지 인테리어</ExtraContentText>
+          <ExtraContentText>모던하고 시크한 블랙&그레이톤</ExtraContentText>
         </ExtraContentItem>
-        {/* <ExtraContentItem>
-          <ExtraContentImage src={extra4} alt="extra4" />
-          <ExtraContentText>클래식한 브라운 인테리어</ExtraContentText>
-        </ExtraContentItem> */}
       </ExtraContentContainer>
     </ExtraContentSection>
   );
