@@ -151,10 +151,11 @@ export default function MyProject() {
             <div className="border-t-2 border-gray-200 w-72"></div>
             <RoomType>
               <div className="text-black opacity-30 p-2">
-                {project.type || "유형 정보 없음"}
+                {project.room_num || "유형 정보 없음"}
               </div>
               <div className="text-xl m-3">
-                {project.name || "프로젝트 이름 없음"}
+                {project.name || "프로젝트 이름 없음"}{" "}
+                {/*사용자 이름으로 바꿔야함 */}
               </div>
               <Choice onClick={() => handleClick("/")}>
                 {project.signmessage || "메시지 없음"}
