@@ -48,7 +48,7 @@ const KakaoLogin = () => {
             // 4. 백 -> 프론트, 토큰 넘김
             // 토큰을 받아서 원하는 로직을 처리
             console.log('Access Token:', data.accessToken);
-            // 예: 로그인 후 메인 페이지로 이동
+            // 로그인 후 환영페이지로 이동
             window.location.href = '/welcome';
           } else {
             // 토큰 발급 실패 처리
