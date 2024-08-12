@@ -11,7 +11,6 @@ import ShareLetter from "./page/ShareLetter";
 import ShareLetterPage from "./page/ShareLetterPage";
 import ShareLetterComplete from "./page/ShareLetterComplete";
 import ShareLetterStory from "./page/ShareLetterStory";
-import ShareLetterSave from "./page/ShareLetterSave";
 import ShareLetterSend from "./page/ShareLetterSend";
 import ShareLetterSendComplete from "./page/ShareLetterSendComplete";
 import HomeLetter from "./component/sendletter/HomeLetter";
@@ -63,7 +62,6 @@ const App = () => {
 					<Route path="/share-letter-complete" element={<ShareLetterComplete />} />
 					<Route path="/share-letter-story" element={<ShareLetterStory addScrap={addScrap} />} />
 					<Route path="/share-letter-send" element={<ShareLetterSend />} />
-					<Route path="/share-letter-save" element={<ShareLetterSave />} />
 					<Route path="/share-letter-send-complete" element={<ShareLetterSendComplete />} />
 					<Route path="/homeletter" element={<HomeLetter />} />
 					<Route path="/home-letter-page" element={<HomeLetterPage />} />

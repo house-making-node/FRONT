@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import houseimage from "../component/img/house.png";
+import axios from 'axios';
 
 const PageContainer = styled.div`
   background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.2) 40.77%);
@@ -123,15 +124,6 @@ const FileInput = styled.input`
   }
 `;
 
-const FileLabel = styled.label`
-  margin-bottom: 8px;
-  font-weight: 260;
-  color: black;
-  font-size: 20px;
-  text-align: left; /* 텍스트 왼쪽 정렬 */
-  align-self: flex-start; /* Flex 컨테이너 내에서 왼쪽으로 정렬 */
-`;
-
 const CompletionContainer = styled.div`
   text-align: center;
   margin-top: 100px;
@@ -158,6 +150,7 @@ const ShareLetterPage = () => {
     console.log(data);
     navigate('/share-letter-complete');
   };
+
 
   return (
     <PageContainer>
