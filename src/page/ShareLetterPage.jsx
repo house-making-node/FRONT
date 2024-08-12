@@ -145,12 +145,36 @@ const ShareLetterPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    setIsSubmitted(true);
-    console.log(data);
-    navigate('/share-letter-complete');
-  };
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append('directory', 'share_letters'); // S3 폴더 경로
+    formData.append('image', data.thumbnail[0]); // 파일
+    formData.append('user_id', 1); // 사용자 ID (예시로 1 사용)
+    formData.append('nickname', data.name); // 사용자 닉네임
+    formData.append('age', data.age); // 사용자 나이
+    formData.append('experience_detail', data.experience); // 공유레터 내용
+    formData.append('experience_comment', data.wishes); // 집꾸에게 보내는 의견
+    formData.append('title', '제목'); // 공유레터 제목 (원하는 제목으로 변경)
 
+    try {
+      const response = await axios.post('http://3.36.240.5:3000/share_letters/submit', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.isSuccess) {
+        console.log('공유레터 제출 성공:', response.data);
+        setIsSubmitted(true);
+      } else {
+        console.error('제출 실패:', response.data.message);
+        alert('제출에 실패했습니다: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('API 호출 중 오류 발생:', error);
+      alert('서버 오류: 나중에 다시 시도해주세요.');
+    }
+  };
 
   return (
     <PageContainer>
