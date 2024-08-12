@@ -155,6 +155,7 @@ const ShareLetterPage = () => {
     formData.append('experience_detail', data.experience); // 공유레터 내용
     formData.append('experience_comment', data.wishes); // 집꾸에게 보내는 의견
     formData.append('title', '제목'); // 공유레터 제목 (원하는 제목으로 변경)
+    navigate('/share-letter-complete');
 
     try {
       const response = await axios.post('http://3.36.240.5:3000/share_letters/submit', formData, {
