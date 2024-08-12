@@ -8,7 +8,7 @@ import shareletter2 from '../component/img/shareletter2.png';
 const PageContainer = styled.div`
   background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.2) 40.77%);
   padding: 20px;
-  margin-top: 120px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
