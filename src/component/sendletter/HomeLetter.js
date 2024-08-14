@@ -50,6 +50,10 @@ function HomeLetter() {
     setModalIsOpen(false);
   };
 
+  const handleThumbnailClick = (id) => {
+    navigate('/home-letter-story');
+  }
+
 
   return (
     <div className="HomeLetter">
@@ -67,21 +71,25 @@ function HomeLetter() {
           id={1}
           src={mirror}
           description="독자님의 가장 큰 인테리어 고민은 무엇인가요 ?"
+          onClick={() => handleThumbnailClick(1)}
         />
         <Thumbnail
           id={2}
           src={running}
           description="똑똑한 자취, OO이 필수라고 ?"
+          onClick={() => handleThumbnailClick(2)}
         />
         <Thumbnail
           id={3}
           src={mirror}
           description="자취생을 위한 돈 관리 방법"
+          onClick={() => handleThumbnailClick(3)}
         />
         <Thumbnail
           id={4}
           src={room}
           description="이미 구매한 물건을 또 구매하고 있다면 !"
+          onClick={() => handleThumbnailClick(4)}
         />
       </div>
     </div>

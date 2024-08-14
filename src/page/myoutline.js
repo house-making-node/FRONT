@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
+import axios from "axios";
+import profile from "../component/img/profile.jpeg";
+import { useUser, UserProvider } from "../component/api/UserContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,6 +14,7 @@ const Wrapper = styled.div`
   padding: 10px;
   font-family: Freesentation;
 `;
+
 const Profile = styled.div`
   width: 300px;
   height: 600px;
@@ -21,6 +25,7 @@ const Profile = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
 const ProfileBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,6 +33,7 @@ const ProfileBox = styled.div`
   height: 400px;
   justify-content: space-evenly;
 `;
+
 const Sort = styled.div`
   font-family: Freesentation;
   font-size: 18px;
@@ -37,6 +43,7 @@ const Sort = styled.div`
   width: 300px;
   padding-top: 0px;
 `;
+
 const Item = styled.div`
   height: 50px;
   cursor: pointer;
@@ -63,6 +70,13 @@ export default function Outline({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [selected, setSelected] = useState(null);
+  const [formData, setFormData] = useState({
+    user_id: 2,
+    user_name: "",
+    email: "",
+    created_at: "",
+  });
+  const [userInfo, setUserInfo] = useUser();
 
   useEffect(() => {
     if (location.pathname === "/mypage") {
@@ -72,19 +86,43 @@ export default function Outline({ children }) {
     } else if (location.pathname === "/myscrap/shareletter") {
       setSelected("스크랩");
     }
-  });
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        console.log("Requesting profile for user_id:", formData.user_id);
+        const response = await axios.get(
+          `http://3.36.240.5:3000/user/profile/${formData.user_id}`
+        );
+        console.log("Response data:", response.data);
+        setFormData(response.data.data);
+        setUserInfo(response.data.data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+
+    getProfile();
+  }, [formData.user_id, setUserInfo]);
+
   const handleClick = (path, item) => {
     setSelected(item);
     navigate(path);
   };
+
   return (
     <Wrapper>
       <Profile>
         <ProfileBox>
           <div className="text-xl">My Profile</div>
-          <div className="w-48 h-40 rounded-full bg-white"></div>
-          <div className="text-lg">이름</div>
-          <div className="text-lg">이메일</div>
+          <img
+            src={profile}
+            className="w-48 h-40 rounded-full bg-white"
+            alt="Profile"
+          />
+          <div className="text-lg">{formData.user_name}</div>
+          <div className="text-lg">{formData.email}</div>
           <div className="border-t-2 border-gray-200 w-72"></div>
         </ProfileBox>
         <Sort>

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from 'styled-components';
-import "./letter.css";
-import SubscriptionModal from "./SubscriptionalModal";
-import Thumbnail from "./Thumbnail";
-import mirror from "../img/mirror.png";
-import running from "../img/running.png";
-import room from "../img/room.png";
-import house from "../img/house.png";
+import "./letter1.css";
+import SubscriptionModal from "./SubscriptionalModal1";
+import Thumbnail from "./Thumbnail1";
+import mirror from "../component/img/mirror.png";
+import running from "../component/img/running.png";
+import room from "../component/img/room.png";
+import house from "../component/img/house.png";
 import { BsFillExclamationDiamondFill } from "react-icons/bs";
 
 const Button = styled.button`
@@ -68,7 +68,7 @@ const CloseButton = styled.button`
   }
 `;
 
-function MemberHomeletter() {
+function MemberShareletter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showSubscriptionCompletedPopup, setShowSubscriptionCompletedPopup] = useState(false);
 
@@ -92,7 +92,7 @@ function MemberHomeletter() {
   };
 
   const handleButtonClick = () => {
-    navigate('/home-letter-page');
+    navigate('/share-letter-page');
   };
 
   const closeSubscriptionCompletedPopup = () => {
@@ -101,8 +101,8 @@ function MemberHomeletter() {
 
 
   return (
-    <div className="HomeLetter">
-      <header className="HomeLetter-header">
+    <div className="ShareLetter">
+      <header className="ShareLetter-header">
         <img src={house} alt='house'/>
         <h1>똑똑한 자취를 위한, 자취레터</h1>
         <p>고민상담부터 생활 지식까지 매주 금요일에 만나요.</p>
@@ -145,4 +145,4 @@ function MemberHomeletter() {
   );
 }
 
-export default MemberHomeletter;
+export default MemberShareletter;

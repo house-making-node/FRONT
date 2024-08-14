@@ -19,3 +19,5 @@ export function PrivacyPopup({isOpen, onClose, title, content}){
         
     );
 }
+
+export default PrivacyPopup;
