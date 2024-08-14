@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
 	padding-top: 140px; /* Navbar 높이 + 여백 */
@@ -32,7 +33,7 @@ const BoxContent = styled.div`
     margin-bottom : 20px;
 `;
 
-const ConfirmButton = styled.button`
+const StyledButton = styled.button`
 	position: absolute;
 	bottom: 10px;
 	right: 10px;
@@ -69,7 +70,10 @@ const LoadingIcon = styled.div`
 	}
 `;
 
+
+
 function Step5Page() {
+	const navigate = useNavigate(); // 추가
 	return (
 		<div>
 			<Navbar />
@@ -81,7 +85,7 @@ function Step5Page() {
 					<BoxContent>
 						조금만 기다려주세요!
 					</BoxContent>
-					<ConfirmButton>확인</ConfirmButton>
+					<StyledButton type="button" onClick={() => navigate("/consulting/gptAnswer")}>확인</StyledButton>
 				</Box>
 				<LoadingIcon style={{ margin: '0 auto' }} /> {/* Box 아래 페이지 가운데에 로딩 아이콘 */}
 			</Container>
