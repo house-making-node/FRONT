@@ -3,6 +3,7 @@ import Outline from "../../page/myoutline";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useUser } from "../api/UserContext";
 
 const Type = styled.div`
   display: flex;
@@ -35,7 +36,6 @@ const ItemWrapper = styled.div`
 `;
 
 const ItemBox = styled.div`
-  margin: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,67 +66,12 @@ const TitleText = styled.span`
   width: 100%;
 `;
 
-const Myscrap = ({ user_id }) => {
+export default function Myscrap() {
   const navigate = useNavigate();
   const location = useLocation();
   const [selected, setSelected] = useState("자취레터");
-  const [shareScraps, setShareScraps] = useState([]);
-  const [homeScraps, setHomeScraps] = useState([]);
   const [scraps, setScraps] = useState([]);
-
-  const getShareScrap = async (user_id) => {
-    try {
-      const getScrap_res = await axios.get(
-        `http://3.36.240.5:3000/user/${user_id}/share_letters/scraps`
-      );
-      const scrapsData = getScrap_res.data.result["Scrap Letters"];
-      console.log("공유레터 API 응답:", getScrap_res.data); // 전체 응답 출력
-      console.log("공유레터 데이터:", scrapsData);
-      setShareScraps(scrapsData);
-    } catch (error) {
-      console.error(
-        "공유레터 에러",
-        error.response ? error.response.data : error
-      );
-    }
-  };
-
-  const getHomeScrap = async (user_id) => {
-    try {
-      const getScrap_res = await axios.get(
-        `http://3.36.240.5:3000/user/home_letters/scrap/${user_id}`
-      );
-      const scrapsData = getScrap_res.data.result["Scrap Letters"];
-      console.log("자취레터 API 응답:", getScrap_res.data); // 전체 응답 출력
-      console.log("자취레터 데이터:", scrapsData);
-      setHomeScraps(scrapsData);
-    } catch (error) {
-      console.error(
-        "자취레터 에러",
-        error.response ? error.response.data : error
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (user_id) {
-      getShareScrap(user_id);
-      getHomeScrap(user_id);
-    }
-  }, [user_id]);
-
-  useEffect(() => {
-    console.log("현재 선택된 유형:", selected);
-    console.log("공유레터 스크랩:", shareScraps);
-    console.log("자취레터 스크랩:", homeScraps);
-
-    if (selected === "공유레터") {
-      setScraps(shareScraps);
-    } else {
-      setScraps(homeScraps);
-    }
-    console.log("현재 선택된 스크랩 데이터:", scraps);
-  }, [selected, shareScraps, homeScraps]);
+  const [userInfo] = useUser();
 
   useEffect(() => {
     if (location.pathname.includes("shareletter")) {
@@ -135,6 +80,37 @@ const Myscrap = ({ user_id }) => {
       setSelected("자취레터");
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (userInfo && userInfo.user_id) {
+      fetchScrapData(userInfo.user_id, selected);
+    }
+  }, [userInfo, selected]);
+
+  const fetchScrapData = async (user_id, type) => {
+    try {
+      let response;
+      let scrapsData = [];
+
+      if (type === "공유레터") {
+        response = await axios.get(
+          `http://3.36.240.5:3000/user/${user_id}/share_letters/scraps`
+        );
+        scrapsData = response.data.result["Scrap Letters "]; // 공유레터 구조에 맞게 처리
+      } else {
+        response = await axios.get(
+          `http://3.36.240.5:3000/user/home_letters/scrap/${user_id}`
+        );
+        scrapsData = response.data.result; // 자취레터는 바로 result 배열에 접근
+      }
+
+      console.log("API Response:", response.data);
+      console.log("Scraps Data:", scrapsData);
+      setScraps(scrapsData);
+    } catch (error) {
+      console.error("스크랩 데이터를 가져오는 중 에러 발생:", error);
+    }
+  };
 
   const getBasePath = (type) => {
     return type === "자취레터" ? "homeletter" : "shareletter";
@@ -170,24 +146,26 @@ const Myscrap = ({ user_id }) => {
         All <ProjectCount>{scraps.length}</ProjectCount>
       </div>
       <ItemWrapper>
-        {scraps.map((scrap) => (
-          <ItemBox
-            key={scrap.scrap_id}
-            onClick={() => handleClick(scrap.letter_id)}
-          >
-            <Title>
-              <TitleText>{scrap.title}</TitleText>
-            </Title>
-            <img
-              src={`https://s3.amazonaws.com/your-bucket-name/${scrap.s3_key}`}
-              className="w-64 h-44 m-2 bg-mypageGray"
-              alt={scrap.title}
-            />
-          </ItemBox>
-        ))}
+        {scraps.length > 0 ? (
+          scraps.map((scrap) => (
+            <ItemBox
+              key={scrap.letter_id}
+              onClick={() => handleClick(scrap.letter_id)}
+            >
+              <Title>
+                <TitleText>{scrap.title}</TitleText>
+              </Title>
+              <img
+                src={scrap.s3_url || "default-image-url.jpg"} // s3_url 사용, null인 경우 기본 이미지 표시
+                className="w-64 h-44 m-2 bg-mypageGray"
+                alt={scrap.title}
+              />
+            </ItemBox>
+          ))
+        ) : (
+          <div>No scraps found</div>
+        )}
       </ItemWrapper>
     </Outline>
   );
-};
-
-export default Myscrap;
+}

@@ -96,9 +96,9 @@ export default function MyProject() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
   const [userProjects, setUserProjects] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-  const [projectsPerPage] = useState(3); // 페이지당 프로젝트 수
-  const [userInfo] = useUser(); // useUser로 사용자 정보 가져오기
+  const [currentPage, setCurrentPage] = useState(1);
+  const [projectsPerPage] = useState(3);
+  const [userInfo] = useUser();
 
   useEffect(() => {
     if (userInfo && userInfo.user_id) {
