@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import axios from "axios";
 import profile from "../component/img/profile.jpeg";
-import { UserProvider } from "../component/api/UserContext";
+import { useUser, UserProvider } from "../component/api/UserContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -71,11 +71,12 @@ export default function Outline({ children }) {
   const location = useLocation();
   const [selected, setSelected] = useState(null);
   const [formData, setFormData] = useState({
-    user_id: 1,
+    user_id: 2,
     user_name: "",
     email: "",
     created_at: "",
   });
+  const [userInfo, setUserInfo] = useUser();
 
   useEffect(() => {
     if (location.pathname === "/mypage") {
@@ -96,23 +97,14 @@ export default function Outline({ children }) {
         );
         console.log("Response data:", response.data);
         setFormData(response.data.data);
+        setUserInfo(response.data.data);
       } catch (error) {
-        if (error.response) {
-          // 서버 응답이 2xx가 아닌 경우
-          console.error("Server responded with status:", error.response.status);
-          console.error("Response data:", error.response.data);
-        } else if (error.request) {
-          // 요청이 만들어졌으나 서버 응답이 없음
-          console.error("No response received from server:", error.request);
-        } else {
-          // 요청을 만들던 중 발생한 오류
-          console.error("Error in request setup:", error.message);
-        }
+        console.error("Error fetching profile:", error);
       }
     };
 
     getProfile();
-  }, [formData.user_id]);
+  }, [formData.user_id, setUserInfo]);
 
   const handleClick = (path, item) => {
     setSelected(item);
@@ -120,36 +112,35 @@ export default function Outline({ children }) {
   };
 
   return (
-    <UserProvider value={formData}>
-      <Wrapper>
-        <Profile>
-          <ProfileBox>
-            <div className="text-xl">My Profile</div>
-            <img
-              src={profile}
-              className="w-48 h-40 rounded-full bg-white"
-            ></img>
-            <div className="text-lg">{formData.user_name}</div>
-            <div className="text-lg">{formData.email}</div>
-            <div className="border-t-2 border-gray-200 w-72"></div>
-          </ProfileBox>
-          <Sort>
-            <Item
-              onClick={() => handleClick("/mypage", "내 프로젝트")}
-              selected={selected === "내 프로젝트"}
-            >
-              내 프로젝트
-            </Item>
-            <Item
-              onClick={() => handleClick("/myscrap/homeletter", "스크랩")}
-              selected={selected === "스크랩"}
-            >
-              스크랩
-            </Item>
-          </Sort>
-        </Profile>
-        <Board>{children}</Board>
-      </Wrapper>
-    </UserProvider>
+    <Wrapper>
+      <Profile>
+        <ProfileBox>
+          <div className="text-xl">My Profile</div>
+          <img
+            src={profile}
+            className="w-48 h-40 rounded-full bg-white"
+            alt="Profile"
+          />
+          <div className="text-lg">{formData.user_name}</div>
+          <div className="text-lg">{formData.email}</div>
+          <div className="border-t-2 border-gray-200 w-72"></div>
+        </ProfileBox>
+        <Sort>
+          <Item
+            onClick={() => handleClick("/mypage", "내 프로젝트")}
+            selected={selected === "내 프로젝트"}
+          >
+            내 프로젝트
+          </Item>
+          <Item
+            onClick={() => handleClick("/myscrap/homeletter", "스크랩")}
+            selected={selected === "스크랩"}
+          >
+            스크랩
+          </Item>
+        </Sort>
+      </Profile>
+      <Board>{children}</Board>
+    </Wrapper>
   );
 }

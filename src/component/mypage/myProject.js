@@ -76,28 +76,51 @@ const Choice = styled.div`
   cursor: pointer;
 `;
 
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const ArrowButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 0 20px;
+  color: ${(props) => (props.disabled ? "#ccc" : "#000")};
+`;
+
 export default function MyProject() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
   const [userProjects, setUserProjects] = useState([]);
-  const userInfo = useUser();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [projectsPerPage] = useState(3);
+  const [userInfo] = useUser();
 
   useEffect(() => {
-    fetchProjectStatus();
-  }, []);
+    if (userInfo && userInfo.user_id) {
+      console.log("User info is available:", userInfo);
+      fetchProjectStatus(userInfo.user_id);
+    } else {
+      console.log("User info is not available");
+    }
+  }, [userInfo]);
 
-  const fetchProjectStatus = async () => {
+  const fetchProjectStatus = async (user_id) => {
     try {
       const response = await axios.get(
-        `http://3.36.240.5:3000/user/consulting/${userInfo.user_id}`,
-        {
-          headers: {
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache",
-            Expires: "0",
-          },
-        }
+        `http://3.36.240.5:3000/user/consulting/${user_id}`
       );
+
+      console.log("API Response:", response.data);
+
+      if (!response.data || !response.data.result) {
+        throw new Error("API 응답이 유효하지 않습니다.");
+      }
+
       const fetchedProjects = response.data.result.map((project) => {
         let signmessage = "";
         const status = project.status;
@@ -118,19 +141,62 @@ export default function MyProject() {
 
         return {
           ...project,
-          //consulting_id: consulting_id,
           themeImage: pjtheme,
           signmessage: signmessage,
         };
       });
+
+      console.log("Fetched Projects:", fetchedProjects);
+
       setUserProjects(fetchedProjects);
     } catch (error) {
       console.error("프로젝트 상태를 불러오는 중 에러 발생:", error);
     }
   };
 
-  const handleClick = (path) => {
+  const handleClick = (signmessage) => {
+    let path = "/";
+    switch (signmessage) {
+      case "집의 상태를 선택해주세요":
+        path = "/consulting/step1Page";
+        break;
+      case "좋아하는 분위기를 선택해주세요":
+        path = "/consulting/step2Page";
+        break;
+      case "사진을 첨부해주세요":
+        path = "/consulting/step3Page";
+        break;
+      case "고민을 작성해주세요":
+        path = "/consulting/step4Page";
+        break;
+      case "이전 화면으로 돌아가기":
+        path = "/consultLoading";
+        break;
+      case "답변 확인하기":
+        path = "/"; //gpt화면
+        break;
+    }
     navigate(path);
+  };
+
+  // 현재 페이지에 해당하는 프로젝트들 가져오기
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = userProjects.slice(
+    indexOfFirstProject,
+    indexOfLastProject
+  );
+
+  const nextPage = () => {
+    if (currentPage < Math.ceil(userProjects.length / projectsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   return (
@@ -143,29 +209,47 @@ export default function MyProject() {
         My Projects <ProjectCount>{userProjects.length}</ProjectCount>
       </div>
       <ItemWrapper>
-        {userProjects.map((project, index) => (
-          <ItemBox key={index}>
-            <StepSign>{project.status || "단계 정보 없음"}</StepSign>
-            <img
-              src={project.themeImage}
-              alt="Project Theme"
-              className="w-64 h-48 m-2 bg-mypageGray"
-            />
-            <div className="border-t-2 border-gray-200 w-72"></div>
-            <RoomType>
-              <div className="text-black opacity-30 p-2">
-                {project.room_num || "유형 정보 없음"}
-              </div>
-              <div className="text-xl m-3">
-                {userInfo?.user_name || "프로젝트 이름 없음"}
-              </div>
-              <Choice onClick={() => handleClick("/")}>
-                {project.signmessage || "메시지 없음"}
-              </Choice>
-            </RoomType>
-          </ItemBox>
-        ))}
+        {currentProjects.length === 0 ? (
+          <div>No projects found</div>
+        ) : (
+          currentProjects.map((project, index) => (
+            <ItemBox key={index}>
+              <StepSign>{project.status || "단계 정보 없음"}</StepSign>
+              <img
+                src={project.themeImage}
+                alt="Project Theme"
+                className="w-64 h-48 m-2 bg-mypageGray"
+              />
+              <div className="border-t-2 border-gray-200 w-72"></div>
+              <RoomType>
+                <div className="text-black opacity-30 p-2">
+                  {project.room_num || "유형 정보 없음"}
+                </div>
+                <div className="text-xl m-3">
+                  {userInfo?.user_name || "프로젝트 이름 없음"}
+                </div>
+                <Choice onClick={() => handleClick(project.signmessage)}>
+                  {project.signmessage || "메시지 없음"}
+                </Choice>
+              </RoomType>
+            </ItemBox>
+          ))
+        )}
       </ItemWrapper>
+      <PaginationWrapper>
+        <ArrowButton onClick={prevPage} disabled={currentPage === 1}>
+          &#8592;
+        </ArrowButton>
+        <span>{currentPage}</span>
+        <ArrowButton
+          onClick={nextPage}
+          disabled={
+            currentPage === Math.ceil(userProjects.length / projectsPerPage)
+          }
+        >
+          &#8594;
+        </ArrowButton>
+      </PaginationWrapper>
     </Outline>
   );
 }
