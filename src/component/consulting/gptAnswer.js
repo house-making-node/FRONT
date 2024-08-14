@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import smallLogo from "../img/logo.png";
 
 const Container = styled.div`
