@@ -1,5 +1,5 @@
 .HomeLetter {
-  padding-top: 140px;
+  -top: 140px;
   max-width: 1920px;
   max-height: 1548px;
   margin: 0 auto;
@@ -44,7 +44,7 @@
 .subscribe-button {
   margin-top: -40px;
   margin-bottom: 50px;
-  padding-right: 20px;
+  padding-right: 0px;
   background-color: white;
   border-style: solid;
   border-color: #c7b1997d;

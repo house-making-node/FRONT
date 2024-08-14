@@ -30,20 +30,30 @@ const Button = styled.button`
 
 function ShareLetter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const isLoggedIn = localStorage.getItem('access_token') ? true : false;
 
   const openModal = () => {
     setModalIsOpen(true);
   };
 
+  // const openModal = () => {
+  //   if (isLoggedIn){
+  //     setModalIsOpen(true);
+  //   }
+  //   else{
+  //     navigate('/login');
+  //   }
+  // };
+
   const closeModal = () => {
     setModalIsOpen(false);
   };
 
-  const navigate = useNavigate();
-
-  const handleButtonClick = () => {
-    navigate('/share-letter-page');
-  };
+  const handleThumbnailClick = (id) => {
+    navigate('/share-letter-story');
+  }
 
   return (
     <div className="ShareLetter">
@@ -61,26 +71,27 @@ function ShareLetter() {
           id={1}
           src={mirror}
           description="자취를 시작하고 000이 생겼다 ?! "
+          onClick={() => handleThumbnailClick(1)}
         />
         <Thumbnail
           id={2}
           src={running}
           description="내가 사려고 모아둔, 다이소 꿀템 추천 모음집 📝"
+          onClick={() => handleThumbnailClick(2)}
         />
         <Thumbnail
           id={3}
           src={mirror}
           description="일주일에 두 번 0원 쓰기, 지출 감소에 효과가 있을까 ?"
+          onClick={() => handleThumbnailClick(3)}
         />
         <Thumbnail
           id={4}
           src={room}
           description="식물 덕후가 알려주는 키우기 좋은 식물들 🪴"
+          onClick={() => handleThumbnailClick(4)}
         />
       </div>
-      <Button onClick={handleButtonClick} className="subscribe-button">
-          내 자취생활 공유하기
-      </Button>
     </div>
   );
 }

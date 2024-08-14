@@ -77,7 +77,7 @@ const ShareLetterComplete = () => {
         <br />공유해주셔서 감사해요!</Description>
       </MessageContainer>
 
-      <Button onClick={handleButtonClick}>자취레터 보러가기</Button>
+      <Button onClick={handleButtonClick}>공유레터 보러가기</Button>
     </PageContainer>
   );
 };

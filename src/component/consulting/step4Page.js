@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
-	padding-top: 140px; /* Navbar 높이 + 여백 */
+	margin-top: 140px; /* Navbar 높이 + 여백 */
 	display: flex;
 	flex-direction: column;
 	align-items: center; /* 수평 중앙 정렬 */
@@ -28,8 +28,8 @@ const Title = styled.div`
 
 const StepBoxes = styled.div`
 	display: flex;
-	margin-left: 30px; /* Title과의 간격 */
-	margin-top: 40px;
+	margin-left: 37px; /* Title과의 간격 */
+	margin-top: 15px;
 `;
 
 const StepBox = styled.div`
@@ -42,7 +42,7 @@ const StepBox = styled.div`
 
 const Box = styled.div`
 	width: 1078px;
-	height: 582px;
+	height: 637px;
 	border-radius: 15px;
 	border: 1px solid #b0b0b0;
 	padding: 10px;
@@ -141,6 +141,10 @@ function Step4Page() {
 		}
 	};
 
+	const handleExit = () => {
+		navigate('/'); // MainPage로 이동
+	};
+
 	return (
 		<div>
 			<Navbar />
@@ -174,7 +178,7 @@ function Step4Page() {
 						<StyledButton type="button" onClick={() => navigate("/consulting/step3Page")}>
 							이전
 						</StyledButton>
-						<StyledButton type="button" onClick={() => navigate("/consulting/exitPage")}>
+						<StyledButton type="button" onClick={handleExit}>
 							나가기
 						</StyledButton>
 						<StyledButton type="button" onClick={() => navigate("/consulting/consultLoading")} disabled={!interiorConcern.trim()}> {/* 내용이 있을 때만 활성화 */}

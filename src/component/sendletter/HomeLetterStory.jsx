@@ -8,7 +8,7 @@ import shareletter2 from '../img/shareletter2.png';
 const PageContainer = styled.div`
   background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.2) 40.77%);
   padding: 20px;
-  margin-top: 120px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -43,7 +43,7 @@ const Button2 = styled.button`
   color: white;
   border-radius: 6px;
   cursor: pointer;
-  margin-top: 111px;
+  margin-top: 121px;
   font-size: 18px;
   font-weight: 400;
   margin-left: -18px;
@@ -109,8 +109,8 @@ const ShareLetter1 = styled.img`
 const ShareLetter2 = styled.img`
   width: 332px;
   height: 293px;
-  margin-top: 50px;
-  margin-bottom: -10px;
+  margin-top: 60px;
+  margin-bottom: 0px;
 `;
 
 const HorizontalLine = styled.hr`
