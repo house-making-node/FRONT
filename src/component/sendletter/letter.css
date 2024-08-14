@@ -58,14 +58,13 @@
 
 .thumbnails {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px; 
+  flex-wrap: wrap; 
   justify-content: space-between;
   width: 816px; 
   height: 847px;
   overflow: auto;
   margin: 0 auto; 
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 .thumbnail {
@@ -73,6 +72,7 @@
   height: 293px; 
   box-sizing: border-box;
   position: relative;
+  margin-bottom: 5px;
   /* overflow: hidden; */
 }
 
@@ -84,7 +84,7 @@
 
 @media (min-width: 700px) {
   .thumbnails {
-    gap: 2px;
+    gap: 20px;
   }
 }
 
@@ -112,22 +112,9 @@
   padding: 2px; 
 }
 
-/* .bookmark-button::before {
-  content: url('../img/bookmark.png') no-repeat center center;
-  background-size: cover; 
-  font-size: 24px; /* 아이콘 크기 */
-  /* color: rgb(250, 246, 246); /* 기본 아이콘 색상 */
-/* } */ */
-
-/* .bookmark-button.bookmarked::before {
-  content:  '\2661';
-  background-size: cover;
-  color: rgb(188, 34, 34); 
-} */ */
-
 .modal {
   position: absolute;
-  width: 400px;
+  width: 600px;
   top: 50%;
   left: 50%;
   right: auto;
@@ -136,7 +123,7 @@
   color: white;
   padding: 20px;
   border: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   z-index: 1005;
 }
 
@@ -173,6 +160,7 @@
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  color:#333
 }
 
 .checkbox-group {
@@ -226,7 +214,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(255, 255, 255, 0);
   z-index: 2000;
   display: flex;
   justify-content: center;
@@ -250,28 +238,30 @@
   z-index: 1200;
 }
 
-.privacy-popup-overlay {
+.privacy-popup-overlay{
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  background-color: rgba(255, 255, 255, 0);
 }
 
 .confirmPopup {
-  width: 500px;
-  height: 400px;
-  max-width: 90%;
+  width: 600px; 
+  height: 350px;
+  max-width: 100%;
   background-color: white;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(100, 97, 97, 0.2);
-  z-index: 2001;
-  position: relative;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0);
+  z-index: 2005;
+  position: fixed;
+  top: 50%; /* 중앙 정렬을 위해 추가 */
+  left: 50%; /* 중앙 정렬을 위해 추가 */
+  transform: translate(-50%, -50%); /* 중앙 정렬을 위해 추가 */
 }
 
 .popup-content {
@@ -288,10 +278,11 @@
   margin-bottom: 20px;
 }
 
-.popup-content p {
+.privacy-popup-text {
   font-size: 13px;
   line-height: 1.5;
   margin-bottom: 20px;
+  color: black;
 }
 
 .privacy-confirm-button {
