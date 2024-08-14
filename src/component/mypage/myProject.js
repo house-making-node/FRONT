@@ -4,6 +4,7 @@ import styled, { css } from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import pjtheme from "../img/projectTheme.png";
+import { useUser } from "../api/UserContext";
 
 const Type = styled.div`
   width: 50px;
@@ -79,6 +80,7 @@ export default function MyProject() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
   const [userProjects, setUserProjects] = useState([]);
+  const userInfo = useUser();
 
   useEffect(() => {
     fetchProjectStatus();
@@ -86,40 +88,41 @@ export default function MyProject() {
 
   const fetchProjectStatus = async () => {
     try {
-      const consultingIds = [1];
-      console.log("Fetching project status for consultingIds:", consultingIds);
-
-      const fetchedProjects = await Promise.all(
-        consultingIds.map(async (consulting_id) => {
-          console.log(`Requesting status for consulting_id: ${consulting_id}`);
-
-          const response = await axios.get(
-            `http://3.36.240.5:3000/user/consulting/${consulting_id}`,
-            {
-              headers: {
-                "Cache-Control": "no-cache",
-                Pragma: "no-cache",
-                Expires: "0",
-              },
-            }
-          );
-
-          console.log(
-            `Response for consulting_id ${consulting_id}:`,
-            response.data
-          );
-
-          // response.data.result 에서 데이터를 추출하여 반환
-          return {
-            ...response.data.result, // result 객체에서 데이터를 추출하여 사용
-            consulting_id: consulting_id,
-            themeImage: pjtheme,
-            signmessage: "좋아하는 분위기를 선택해주세요",
-          };
-        })
+      const response = await axios.get(
+        `http://3.36.240.5:3000/user/consulting/${userInfo.user_id}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        }
       );
+      const fetchedProjects = response.data.result.map((project) => {
+        let signmessage = "";
+        const status = project.status;
 
-      console.log("Fetched projects:", fetchedProjects);
+        if (status === "step1") {
+          signmessage = "집의 상태를 선택해주세요";
+        } else if (status === "step2") {
+          signmessage = "좋아하는 분위기를 선택해주세요";
+        } else if (status === "step3") {
+          signmessage = "사진을 첨부해주세요";
+        } else if (status === "step4") {
+          signmessage = "고민을 작성해주세요";
+        } else if (status === "답변 대기중") {
+          signmessage = "이전 화면으로 돌아가기";
+        } else if (status === "답변 완료") {
+          signmessage = "답변 확인하기";
+        }
+
+        return {
+          ...project,
+          //consulting_id: consulting_id,
+          themeImage: pjtheme,
+          signmessage: signmessage,
+        };
+      });
       setUserProjects(fetchedProjects);
     } catch (error) {
       console.error("프로젝트 상태를 불러오는 중 에러 발생:", error);
@@ -154,8 +157,7 @@ export default function MyProject() {
                 {project.room_num || "유형 정보 없음"}
               </div>
               <div className="text-xl m-3">
-                {project.name || "프로젝트 이름 없음"}{" "}
-                {/*사용자 이름으로 바꿔야함 */}
+                {userInfo?.user_name || "프로젝트 이름 없음"}
               </div>
               <Choice onClick={() => handleClick("/")}>
                 {project.signmessage || "메시지 없음"}

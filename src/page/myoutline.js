@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import axios from "axios";
 import profile from "../component/img/profile.jpeg";
+import { UserProvider } from "../component/api/UserContext";
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -118,31 +120,36 @@ export default function Outline({ children }) {
   };
 
   return (
-    <Wrapper>
-      <Profile>
-        <ProfileBox>
-          <div className="text-xl">My Profile</div>
-          <img src={profile} className="w-48 h-40 rounded-full bg-white"></img>
-          <div className="text-lg">{formData.user_name}</div>
-          <div className="text-lg">{formData.email}</div>
-          <div className="border-t-2 border-gray-200 w-72"></div>
-        </ProfileBox>
-        <Sort>
-          <Item
-            onClick={() => handleClick("/mypage", "내 프로젝트")}
-            selected={selected === "내 프로젝트"}
-          >
-            내 프로젝트
-          </Item>
-          <Item
-            onClick={() => handleClick("/myscrap/homeletter", "스크랩")}
-            selected={selected === "스크랩"}
-          >
-            스크랩
-          </Item>
-        </Sort>
-      </Profile>
-      <Board>{children}</Board>
-    </Wrapper>
+    <UserProvider value={formData}>
+      <Wrapper>
+        <Profile>
+          <ProfileBox>
+            <div className="text-xl">My Profile</div>
+            <img
+              src={profile}
+              className="w-48 h-40 rounded-full bg-white"
+            ></img>
+            <div className="text-lg">{formData.user_name}</div>
+            <div className="text-lg">{formData.email}</div>
+            <div className="border-t-2 border-gray-200 w-72"></div>
+          </ProfileBox>
+          <Sort>
+            <Item
+              onClick={() => handleClick("/mypage", "내 프로젝트")}
+              selected={selected === "내 프로젝트"}
+            >
+              내 프로젝트
+            </Item>
+            <Item
+              onClick={() => handleClick("/myscrap/homeletter", "스크랩")}
+              selected={selected === "스크랩"}
+            >
+              스크랩
+            </Item>
+          </Sort>
+        </Profile>
+        <Board>{children}</Board>
+      </Wrapper>
+    </UserProvider>
   );
 }
