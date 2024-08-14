@@ -25,16 +25,18 @@ import Step2Page from "./component/consulting/step2Page";
 import Step3Page from "./component/consulting/step3Page";
 import Step4Page from "./component/consulting/step4Page";
 import ConsultLoading from "./component/consulting/consultLoading";
+import GptAnswer from './component/consulting/gptAnswer'; 
 import KakaoLogin from "./component/interiorconsult/KakaoLogin";
 import KakaoAgreement from "./component/interiorconsult/KakaoAgreement";
 import KakaoWelcome from "./component/interiorconsult/KakaoWelcome";
 import MemberHomeletter from './component/sendletter/HomeLetterRegister';
 
+
 const App = () => {
 	const [scraps, setScraps] = useState([]);
-  
+
 	const addScrap = (scrap) => {
-	  setScraps([...scraps, scrap]);
+		setScraps([...scraps, scrap]);
 	};
 
 	return (
@@ -49,8 +51,11 @@ const App = () => {
 					<Route path="/consulting/step2Page" element={<Step2Page />} />
 					<Route path="/consulting/step3Page" element={<Step3Page />} />
 					<Route path="/consulting/step4Page" element={<Step4Page />} />
+					<Route path="/consulting/consultLoading" element={<ConsultLoading />} />
+					<Route path="/consulting/gptAnswer" element={<GptAnswer />} />
+
 					<Route path="/login" element={<KakaoLogin />} />
-          			<Route path="/agreement" element={<KakaoAgreement />} />
+					<Route path="/agreement" element={<KakaoAgreement />} />
 					<Route path="/welcome" element={<KakaoWelcome />} />
 
 					<Route path="/question" element={<PersonalBoard />} />
@@ -72,7 +77,7 @@ const App = () => {
 					<Route path="/home-letter-send" element={<HomeLetterSend />} />
 					<Route path="/home-letter-send-complete" element={<HomeLetterSendComplete />} />
 
-					<Route path="/consulting/consultLoading" element={<ConsultLoading />} />
+
 				</Routes>
 			</BrowserRouter>
 		</div>
