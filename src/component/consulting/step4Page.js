@@ -113,9 +113,11 @@ function Step4Page() {
 	const navigate = useNavigate();
 	const [interiorConcern, setInteriorConcern] = useState(""); // 텍스트 영역 상태 추가
 	const [consultingId, setConsultingId] = useState(null);
+	const [userName, setUserName] = useState("");
 
 	useEffect(() => {
 		const storedConsultingId = localStorage.getItem("consultingId");
+		const storedUserName = localStorage.getItem("userName");
 		if (storedConsultingId) {
 			setConsultingId(parseInt(storedConsultingId));
 		} else {
@@ -123,6 +125,9 @@ function Step4Page() {
 			// 필요하다면 이전 단계로 리다이렉트 등의 처리를 할 수 있습니다.
 			// navigate("/consulting/step3Page");
 		}
+		if (storedUserName) {
+			setUserName(storedUserName);
+			}
 	}, []);
 
 	const handleTextChange = (event) => {
@@ -176,7 +181,7 @@ function Step4Page() {
 						<form id="step4Form">
 							<Option>
 								<Label id="finalLabel">
-									<span id="userNameFinal"></span>님, 가지고 있는 인테리어 관련 고민을 자유롭게 작성해 주세요.
+									<span id="userNameFinal">{userName}</span>님, 가지고 있는 인테리어 관련 고민을 자유롭게 작성해 주세요.
 								</Label>
 								<TextArea
 									id="interiorConcern"
