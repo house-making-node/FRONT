@@ -81,7 +81,7 @@ function Step5Page() {
 	const saveGptResponse = async (consultingId) => {
 		try {
 			const response = await axios.post("http://3.36.240.5:3000/consulting/gpt_request", {
-				consulting_id: consultingId // 요청 본문 수정
+				consulting_id: consultingId
 			});
 			console.log(response.data);
 
