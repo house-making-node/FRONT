@@ -91,10 +91,11 @@ function Step5Page() {
 				const gptResponseData = response.data.result.gpt_response; // 응답 데이터 저장
 				setIsButtonEnabled(true); // 버튼 활성화
 				setGptResponse(gptResponseData); // 응답 데이터 상태 업데이트
-				 // 추가: 응답 데이터에서 필요한 정보 추출
+				// 추가: 응답 데이터에서 필요한 정보 추출
 				const { house_size, room_num, mood, concern, status, response_id } = response.data.result;
 				console.log({ house_size, room_num, mood, concern, status, response_id });
-			
+			} else {
+				console.log("응답이 성공적이지 않음:", response.data.isSuccess); // 추가된 로그
 			}
 		} catch (error) {
 			console.error("API 호출 오류:", error);
@@ -120,7 +121,7 @@ function Step5Page() {
 		};
 
 		updateConsultingStatus();
-	}, []);
+	}, [consultingId]); // 의존성 배열에 consultingId 추가
 
 	return (
 		<div>
@@ -133,6 +134,7 @@ function Step5Page() {
 					<BoxContent>
 						조금만 기다려주세요!
 					</BoxContent>
+					{console.log(isButtonEnabled)} {/* 상태 확인 */}
 					<StyledButton 
 						type="button" 
 						onClick={() => navigate("/consulting/gptAnswer", { state: { gptResponse } })} 
@@ -142,7 +144,6 @@ function Step5Page() {
 					</StyledButton>
 				</Box>
 				<LoadingIcon style={{ margin: '0 auto' }} />
-				{/* <LoadingIcon style={{ margin: '0 auto' }} /> */}
 			</Container>
 		</div>
 	);
