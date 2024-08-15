@@ -74,24 +74,27 @@ const LoadingIcon = styled.div`
 function Step5Page() {
 	const navigate = useNavigate();
 	const [consultingId, setConsultingId] = useState(null);
-	const [status, setStatus] = useState("답변대기중"); // 상태 추가
+	const [status, setStatus] = useState("답변 대기 중"); // 상태 추가
+	const [gptResponse, setGptResponse] = useState(null); // 응답 데이터 상태 추가
+	const [isButtonEnabled, setIsButtonEnabled] = useState(false); // 버튼 활성화 상태 추가
 
 	const saveGptResponse = async (consultingId) => {
 		try {
 			const response = await axios.post("http://3.36.240.5:3000/consulting/gpt_request", {
-				Params: {
-					consulting_id: consultingId
-				}
+				consulting_id: consultingId // 요청 본문 수정
 			});
 			console.log(response.data);
 
 			// gpt 답변 생성 완료 시 상태 업데이트
 			if (response.data.isSuccess) {
-				setStatus("답변완료"); // 상태 업데이트
-				await axios.patch("http://3.36.240.5:3000/consulting/status", {
-					consulting_id: consultingId,
-					status: "답변완료" // 상태를 '답변완료'로 변경
-				});
+				setStatus("답변 완료"); // 상태 업데이트
+				const gptResponseData = response.data.result.gpt_response; // 응답 데이터 저장
+				setIsButtonEnabled(true); // 버튼 활성화
+				setGptResponse(gptResponseData); // 응답 데이터 상태 업데이트
+				 // 추가: 응답 데이터에서 필요한 정보 추출
+				const { house_size, room_num, mood, concern, status, response_id } = response.data.result;
+				console.log({ house_size, room_num, mood, concern, status, response_id });
+			
 			}
 		} catch (error) {
 			console.error("API 호출 오류:", error);
@@ -108,14 +111,8 @@ function Step5Page() {
 					console.error("consultingId가 로컬 스토리지에 없습니다.");
 				}
 
-				// 초기 상태를 '답변대기중'으로 설정
-				await axios.patch("http://3.36.240.5:3000/consulting/status", {
-					consulting_id: consultingId,
-					status: "답변대기중"
-				});
-
 				if (consultingId) {
-					await saveGptResponse(consultingId); // 추가된 부분
+					await saveGptResponse(consultingId); // gpt 답변 요청
 				}
 			} catch (error) {
 				console.error("API 호출 오류:", error);
@@ -138,13 +135,14 @@ function Step5Page() {
 					</BoxContent>
 					<StyledButton 
 						type="button" 
-						onClick={() => navigate("/consulting/gptAnswer")} 
-						disabled={status === "답변대기중"} // 버튼 비활성화 조건
+						onClick={() => navigate("/consulting/gptAnswer", { state: { gptResponse } })} 
+						disabled={!isButtonEnabled} // 버튼 비활성화 조건 수정
 					>
 						확인
 					</StyledButton>
 				</Box>
 				<LoadingIcon style={{ margin: '0 auto' }} />
+				{/* <LoadingIcon style={{ margin: '0 auto' }} /> */}
 			</Container>
 		</div>
 	);

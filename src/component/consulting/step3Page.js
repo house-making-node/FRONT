@@ -174,9 +174,11 @@ function Step3Page() {
 	const [isBlueprintUploaded, setIsBlueprintUploaded] = useState(false); // 도면 업로드 상태
 	const [showFloorPlan, setShowFloorPlan] = useState(false); // floorPlanImg 표시 상태
 	const [consultingId, setConsultingId] = useState(null);
+	const [userName, setUserName] = useState("");
 
 	useEffect(() => {
 		const storedConsultingId = localStorage.getItem("consultingId");
+		const storedUserName = localStorage.getItem("userName");
 		if (storedConsultingId) {
 			setConsultingId(parseInt(storedConsultingId));
 		} else {
@@ -184,6 +186,9 @@ function Step3Page() {
 			// 필요하다면 이전 페이지로 리다이렉트 등의 처리를 할 수 있습니다.
 			// navigate("/consulting/step2Page");
 		}
+		if (storedUserName) {
+			setUserName(storedUserName);
+			}
 	}, []);
 
 	const handlePhotoChange = async (event) => {
@@ -270,7 +275,7 @@ function Step3Page() {
 					<HalfBox>
 						<Option>
 							<Label id="photoLabel">
-								<span id="userNamePhoto"></span>님, 사진을 업로드해 주세요.
+								<span id="userNamePhoto">{userName}</span>님, 사진을 업로드해 주세요.
 							</Label>
 							<FileButton>
 								<FileButtonText>파일 선택</FileButtonText>
@@ -282,7 +287,7 @@ function Step3Page() {
 						<Option>
 							<LabelContainer>
 								<Label id="blueprintLabel">
-									<span id="userNameBlueprint"></span>님, 도면을 업로드해 주세요.
+									<span id="userNameBlueprint">{userName}</span>님, 도면을 업로드해 주세요.
 								</Label>
 								<LabelWithButton>
 									<SpecialButton className="special-button" onClick={handleShowFloorPlan}>?</SpecialButton>
