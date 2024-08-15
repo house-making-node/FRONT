@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
 import floorPlanImg from "../img/floorPlan.png";
+import axios from 'axios'; // axios imported
 
 const Container = styled.div`
 	margin-top: 140px; /* Navbar 높이 + 여백 */
@@ -172,21 +173,63 @@ function Step3Page() {
 	const [isPhotoUploaded, setIsPhotoUploaded] = useState(false); // 사진 업로드 상태
 	const [isBlueprintUploaded, setIsBlueprintUploaded] = useState(false); // 도면 업로드 상태
 	const [showFloorPlan, setShowFloorPlan] = useState(false); // floorPlanImg 표시 상태
+	const [consultingId, setConsultingId] = useState(null);
 
 	useEffect(() => {
-		const userName = localStorage.getItem("userName");
-		if (userName) {
-			document.getElementById("userNamePhoto").innerText = userName;
-			document.getElementById("userNameBlueprint").innerText = userName;
+		const storedConsultingId = localStorage.getItem("consultingId");
+		if (storedConsultingId) {
+			setConsultingId(parseInt(storedConsultingId));
+		} else {
+			console.error("consultingId가 로컬 스토리지에 없습니다.");
+			// 필요하다면 이전 페이지로 리다이렉트 등의 처리를 할 수 있습니다.
+			// navigate("/consulting/step2Page");
 		}
 	}, []);
 
-	const handlePhotoChange = () => {
-		setIsPhotoUploaded(true); // 사진이 업로드되면 상태 변경
+	const handlePhotoChange = async (event) => {
+		const file = event.target.files[0]; // 업로드된 파일 가져오기
+		const formData = new FormData();
+		formData.append("consulting_id", consultingId); // 로컬에서 가져온 consulting_id 사용
+		formData.append("directory", "room_images");
+		formData.append("image", file);
+
+		try {
+			const response = await axios.post("http://3.36.240.5:3000/consulting/requirements/room_image", formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+			if (response.data.isSuccess) {
+				setIsPhotoUploaded(true); // 사진이 업로드되면 상태 변경
+			} else {
+				console.error(response.data.message); // 에러 처리
+			}
+		} catch (error) {
+			console.error("Error uploading photo:", error); // 에러 처리
+		}
 	};
 
-	const handleBlueprintChange = () => {
-		setIsBlueprintUploaded(true); // 도면이 업로드되면 상태 변경
+	const handleBlueprintChange = async (event) => {
+		const file = event.target.files[0]; // 업로드된 파일 가져오기
+		const formData = new FormData();
+		formData.append("consulting_id", consultingId); // 로컬에서 가져온 consulting_id 사용
+		formData.append("folder_name", "blueprints");
+		formData.append("image", file);
+
+		try {
+			const response = await axios.post("http://3.36.240.5:3000/consulting/requirements/blueprint", formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+			if (response.data.isSuccess) {
+				setIsBlueprintUploaded(true); // 도면이 업로드되면 상태 변경
+			} else {
+				console.error(response.data.message); // 에러 처리
+			}
+		} catch (error) {
+			console.error("Error uploading blueprint:", error); // 에러 처리
+		}
 	};
 
 	const handleExit = () => {
