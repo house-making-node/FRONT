@@ -61,9 +61,11 @@ const LogoImage = styled.img`
 
 const MessageContent = styled.div`
     flex: 1;
-    background-color: ##F7F7F7;
+    background-color: #F7F7F7;
     border-radius: 10px;
     padding: 15px;
+    white-space: pre-wrap; // 줄바꿈을 자연스럽게 처리
+    font-size : 18px;
 `;
 
 const GptResponseArea = styled.div`
@@ -132,7 +134,11 @@ function GptAnswer() {
 
             if (data.isSuccess) {
                 const gptResponse = data.result.gpt_response;
-                setGptResponses(prevResponses => [...prevResponses, gptResponse]);
+
+                // 중복 응답 방지 및 응답이 없을 때만 추가
+                if (!gptResponses.includes(gptResponse)) {
+                    setGptResponses(prevResponses => [...prevResponses, gptResponse]);
+                }
             } else {
                 console.error(data.message);
             }
@@ -143,8 +149,10 @@ function GptAnswer() {
 
     // 컴포넌트가 마운트될 때 API 호출
     useEffect(() => {
-        fetchGptResponse();
-    }, [consultingId]);
+        if (gptResponses.length === 0) { // gptResponses가 비어있을 때만 호출
+            fetchGptResponse();
+        }
+    }, [consultingId, gptResponses.length]); // gptResponses.length를 의존성 배열에 추가
 
     return (
         <div>
@@ -153,10 +161,8 @@ function GptAnswer() {
             <Container>
                 <CentralBox>
                     <GptResponseArea>
-                        {gptResponses.length > 0 ? (
-                            gptResponses.map((response, index) => (
-                                <Message key={index} content={response} />
-                            ))
+                        {gptResponses.length > 0 ? ( // 응답이 있을 때만 출력
+                            <Message key={0} content={gptResponses[0]} />
                         ) : (
                             <Message content="응답이 없습니다." />
                         )}
