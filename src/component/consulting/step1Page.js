@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
 
@@ -140,42 +141,75 @@ const HiddenRadio = styled.input`
 
 function Step1Page() {
   const navigate = useNavigate();
-  const [isNextEnabled, setIsNextEnabled] = React.useState(false); // 버튼 활성화 상태 관리
+  const [isNextEnabled, setIsNextEnabled] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [consultingId, setConsultingId] = useState(null);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    const userName = localStorage.getItem("userName");
-    if (!userName) {
-      const newUserName = prompt("사용자의 이름을 입력해 주세요:");
-      if (newUserName) {
-        localStorage.setItem("userName", newUserName);
-        document.getElementById("userNamePyeong").innerText = newUserName;
-        document.getElementById("userNameRooms").innerText = newUserName;
-      }
+    // const storedUserId = localStorage.getItem("userId");
+    const storedUserId = 1; // userId를 1로 임시 설정
+    const storedUserName = localStorage.getItem("userName");
+    if (storedUserId) {
+      setUserId(parseInt(storedUserId));
+    }
+    if (storedUserName) {
+      setUserName(storedUserName);
     } else {
-      document.getElementById("userNamePyeong").innerText = userName;
-      document.getElementById("userNameRooms").innerText = userName;
+      // userId가 없는 경우 처리
+      console.error("userId가 로컬 스토리지에 없습니다.");
+      // 필요하다면 로그인 페이지로 리다이렉트 등의 처리를 할 수 있습니다.
+      // navigate("/login");
     }
   }, []);
 
   const handleOptionChange = () => {
-    const selectedPyeong = document.querySelector(
-      'input[name="pyeong"]:checked'
-    );
+    const selectedPyeong = document.querySelector('input[name="pyeong"]:checked');
     const selectedRooms = document.querySelector('input[name="rooms"]:checked');
-    setIsNextEnabled(!!selectedPyeong && !!selectedRooms); // 모든 옵션이 선택되면 true
+    setIsNextEnabled(!!selectedPyeong && !!selectedRooms);
   };
 
-  const handleNext = () => {
-    const selectedPyeong = document.querySelector(
-      'input[name="pyeong"]:checked'
-    );
+  const handleNext = async () => {
+    const selectedPyeong = document.querySelector('input[name="pyeong"]:checked');
     const selectedRooms = document.querySelector('input[name="rooms"]:checked');
 
     if (!selectedPyeong || !selectedRooms) {
-      alert("모든 옵션을 선택해 주세요."); // 옵션 선택을 요구하는 경고 메시지
+      alert("모든 옵션을 선택해 주세요.");
       return;
     }
-    navigate("/consulting/step2Page"); // 모든 옵션이 선택된 경우 페이지 이동
+
+    try {
+      const houseSizeResponse = await axios.post("http://3.36.240.5:3000/consulting/requirements/house_size", {
+        user_id: userId,
+        house_size: selectedPyeong.value
+      });
+
+      if (houseSizeResponse.data.isSuccess) {
+        const consultingData = houseSizeResponse.data.result;
+        setConsultingId(consultingData.consulting_id);
+        localStorage.setItem("consultingId", consultingData.consulting_id);
+        localStorage.setItem("houseSize", consultingData.house_size);
+
+        const roomNumResponse = await axios.patch("http://3.36.240.5:3000/consulting/requirements/room_num", {
+          consulting_id: consultingData.consulting_id,
+          room_num: selectedRooms.value
+        });
+
+        if (roomNumResponse.data.isSuccess) {
+          const updatedConsultingData = roomNumResponse.data.result;
+          localStorage.setItem("roomNum", updatedConsultingData.room_num);
+          
+          navigate("/consulting/step2Page");
+        } else {
+          alert("방 개수 저장 중 오류가 발생했습니다.");
+        }
+      } else {
+        alert("집 평수 저장 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("API 요청 중 오류 발생:", error);
+      alert("서버 통신 중 오류가 발생했습니다.");
+    }
   };
 
   const handleExit = () => {
@@ -198,7 +232,7 @@ function Step1Page() {
           <form id="step1Form">
             <div className="option">
               <Label id="pyeongLabel">
-                <span id="userNamePyeong"></span>님 집의 평수를 선택해 주세요.
+                {userName ? `${userName}님` : ""}의 집 평수를 선택해 주세요.
               </Label>
             </div>
             <OptionContainer>
@@ -235,7 +269,7 @@ function Step1Page() {
             </OptionContainer>
             <div className="option">
               <Label id="roomsLabel">
-                <span id="userNameRooms"></span>님 집의 방 개수를 선택해 주세요.
+                {userName ? `${userName}님` : ""}의 집 방 개수를 선택해 주세요.
               </Label>
             </div>
             <OptionContainer>

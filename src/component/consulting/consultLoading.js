@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Container = styled.div`
 	padding-top: 140px; /* Navbar 높이 + 여백 */
@@ -41,15 +42,15 @@ const StyledButton = styled.button`
 	height: 50px;
 	border-radius: 6px;
     border: none; 
-    Color : white;
-    Background-color : #CA904B69;
-    margin-bottom : 10px;
-    margin-right : 40px;
+    color: white;
+    background-color: ${props => props.disabled ? '#ccc' : '#CA904B69'}; /* 비활성화 시 회색 */
+    margin-bottom: 10px;
+    margin-right: 40px;
     font-size: 18px; 
     font-weight: 330;
     line-height: 21.04px;
     text-align: center; 
-    cursor: pointer; 
+    cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'}; /* 비활성화 시 커서 변경 */
 `;
 
 const LoadingIcon = styled.div`
@@ -70,10 +71,60 @@ const LoadingIcon = styled.div`
 	}
 `;
 
-
-
 function Step5Page() {
-	const navigate = useNavigate(); // 추가
+	const navigate = useNavigate();
+	const [consultingId, setConsultingId] = useState(null);
+	const [status, setStatus] = useState("답변대기중"); // 상태 추가
+
+	const saveGptResponse = async (consultingId) => {
+		try {
+			const response = await axios.post("http://3.36.240.5:3000/consulting/gpt_request", {
+				Params: {
+					consulting_id: consultingId
+				}
+			});
+			console.log(response.data);
+
+			// gpt 답변 생성 완료 시 상태 업데이트
+			if (response.data.isSuccess) {
+				setStatus("답변완료"); // 상태 업데이트
+				await axios.patch("http://3.36.240.5:3000/consulting/status", {
+					consulting_id: consultingId,
+					status: "답변완료" // 상태를 '답변완료'로 변경
+				});
+			}
+		} catch (error) {
+			console.error("API 호출 오류:", error);
+		}
+	};
+
+	useEffect(() => {
+		const updateConsultingStatus = async () => {
+			try {
+				const storedConsultingId = localStorage.getItem("consultingId");
+				if (storedConsultingId) {
+					setConsultingId(parseInt(storedConsultingId));
+				} else {
+					console.error("consultingId가 로컬 스토리지에 없습니다.");
+				}
+
+				// 초기 상태를 '답변대기중'으로 설정
+				await axios.patch("http://3.36.240.5:3000/consulting/status", {
+					consulting_id: consultingId,
+					status: "답변대기중"
+				});
+
+				if (consultingId) {
+					await saveGptResponse(consultingId); // 추가된 부분
+				}
+			} catch (error) {
+				console.error("API 호출 오류:", error);
+			}
+		};
+
+		updateConsultingStatus();
+	}, []);
+
 	return (
 		<div>
 			<Navbar />
@@ -85,9 +136,15 @@ function Step5Page() {
 					<BoxContent>
 						조금만 기다려주세요!
 					</BoxContent>
-					<StyledButton type="button" onClick={() => navigate("/consulting/gptAnswer")}>확인</StyledButton>
+					<StyledButton 
+						type="button" 
+						onClick={() => navigate("/consulting/gptAnswer")} 
+						disabled={status === "답변대기중"} // 버튼 비활성화 조건
+					>
+						확인
+					</StyledButton>
 				</Box>
-				<LoadingIcon style={{ margin: '0 auto' }} /> {/* Box 아래 페이지 가운데에 로딩 아이콘 */}
+				<LoadingIcon style={{ margin: '0 auto' }} />
 			</Container>
 		</div>
 	);

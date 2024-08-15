@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import smallLogo from "../img/logo.png";
+import axios from 'axios';
 
 const Container = styled.div`
     padding-top: 140px; /* Navbar 높이 + 여백 */
@@ -109,17 +110,41 @@ function Message({ content }) {
 function GptAnswer() {
     const [gptResponses, setGptResponses] = useState([]);
     const navigate = useNavigate();
+    const [consultingId, setConsultingId] = useState(() => {
+        const storedConsultingId = localStorage.getItem("consultingId");
+        return storedConsultingId ? parseInt(storedConsultingId) : null;
+    });
 
     const handleExit = () => {
         navigate("/");
     };
 
-    // ChatGPT 응답을 가져오는 함수 (예시)
+    // ChatGPT 응답을 가져오는 함수
     const fetchGptResponse = async () => {
-        // API 호출 로직
-        const newResponse = "새로운 ChatGPT 응답입니다.";
-        setGptResponses(prevResponses => [...prevResponses, newResponse]);
+        if (consultingId === null) {
+            console.error("consultingId가 없습니다.");
+            return;
+        }
+
+        try {
+            const response = await axios.get(`http://3.36.240.5:3000/consulting/gpt_response/${consultingId}`);
+            const data = response.data;
+
+            if (data.isSuccess) {
+                const gptResponse = data.result.gpt_response;
+                setGptResponses(prevResponses => [...prevResponses, gptResponse]);
+            } else {
+                console.error(data.message);
+            }
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        }
     };
+
+    // 컴포넌트가 마운트될 때 API 호출
+    useEffect(() => {
+        fetchGptResponse();
+    }, [consultingId]);
 
     return (
         <div>
@@ -133,7 +158,7 @@ function GptAnswer() {
                                 <Message key={index} content={response} />
                             ))
                         ) : (
-                            <Message content="ChatGPT 응답이 여기에 표시됩니다." />
+                            <Message content="응답이 없습니다." />
                         )}
                     </GptResponseArea>
                 </CentralBox>
