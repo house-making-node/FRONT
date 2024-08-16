@@ -170,7 +170,7 @@ export default function MyProject() {
         path = "/consulting/step4Page";
         break;
       case "이전 화면으로 돌아가기":
-        path = "/consultLoading";
+        path = "/consulting/consultLoading";
         break;
       case "답변 확인하기":
         path = "/"; //gpt화면
