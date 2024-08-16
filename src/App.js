@@ -41,7 +41,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="max-w-full">
       <BrowserRouter>
         <Navbar />
         <Routes>
