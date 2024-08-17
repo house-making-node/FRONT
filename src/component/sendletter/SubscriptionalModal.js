@@ -5,6 +5,7 @@ import "./letter.css";
 import { useState, useEffect } from "react";
 import { PrivacyPopup } from "./privacypopup";
 import styled from 'styled-components';
+import axios from "axios";
 
 
 const Button = styled.button`
@@ -30,7 +31,7 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
   const [marketingChecked, setMarketingChecked] = useState(false);
   const [showPrivacyPopup, setShowPrivacyPopup] = useState(false);
   const [showMarketingPopup, setShowMarketingPopup] = useState(false);
-  const [userName, setUserName] = useState(""); // 변경된 변수 이름
+  const [userName, setUserName] = useState(""); 
   const [email, setEmail] = useState("");
 
   const handlePrivacyChange = (event) => {
@@ -51,11 +52,11 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
   }, [privacyChecked]);
 
   useEffect(() => {
-    if (marketingChecked) {
-      setShowMarketingPopup(true);
-    } else {
-      setShowMarketingPopup(false);
-    }
+    setShowPrivacyPopup(privacyChecked);
+  }, [privacyChecked]);
+
+  useEffect(() => {
+    setShowMarketingPopup(marketingChecked);
   }, [marketingChecked]);
 
   const closePrivacyPopup = () => {
@@ -72,21 +73,21 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
     e.preventDefault();
 
     const subscriptionData = {
-      user_id: 1, // 실제 사용자 ID를 여기에 설정하거나, 필요 시 동적으로 관리
+      user_id: 1, 
       email: email,
       name: userName
     };
 
     try {
-      const response = await fetch('http://3.36.240.5:3000/home_letters/subscribe', {
-        method: 'POST',
+      const response = await axios.post('http://3.36.240.5:3000/home_letters/subscribe', subscriptionData, {
         headers: {
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(subscriptionData)
+        }
       });
 
-      if (response.ok) {
+      console.log("Response:", response);
+
+      if (response.status === 200) {
         console.log("Subscription successful");
         navigate('/member-home-letter', { state: { subscriptionCompleted: true } });
       } else {

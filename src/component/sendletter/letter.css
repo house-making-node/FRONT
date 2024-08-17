@@ -97,9 +97,18 @@
 
 .thumbnail-description {
   margin-top: 20px;
-  margin-left: 5px;
+  margin-left: 20px;
   margin-right: 5px;
-  text-align: center;
+  text-align: left;
+}
+
+.thumbnail-date {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 5px;
+  text-align: left;
+  color:#666;
+  font-size: 14px;
 }
 
 .bookmark-button {
@@ -253,6 +262,7 @@
 .confirmPopup {
   width: 600px; 
   height: 350px;
+  top: 10px;
   max-width: 100%;
   background-color: white;
   padding: 20px;
