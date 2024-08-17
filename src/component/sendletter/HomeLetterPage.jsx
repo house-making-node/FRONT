@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import houseimage from "../img/house.png";
+import axios from 'axios';
 
 const PageContainer = styled.div`
   background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.2) 40.77%);
@@ -123,14 +124,14 @@ const FileInput = styled.input`
   }
 `;
 
-const FileLabel = styled.label`
-  margin-bottom: 8px;
-  font-weight: 260;
-  color: black;
-  font-size: 20px;
-  text-align: left; /* 텍스트 왼쪽 정렬 */
-  align-self: flex-start; /* Flex 컨테이너 내에서 왼쪽으로 정렬 */
-`;
+// const FileLabel = styled.label`
+//   margin-bottom: 8px;
+//   font-weight: 260;
+//   color: black;
+//   font-size: 20px;
+//   text-align: left; /* 텍스트 왼쪽 정렬 */
+//   align-self: flex-start; /* Flex 컨테이너 내에서 왼쪽으로 정렬 */
+// `;
 
 const CompletionContainer = styled.div`
   text-align: center;
@@ -153,11 +154,44 @@ const HomeLetterPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    setIsSubmitted(true);
-    console.log(data);
+
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append('directory', 'share_letters'); // S3 폴더 경로
+    formData.append('image', data.thumbnail[0]); // 파일
+    formData.append('user_id', 1); // 사용자 ID (예시로 1 사용)
+    formData.append('nickname', data.name); // 사용자 닉네임
+    formData.append('age', data.age); // 사용자 나이
+    formData.append('experience_detail', data.experience); // 공유레터 내용
+    formData.append('experience_comment', data.wishes); // 집꾸에게 보내는 의견
+    formData.append('title', '제목'); // 공유레터 제목 (원하는 제목으로 변경)
     navigate('/home-letter-complete');
+
+    try {
+      const response = await axios.post('http://3.36.240.5:3000/home_letters/submit', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.isSuccess) {
+        console.log('공유레터 제출 성공:', response.data);
+        setIsSubmitted(true);
+      } else {
+        console.error('제출 실패:', response.data.message);
+        alert('제출에 실패했습니다: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('API 호출 중 오류 발생:', error);
+      alert('서버 오류: 나중에 다시 시도해주세요.');
+    }
   };
+
+  // const onSubmit = (data) => {
+  //   setIsSubmitted(true);
+  //   console.log(data);
+  //   navigate('/home-letter-complete');
+  // };
 
   return (
     <PageContainer>
@@ -228,7 +262,7 @@ const HomeLetterPage = () => {
         </>
       ) : (
         <CompletionContainer>
-          <CompletionTitle>행복한 자취를 위한, 공유레터</CompletionTitle>
+          <CompletionTitle>똑똑한 자취를 위한, 자취레터</CompletionTitle>
           <CompletionText>제출이 완료 되었어요.<br />보내주신 고민에 명확한 솔루션을 드리도록<br />집꾸 팀이 노력할게요 !</CompletionText>
         </CompletionContainer>
       )}
