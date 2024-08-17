@@ -9,7 +9,6 @@ import room from '../img/room.png';
 
 const imageMapping = [mirror,running,mirror,room];
 
-
 const Type = styled.div`
   display: flex;
   flex-direction: row;
@@ -37,7 +36,6 @@ const ItemWrapper = styled.div`
   flex-direction: row;
 `;
 const ItemBox = styled.div`
-  margin: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,6 +78,7 @@ const Myscrap = () => {
     }
   }, [location.pathname]);
 
+
   useEffect(() => {
     async function fetchScraps() {
       try {
@@ -102,6 +101,37 @@ const Myscrap = () => {
 
     fetchScraps();
   }, []);
+
+  useEffect(() => {
+    if (userInfo && userInfo.user_id) {
+      fetchScrapData(userInfo.user_id, selected);
+    }
+  }, [userInfo, selected]);
+
+  const fetchScrapData = async (user_id, type) => {
+    try {
+      let response;
+      let scrapsData = [];
+
+      if (type === "공유레터") {
+        response = await axios.get(
+          `http://3.36.240.5:3000/user/${user_id}/share_letters/scraps`
+        );
+        scrapsData = response.data.result["Scrap Letters "]; // 공유레터 구조에 맞게 처리
+      } else {
+        response = await axios.get(
+          `http://3.36.240.5:3000/user/home_letters/scrap/${user_id}`
+        );
+        scrapsData = response.data.result; // 자취레터는 바로 result 배열에 접근
+      }
+
+      console.log("API Response:", response.data);
+      console.log("Scraps Data:", scrapsData);
+      setScraps(scrapsData);
+    } catch (error) {
+      console.error("스크랩 데이터를 가져오는 중 에러 발생:", error);
+    }
+  };
 
   const getBasePath = (type) => {
     return type === '자취레터' ? 'homeletter' : 'shareletter';
@@ -146,9 +176,10 @@ const Myscrap = () => {
             className="w-64 h-44 m-2 bg-mypageGray" />
           </ItemBox>
         ))}
+
       </ItemWrapper>
     </Outline>
   );
-};
+}
 
 export default Myscrap;
