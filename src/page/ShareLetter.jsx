@@ -24,7 +24,7 @@ function ShareLetter() {
     // Fetch data when the component mounts
     async function fetchLetters() {
       try {
-        const response = await axios.get('http://3.36.240.5:3000/share_letters', {
+        const response = await axios.get('http://3.36.240.5:3000/share_letters?offset=0&limit=4', {
           params: {
             page: 0, // Set the desired page
             size: 4 // Set the desired size
@@ -56,10 +56,10 @@ function ShareLetter() {
     setModalIsOpen(false);
   };
 
-  const handleThumbnailClick = (id) => {
-    navigate('/share-letter-story');
-  }
 
+  const handleThumbnailClick = (letter_id) => {
+    navigate(`/share-letter-story/${letter_id}`);
+  }
 
   return (
     <div className="ShareLetter">
@@ -76,11 +76,12 @@ function ShareLetter() {
         {letters.map((letter,index) => (
           <Thumbnail
             key={letter.letter_id}
-            id={letter.letter_id}
+            id={letter.share_id}
             src={localImages[index % localImages.length]}
             description={letter.title}
+            content = {letter.content}
             onClick={() => handleThumbnailClick(letter.letter_id)}
-            publicationDate={new Date(letter.created_at).toLocaleDateString('ko-KR')}
+            publicationDate={letter.created_at}
           />
         ))}
       </div>
