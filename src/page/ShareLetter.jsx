@@ -4,14 +4,15 @@ import styled from 'styled-components';
 import "./letter1.css";
 import SubscriptionModal from "./SubscriptionalModal1";
 import Thumbnail from "./Thumbnail1";
-import mirror from "../component/img/mirror.png";
-import running from "../component/img/running.png";
-import room from "../component/img/room.png";
+import shareletter_1 from "../component/img/shareletter_1.png";
+import shareletter_2 from "../component/img/shareletter_2.png";
+import shareletter_3 from "../component/img/shareletter_3.png";
+import shareletter_4 from "../component/img/shareletter_4.png";
 import house from "../component/img/house.png";
 import axios from "axios";
 
 
-const localImages = [mirror, running,mirror, room];
+const localImages = [shareletter_1, shareletter_2, shareletter_3, shareletter_4];
 
 function ShareLetter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
