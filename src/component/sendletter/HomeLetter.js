@@ -52,6 +52,7 @@ function HomeLetter() {
         if (response.data.isSuccess && response.data.code === 2000) {
           // Update state with fetched letters
           setLetters(response.data.result.Letter.slice(0,4));
+          console.log("성공:", response.data);
         } else {
           console.error("Failed to fetch letters:", response.data.message);
         }
@@ -83,7 +84,7 @@ function HomeLetter() {
   };
 
   const handleThumbnailClick = (id) => {
-    navigate('/home-letter-story');
+    navigate(`/home-letter-story/${id}`);
   }
 
 
@@ -103,7 +104,7 @@ function HomeLetter() {
           <Thumbnail
             key={letter.letter_id}
             id={letter.letter_id}
-            src={localImages[index % localImages.length]}
+            src={letter.s3_key ?  `http://3.36.240.5:3000/${letter.s3_key}`:localImages[index % localImages.length]}
             description={letter.title}
             onClick={() => handleThumbnailClick(letter.letter_id)}
             publicationDate={new Date(letter.created_at).toLocaleDateString('ko-KR')}

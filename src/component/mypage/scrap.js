@@ -116,6 +116,7 @@ export default function Myscrap() {
       console.log("API Response:", response.data);
       console.log("Unique Scraps Data:", uniqueScraps);
       setScraps(uniqueScraps);
+
     } catch (error) {
       console.error("스크랩 데이터를 가져오는 중 에러 발생:", error);
     }
@@ -165,8 +166,10 @@ export default function Myscrap() {
                 <TitleText>{scrap.title}</TitleText>
               </Title>
               <img
+
                 src={scrap.s3_url || "default-image-url.jpg"} // s3_url 사용, null인 경우 기본 이미지 표시 -> 넣어야됨
                 className="w-64 h-44 m-2 bg-mypageGray"
+
               />
             </ItemBox>
           ))

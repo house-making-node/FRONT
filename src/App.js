@@ -94,7 +94,7 @@ const App = () => {
             path="/home-letter-complete"
             element={<HomeLetterComplete />}
           />
-          <Route path="/home-letter-story" element={<HomeLetterStory />} />
+          <Route path="/home-letter-story/:letter_id" element={<HomeLetterStory />} />
           <Route path="/home-letter-send" element={<HomeLetterSend />} />
           <Route
             path="/home-letter-send-complete"
