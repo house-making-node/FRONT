@@ -70,7 +70,7 @@ export default function Outline({ children }) {
   const location = useLocation();
   const [selected, setSelected] = useState(null);
   const [formData, setFormData] = useState({
-    user_id: 3654721121,
+    user_id: 1,
     user_name: "",
     email: "",
     created_at: "",
