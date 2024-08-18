@@ -11,7 +11,7 @@ function Thumbnail({ src, description, onClick, id, publicationDate}) {
   useEffect(() => {
     async function loadBookmarkStatus() {
       try {
-        const response = await axios.get('http://3.36.240.5:3000/user/{user_id}/share_letters/scraps', {
+        const response = await axios.get('http://3.36.240.5:3000/user/home_letters/scrap/1', {
           params: {
             user_id: 1, // 현재 사용자 ID
           }
