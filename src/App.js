@@ -64,44 +64,44 @@ const App = () => {
 
           <Route path="/question" element={<PersonalBoard />} />
           <Route path="/mypage" element={<MyProject />} />
-          <Route
-            path="/myscrap/homeletter"
-            element={<Myscrap scraps={scraps} />}
-          />
           <Route path="/member-home-letter" element={<MemberHomeletter />} />
+          <Route path="/member-share-letter" element={<MemberShareletter />} />
           <Route
             path="/myscrap/shareletter"
             element={<Myscrap scraps={scraps} />}
           />
+          <Route
+            path="/myscrap/homeletter"
+            element={<Myscrap scraps={scraps} />}
+          />
           <Route path="/share-letter-page" element={<ShareLetterPage />} />
+          <Route path="/home-letter-page" element={<HomeLetterPage />} />
           <Route path="/shareletter" element={<ShareLetter />} />
+          <Route path="/homeletter" element={<HomeLetter />} />
           <Route
             path="/share-letter-complete"
             element={<ShareLetterComplete />}
           />
           <Route
+            path="/home-letter-complete"
+            element={<HomeLetterComplete />}
+          />
+          {/* <Route
             path="/share-letter-story"
             element={<ShareLetterStory addScrap={addScrap} />}
-          />
+          /> */}
+          <Route path="/home-letter-story/:letter_id" element={<HomeLetterStory />} />
+          <Route path="/share-letter-story/:letter_id" element={<ShareLetterStory />} />
           <Route path="/share-letter-send" element={<ShareLetterSend />} />
           <Route
             path="/share-letter-send-complete"
             element={<ShareLetterSendComplete />}
           />
-          <Route path="/homeletter" element={<HomeLetter />} />
-          <Route path="/home-letter-page" element={<HomeLetterPage />} />
-          <Route
-            path="/home-letter-complete"
-            element={<HomeLetterComplete />}
-          />
-          <Route path="/home-letter-story/:letter_id" element={<HomeLetterStory />} />
           <Route path="/home-letter-send" element={<HomeLetterSend />} />
           <Route
             path="/home-letter-send-complete"
             element={<HomeLetterSendComplete />}
           />
-
-          <Route path="member-share-letter" element={<MemberShareletter />} />
           <Route
             path="/consulting/consultLoading"
             element={<ConsultLoading />}
