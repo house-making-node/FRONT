@@ -56,7 +56,6 @@ const Box = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center; /* 수평 중앙 정렬 */
-	margin-left : 15px;
 `;
 
 const MoodLabel = styled.label`
@@ -142,7 +141,7 @@ const ButtonContainer = styled.div`
 	margin-top: 30px; /* 버튼과 Box 간의 간격 추가 */
 	margin-bottom: 40px; /* 버튼과 페이지 아래 끝 간의 간격 추가 */
 	padding-bottom: 50px;
-	margin-left : 15px;
+	margin-left: 15px;
 `;
 
 const StyledButton = styled.button`
@@ -168,14 +167,14 @@ function Step2Page() {
 		const storedConsultingId = localStorage.getItem("consultingId");
 		const storedUserName = localStorage.getItem("userName");
 		if (storedConsultingId) {
-		setConsultingId(parseInt(storedConsultingId));
+			setConsultingId(parseInt(storedConsultingId));
 		} else {
-		console.error("consultingId가 로컬 스토리지에 없습니다.");
-		// 필요하다면 이전 페이지로 리다이렉트 등의 처리를 할 수 있습니다.
-		// navigate("/consulting/step1Page");
+			console.error("consultingId가 로컬 스토리지에 없습니다.");
+			// 필요하다면 이전 페이지로 리다이렉트 등의 처리를 할 수 있습니다.
+			// navigate("/consulting/step1Page");
 		}
 		if (storedUserName) {
-		setUserName(storedUserName);
+			setUserName(storedUserName);
 		}
 	}, []);
 
@@ -188,82 +187,82 @@ function Step2Page() {
 		const selectedOption = document.querySelector('input[name="mood"]:checked');
 
 		if (!selectedOption) {
-		alert("옵션을 선택해 주세요.");
-		return;
+			alert("옵션을 선택해 주세요.");
+			return;
 		}
 
 		try {
-		const response = await axios.patch("http://3.36.240.5:3000/consulting/requirements/mood", {
-			consulting_id: consultingId,
-			mood: selectedOption.value
-		});
+			const response = await axios.patch("http://3.36.240.5:3000/consulting/requirements/mood", {
+				consulting_id: consultingId,
+				mood: selectedOption.value,
+			});
 
-		if (response.data.isSuccess) {
-			navigate("/consulting/step3Page");
-		} else {
-			alert("저장에 실패했습니다. 다시 시도해 주세요.");
-		}
+			if (response.data.isSuccess) {
+				navigate("/consulting/step3Page");
+			} else {
+				alert("저장에 실패했습니다. 다시 시도해 주세요.");
+			}
 		} catch (error) {
-		console.error("API 요청 중 오류 발생:", error);
-		alert("서버 통신 중 오류가 발생했습니다.");
+			console.error("API 요청 중 오류 발생:", error);
+			alert("서버 통신 중 오류가 발생했습니다.");
 		}
 	};
 
 	const handleExit = () => {
-		navigate('/'); // MainPage로 이동
+		navigate("/"); // MainPage로 이동
 	};
 
 	return (
 		<div>
-		<Navbar />
-		<Container>
-			<TitleContainer>
-			<Title>STEP 02</Title>
-			<StepBoxes>
-				{[1, 2, 3, 4].map((step, index) => (
-				<StepBox key={index} active={step === 2} index={index} />
-				))}
-			</StepBoxes>
-			</TitleContainer>
-			<Box>
-			<form id="step2Form">
-				<div className="option">
-				<MoodLabel id="moodLabel">
-					<span id="userNameMood">{userName}</span>님이 좋아하는 분위기를 선택해 주세요.
-				</MoodLabel>
-				</div>
-				<OptionsContainer>
-				<HiddenRadio type="radio" id="option1" name="mood" value="깔끔한 화이트톤" onChange={handleOptionChange} />
-				<OptionBox htmlFor="option1" image={`url(${whiteToneImg})`}>
-					<span>깔끔한 화이트톤</span>
-				</OptionBox>
-				<HiddenRadio type="radio" id="option2" name="mood" value="따뜻한 우드톤" onChange={handleOptionChange} />
-				<OptionBox htmlFor="option2" image={`url(${woodToneImg})`}>
-					<span>따뜻한 우드톤</span>
-				</OptionBox>
-				<HiddenRadio type="radio" id="option3" name="mood" value="모던한 블랙, 그레이" onChange={handleOptionChange} />
-				<OptionBox htmlFor="option3" image={`url(${blackToneImg})`}>
-					<span>모던한 블랙, 그레이</span>
-				</OptionBox>
-				<HiddenRadio type="radio" id="option4" name="mood" value="기타" onChange={handleOptionChange} />
-				<OptionBox htmlFor="option4" image={`url(${excImg})`}>
-					<span>기타</span>
-				</OptionBox>
-				</OptionsContainer>
-			</form>
-			</Box>
-			<ButtonContainer>
-			<StyledButton type="button" onClick={() => navigate("/consulting/step1Page")}>
-				이전
-			</StyledButton>
-			<StyledButton type="button" onClick={handleExit}>
-				나가기
-			</StyledButton>
-			<StyledButton type="button" onClick={handleNext} disabled={!isNextEnabled}>
-				다음
-			</StyledButton>
-			</ButtonContainer>
-		</Container>
+			<Navbar />
+			<Container>
+				<TitleContainer>
+					<Title>STEP 02</Title>
+					<StepBoxes>
+						{[1, 2, 3, 4].map((step, index) => (
+							<StepBox key={index} active={step === 2} index={index} />
+						))}
+					</StepBoxes>
+				</TitleContainer>
+				<Box>
+					<form id="step2Form">
+						<div className="option">
+							<MoodLabel id="moodLabel">
+								<span id="userNameMood">{userName}</span>님이 좋아하는 분위기를 선택해 주세요.
+							</MoodLabel>
+						</div>
+						<OptionsContainer>
+							<HiddenRadio type="radio" id="option1" name="mood" value="깔끔한 화이트톤" onChange={handleOptionChange} />
+							<OptionBox htmlFor="option1" image={`url(${whiteToneImg})`}>
+								<span>깔끔한 화이트톤</span>
+							</OptionBox>
+							<HiddenRadio type="radio" id="option2" name="mood" value="따뜻한 우드톤" onChange={handleOptionChange} />
+							<OptionBox htmlFor="option2" image={`url(${woodToneImg})`}>
+								<span>따뜻한 우드톤</span>
+							</OptionBox>
+							<HiddenRadio type="radio" id="option3" name="mood" value="모던한 블랙, 그레이" onChange={handleOptionChange} />
+							<OptionBox htmlFor="option3" image={`url(${blackToneImg})`}>
+								<span>모던한 블랙, 그레이</span>
+							</OptionBox>
+							<HiddenRadio type="radio" id="option4" name="mood" value="기타" onChange={handleOptionChange} />
+							<OptionBox htmlFor="option4" image={`url(${excImg})`}>
+								<span>기타</span>
+							</OptionBox>
+						</OptionsContainer>
+					</form>
+				</Box>
+				<ButtonContainer>
+					<StyledButton type="button" onClick={() => navigate("/consulting/step1Page")}>
+						이전
+					</StyledButton>
+					<StyledButton type="button" onClick={handleExit}>
+						나가기
+					</StyledButton>
+					<StyledButton type="button" onClick={handleNext} disabled={!isNextEnabled}>
+						다음
+					</StyledButton>
+				</ButtonContainer>
+			</Container>
 		</div>
 	);
 }

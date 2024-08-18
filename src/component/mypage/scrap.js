@@ -32,7 +32,7 @@ const ProjectCount = styled.div`
 
 const ItemWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
 `;
 
 const ItemBox = styled.div`
@@ -41,6 +41,9 @@ const ItemBox = styled.div`
   align-items: center;
   position: relative;
   cursor: pointer;
+  width: 31%;
+  margin: 1%;
+  box-sizing: border-box;
 `;
 
 const Title = styled.div`
@@ -96,17 +99,24 @@ export default function Myscrap() {
         response = await axios.get(
           `http://3.36.240.5:3000/user/${user_id}/share_letters/scraps`
         );
-        scrapsData = response.data.result["Scrap Letters "]; // 공유레터 구조에 맞게 처리
+        scrapsData = response.data.result["Scrap Letters "];
       } else {
         response = await axios.get(
-          `http://3.36.240.5:3000/user/home_letters/scrap/1`
+          `http://3.36.240.5:3000/user/home_letters/scrap/${user_id}`
         );
-        scrapsData = response.data.result; // 자취레터는 바로 result 배열에 접근
+        scrapsData = response.data.result;
       }
 
+      // 중복된 스크랩 필터링
+      const uniqueScraps = scrapsData.filter(
+        (scrap, index, self) =>
+          index === self.findIndex((t) => t.letter_id === scrap.letter_id)
+      );
+
       console.log("API Response:", response.data);
-      console.log("Scraps Data:", scrapsData);
-      setScraps(scrapsData);
+      console.log("Unique Scraps Data:", uniqueScraps);
+      setScraps(uniqueScraps);
+
     } catch (error) {
       console.error("스크랩 데이터를 가져오는 중 에러 발생:", error);
     }
@@ -156,9 +166,10 @@ export default function Myscrap() {
                 <TitleText>{scrap.title}</TitleText>
               </Title>
               <img
-                src={scrap.s3_url || "default-image-url.jpg"} // s3_url 사용, null인 경우 기본 이미지 표시
+
+                src={scrap.s3_url || "default-image-url.jpg"} // s3_url 사용, null인 경우 기본 이미지 표시 -> 넣어야됨
                 className="w-64 h-44 m-2 bg-mypageGray"
-                alt={scrap.title}
+
               />
             </ItemBox>
           ))

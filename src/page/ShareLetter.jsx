@@ -1,51 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
-import SubscriptionModal from "./SubscriptionalModal1";  // 올바른 경로로 수정
+import "./letter1.css";
+import SubscriptionModal from "./SubscriptionalModal1";
 import Thumbnail from "./Thumbnail1";
 import mirror from "../component/img/mirror.png";
 import running from "../component/img/running.png";
 import room from "../component/img/room.png";
 import house from "../component/img/house.png";
-import "./letter1.css"
+import axios from "axios";
 
-const Button = styled.button`
-    width: 217px;
-    height: 68px;
-    padding: 10px;
-    background-color: #CA904B69;
-    border: none;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 200px;
-    font-size: 18px;
-    font-weight: 400;
-    margin-left: 600px;
 
-    &:hover {
-        background-color: #CA904B72;
-    }
-`;
+const localImages = [mirror, running,mirror, room];
 
 function ShareLetter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
+  const [letters, setLetters] = useState([]);
+
+
+  useEffect(() => {
+    // Fetch data when the component mounts
+    async function fetchLetters() {
+      try {
+        const response = await axios.get('http://3.36.240.5:3000/share_letters', {
+          params: {
+            page: 0, // Set the desired page
+            size: 4 // Set the desired size
+          }
+        });
+        console.log(response.data)
+
+        if (response.data.isSuccess && response.data.code === 2000) {
+          // Update state with fetched letters
+          setLetters(response.data.result.Letter.slice(0,4));
+        } else {
+          console.error("Failed to fetch letters:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Failed to fetch letters:", error);
+      }
+    }
+
+    fetchLetters();
+  }, []);
 
   const isLoggedIn = localStorage.getItem('access_token') ? true : false;
 
   const openModal = () => {
     setModalIsOpen(true);
   };
-
-  // const openModal = () => {
-  //   if (isLoggedIn){
-  //     setModalIsOpen(true);
-  //   }
-  //   else{
-  //     navigate('/login');
-  //   }
-  // };
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -54,6 +58,7 @@ function ShareLetter() {
   const handleThumbnailClick = (id) => {
     navigate('/share-letter-story');
   }
+
 
   return (
     <div className="ShareLetter">
@@ -67,30 +72,16 @@ function ShareLetter() {
         <SubscriptionModal isOpen={modalIsOpen} onRequestClose={closeModal} />
       </header>
       <div className="thumbnails">
-        <Thumbnail
-          id={1}
-          src={mirror}
-          description="자취를 시작하고 000이 생겼다 ?! "
-          onClick={() => handleThumbnailClick(1)}
-        />
-        <Thumbnail
-          id={2}
-          src={running}
-          description="내가 사려고 모아둔, 다이소 꿀템 추천 모음집 📝"
-          onClick={() => handleThumbnailClick(2)}
-        />
-        <Thumbnail
-          id={3}
-          src={mirror}
-          description="일주일에 두 번 0원 쓰기, 지출 감소에 효과가 있을까 ?"
-          onClick={() => handleThumbnailClick(3)}
-        />
-        <Thumbnail
-          id={4}
-          src={room}
-          description="식물 덕후가 알려주는 키우기 좋은 식물들 🪴"
-          onClick={() => handleThumbnailClick(4)}
-        />
+        {letters.map((letter,index) => (
+          <Thumbnail
+            key={letter.letter_id}
+            id={letter.letter_id}
+            src={localImages[index % localImages.length]}
+            description={letter.title}
+            onClick={() => handleThumbnailClick(letter.letter_id)}
+            publicationDate={new Date(letter.created_at).toLocaleDateString('ko-KR')}
+          />
+        ))}
       </div>
     </div>
   );

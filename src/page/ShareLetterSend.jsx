@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import houseimage from "../component/img/house.png";
-
 
 const PageContainer = styled.div`
   background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.2) 40.77%);
@@ -15,7 +15,7 @@ const PageContainer = styled.div`
 `;
 
 const HouseImage = styled.img`
-  width: 81px; /* Adjust the size as needed */
+  width: 81px;
   height: 66px;
   margin-top: 167px;
 `;
@@ -108,17 +108,46 @@ const ShareLetterSend = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Form Data:', formData);
-    // Add form submission logic here
+
+    const opinionData = {
+      user_id: 1, // 사용자 ID를 적절하게 설정하세요
+      is_satisfy: formData.satisfaction === 'yes',
+      satisfy_detail_1: formData.liked === 'content',
+      satisfy_detail_2: formData.liked === 'layout',
+      satisfy_detail_3: formData.liked === 'other',
+      unsatisfy_detail_1: formData.disliked === 'content',
+      unsatisfy_detail_2: formData.disliked === 'layout',
+      unsatisfy_detail_3: formData.disliked === 'other',
+      opinion_good: formData.goodPoints,
+      opinion_bad: formData.improvementPoints,
+      comment: formData.otherFeedback
+    };
+
+    try {
+      const response = await axios.post('http://3.36.240.5:3000/share_letters/2/opinions', opinionData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.data.isSuccess) {
+        console.log("Opinion submitted successfully:", response.data);
+        setIsSubmitted(true);
+        handleButtonClick();
+      } else {
+        console.error("Failed to submit opinion:", response.data);
+      }
+    } catch (error) {
+      console.error("Error submitting opinion:", error);
+    }
   };
 
   const handleButtonClick = () => {
     navigate('/share-letter-send-complete');
   };
-
-  
 
   return (
     <PageContainer>
@@ -253,7 +282,7 @@ const ShareLetterSend = () => {
           />
         </FormGroup>
 
-        <Button type="submit" onClick={handleButtonClick}>제출하기</Button>
+        <Button type="submit">제출하기</Button>
       </Form>
     </PageContainer>
   );
