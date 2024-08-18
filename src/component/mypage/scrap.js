@@ -1,13 +1,9 @@
-import styled, { css } from 'styled-components';
-import Outline from '../../page/myoutline';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import mirror from '../img/mirror.png';
-import running from '../img/running.png';
-import room from '../img/room.png';
-
-const imageMapping = [mirror,running,mirror,room];
+import styled, { css } from "styled-components";
+import Outline from "../../page/myoutline";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useUser } from "../api/UserContext";
 
 const Type = styled.div`
   display: flex;
@@ -15,6 +11,7 @@ const Type = styled.div`
   margin-bottom: -2px;
   cursor: pointer;
 `;
+
 const TypeOption = styled.div`
   padding: 10px 20px;
   margin-left: 50px;
@@ -26,23 +23,26 @@ const TypeOption = styled.div`
       border-bottom: 2px solid rgba(202, 144, 75, 0.41);
     `}
 `;
+
 const ProjectCount = styled.div`
   color: rgba(202, 144, 75, 0.56);
   font-size: 14px;
   margin-left: 20px;
 `;
+
 const ItemWrapper = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 const ItemBox = styled.div`
-  margin: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   cursor: pointer;
 `;
+
 const Title = styled.div`
   position: absolute;
   background-color: rgba(255, 255, 255, 1);
@@ -57,6 +57,7 @@ const Title = styled.div`
   display: flex;
   align-items: center;
 `;
+
 const TitleText = styled.span`
   white-space: nowrap;
   overflow: hidden;
@@ -65,45 +66,54 @@ const TitleText = styled.span`
   width: 100%;
 `;
 
-const Myscrap = () => {
+export default function Myscrap() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [selected, setSelected] = useState('자취레터');
+  const [selected, setSelected] = useState("자취레터");
   const [scraps, setScraps] = useState([]);
+  const [userInfo] = useUser();
 
   useEffect(() => {
-    if (location.pathname.includes('shareletter')) {
-      setSelected('공유레터');
+    if (location.pathname.includes("shareletter")) {
+      setSelected("공유레터");
     } else {
-      setSelected('자취레터');
+      setSelected("자취레터");
     }
   }, [location.pathname]);
 
   useEffect(() => {
-    async function fetchScraps() {
-      try {
-        const response = await axios.get('http://3.36.240.5:3000/user/home_letters/scrap/1', {
-          params: {
-            user_id: 1 // 현재 사용자 ID
-          }
-        });
-
-        if (response.data.isSuccess && response.data.code === 2000) {
-          console.log(response.data.result); 
-          setScraps(response.data.result); // 스크랩 데이터를 설정
-        } else {
-          console.error("스크랩 데이터를 불러오는 데 실패했습니다:", response.data.message);
-        }
-      } catch (error) {
-        console.error("스크랩 데이터를 불러오는 데 실패했습니다:", error);
-      }
+    if (userInfo && userInfo.user_id) {
+      fetchScrapData(userInfo.user_id, selected);
     }
+  }, [userInfo, selected]);
 
-    fetchScraps();
-  }, []);
+  const fetchScrapData = async (user_id, type) => {
+    try {
+      let response;
+      let scrapsData = [];
+
+      if (type === "공유레터") {
+        response = await axios.get(
+          `http://3.36.240.5:3000/user/${user_id}/share_letters/scraps`
+        );
+        scrapsData = response.data.result["Scrap Letters "]; // 공유레터 구조에 맞게 처리
+      } else {
+        response = await axios.get(
+          `http://3.36.240.5:3000/user/home_letters/scrap/1`
+        );
+        scrapsData = response.data.result; // 자취레터는 바로 result 배열에 접근
+      }
+
+      console.log("API Response:", response.data);
+      console.log("Scraps Data:", scrapsData);
+      setScraps(scrapsData);
+    } catch (error) {
+      console.error("스크랩 데이터를 가져오는 중 에러 발생:", error);
+    }
+  };
 
   const getBasePath = (type) => {
-    return type === '자취레터' ? 'homeletter' : 'shareletter';
+    return type === "자취레터" ? "homeletter" : "shareletter";
   };
 
   const handleTypeClick = (type) => {
@@ -119,14 +129,14 @@ const Myscrap = () => {
     <Outline>
       <Type>
         <TypeOption
-          selected={selected === '자취레터'}
-          onClick={() => handleTypeClick('자취레터')}
+          selected={selected === "자취레터"}
+          onClick={() => handleTypeClick("자취레터")}
         >
           자취레터
         </TypeOption>
         <TypeOption
-          selected={selected === '공유레터'}
-          onClick={() => handleTypeClick('공유레터')}
+          selected={selected === "공유레터"}
+          onClick={() => handleTypeClick("공유레터")}
         >
           공유레터
         </TypeOption>
@@ -136,18 +146,26 @@ const Myscrap = () => {
         All <ProjectCount>{scraps.length}</ProjectCount>
       </div>
       <ItemWrapper>
-        {Array.isArray(scraps) && scraps.map((scrap) => (
-          <ItemBox key={scrap.letter_id} onClick={() => handleClick(scrap.letter_id)}>
-            <Title>
-              <TitleText>{scrap.title}</TitleText>
-            </Title>
-            <img src={imageMapping[scrap.letter_id]}
-            className="w-64 h-44 m-2 bg-mypageGray" />
-          </ItemBox>
-        ))}
+        {scraps.length > 0 ? (
+          scraps.map((scrap) => (
+            <ItemBox
+              key={scrap.letter_id}
+              onClick={() => handleClick(scrap.letter_id)}
+            >
+              <Title>
+                <TitleText>{scrap.title}</TitleText>
+              </Title>
+              <img
+                src={scrap.s3_url || "default-image-url.jpg"} // s3_url 사용, null인 경우 기본 이미지 표시
+                className="w-64 h-44 m-2 bg-mypageGray"
+                alt={scrap.title}
+              />
+            </ItemBox>
+          ))
+        ) : (
+          <div>No scraps found</div>
+        )}
       </ItemWrapper>
     </Outline>
   );
-};
-
-export default Myscrap;
+}
