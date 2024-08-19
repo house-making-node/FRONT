@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import kakaoLoginImage from '../img/kakaoLogin1.png';
+import React, { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import axios from "axios";
+import kakaoLoginImage from "../img/kakaoLogin1.png";
 
-const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=a2a708f9ef61aa50055f852bf8e7bc16&redirect_uri=http://3.36.240.5:3000/auth/kakao/callback";
+const KAKAO_API_KEY = process.env.REACT_APP_KAKAO_CLIENT_ID;
+const API_BASE_URL = process.env.REACT_APP_SERVER_URL;
+const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
 
 const LoginContainer = styled.div`
   display: flex;
@@ -24,46 +28,70 @@ const KakaoButton = styled.button`
 `;
 
 const KakaoImage = styled.img`
-  width: 712px; /* provided image size */
+  width: 712px;
   height: auto;
 `;
 
 const KakaoLogin = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { Kakao } = window;
 
   useEffect(() => {
-    const code = new URL(window.location.href).searchParams.get("code");
+    const initKakao = async () => {
+      if (!Kakao.isInitialized()) {
+        Kakao.init(KAKAO_API_KEY);
+      }
+    };
 
-    if (code) {
-      // 2. 프론트 -> 백, 인가코드 넘김
-      fetch('/api/auth/kakao/callback', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.accessToken) {
-            // 4. 백 -> 프론트, 토큰 넘김
-            // 토큰을 받아서 원하는 로직을 처리
-            console.log('Access Token:', data.accessToken);
-            // 예: 로그인 후 메인 페이지로 이동
-            window.location.href = '/welcome';
+    initKakao();
+  }, [Kakao]);
+
+  useEffect(() => {
+    const handleKakaoCallback = async () => {
+      const urlParams = new URLSearchParams(location.search);
+      const code = urlParams.get("code");
+      console.log("Extracted code:", code); // 콘솔에 코드 출력 확인
+
+      if (code) {
+        try {
+          console.log("Sending request to server...");
+          const response = await axios.get(
+            `${API_BASE_URL}/auth/kakao?code=${code}`
+          );
+          console.log("Server response:", response); // 서버 응답 확인
+
+          if (response.status === 200) {
+            const data = response.data;
+            console.log("Response Data:", data);
+
+            if (data.isSuccess) {
+              const { access_token } = data.result;
+              localStorage.setItem("access_token", access_token);
+              navigate("/home");
+            } else {
+              console.error("Login failed:", data.message);
+            }
           } else {
-            // 토큰 발급 실패 처리
-            console.error('Failed to retrieve access token');
+            console.error("Failed to authenticate:", response.status);
           }
-        })
-        .catch((error) => {
-          console.error('Error during Kakao login:', error);
-        });
-    }
-  }, []);
+        } catch (error) {
+          console.error("Error during Kakao login:", error);
+        }
+      } else {
+        console.error("No code found in URL");
+      }
+    };
 
-  // 1. 프론트 <-> 카카오, 인가코드 발급
+    if (location.search.includes("code=")) {
+      handleKakaoCallback();
+    }
+  }, [location.search, navigate]);
+
   const handleKakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
+    Kakao.Auth.authorize({
+      redirectUri: REDIRECT_URI,
+    });
   };
 
   return (
