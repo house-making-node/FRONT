@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import kakaoLoginImage from '../img/kakaoLogin1.png';
 
-const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=a2a708f9ef61aa50055f852bf8e7bc16&redirect_uri=http://3.36.240.5:3000/auth/kakao/callback";
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
 
 const LoginContainer = styled.div`
   display: flex;
@@ -34,18 +34,16 @@ const KakaoLogin = () => {
     const code = new URL(window.location.href).searchParams.get("code");
 
     if (code) {
-      // 2. 프론트 -> 백, 인가코드 넘김
-      fetch('/api/auth/kakao/callback', {
-        method: 'POST',
+      // 프론트 -> 백엔드로 GET 요청 전송
+      fetch(`${process.env.REACT_APP_SERVER_URL}/auth/kakao?code=${code}`, {
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
-        body: JSON.stringify({ code }),
       })
         .then((response) => response.json())
         .then((data) => {
           if (data.accessToken) {
-            // 4. 백 -> 프론트, 토큰 넘김
             // 토큰을 받아서 원하는 로직을 처리
             console.log('Access Token:', data.accessToken);
             // 로그인 후 환영페이지로 이동
@@ -59,9 +57,9 @@ const KakaoLogin = () => {
           console.error('Error during Kakao login:', error);
         });
     }
-  }, []);
+  }, []); 
 
-  // 1. 프론트 <-> 카카오, 인가코드 발급
+  // 카카오 로그인 버튼 클릭 시 실행
   const handleKakaoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
