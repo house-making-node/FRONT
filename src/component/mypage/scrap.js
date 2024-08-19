@@ -74,6 +74,8 @@ export default function Myscrap() {
   const location = useLocation();
   const [selected, setSelected] = useState("자취레터");
   const [scraps, setScraps] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [scrapsPerPage] = useState(6);
   const [userInfo] = useUser();
 
   useEffect(() => {
@@ -126,9 +128,23 @@ export default function Myscrap() {
       selected === "자취레터" ? "home-letter-story" : "share-letter-story";
     navigate(`/${path}/${id}`);
   };
+  // 현재 페이지에 해당하는 스크랩 데이터 계산
+  const indexOfLastScrap = currentPage * scrapsPerPage;
+  const indexOfFirstScrap = indexOfLastScrap - scrapsPerPage;
+  const currentScraps = scraps.slice(indexOfFirstScrap, indexOfLastScrap);
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  // 총 페이지 수 계산
+  const totalPages = Math.ceil(scraps.length / scrapsPerPage);
 
   return (
-    <Outline>
+    <Outline
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    >
       <Type>
         <TypeOption
           selected={selected === "자취레터"}
