@@ -5,6 +5,7 @@ import "./letter.css";
 import { useState, useEffect } from "react";
 import { PrivacyPopup } from "./privacypopup";
 import styled from 'styled-components';
+import axios from "axios";
 
 
 const Button = styled.button`
@@ -30,6 +31,8 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
   const [marketingChecked, setMarketingChecked] = useState(false);
   const [showPrivacyPopup, setShowPrivacyPopup] = useState(false);
   const [showMarketingPopup, setShowMarketingPopup] = useState(false);
+  const [userName, setUserName] = useState(""); 
+  const [email, setEmail] = useState("");
 
   const handlePrivacyChange = (event) => {
     setPrivacyChecked(event.target.checked);
@@ -49,11 +52,11 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
   }, [privacyChecked]);
 
   useEffect(() => {
-    if (marketingChecked) {
-      setShowMarketingPopup(true);
-    } else {
-      setShowMarketingPopup(false);
-    }
+    setShowPrivacyPopup(privacyChecked);
+  }, [privacyChecked]);
+
+  useEffect(() => {
+    setShowMarketingPopup(marketingChecked);
   }, [marketingChecked]);
 
   const closePrivacyPopup = () => {
@@ -66,8 +69,36 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
 
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    navigate('/member-home-letter', {state: { subscriptionCompleted: true}});
+  const handleButtonClick = async (e) => {
+    e.preventDefault();
+
+    const subscriptionData = {
+      user_id: 1, 
+      email: email,
+      name: userName
+    };
+
+    console.log("전송된 데이터:", subscriptionData);
+
+    try {
+      const response = await axios.post('http://3.36.240.5:3000/home_letters/subscribe', subscriptionData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log("Response:", response.data);
+
+      if (response.status === 200) {
+        console.log("Subscription successful");
+        navigate('/member-home-letter', { state: { subscriptionCompleted: true } });
+        console.log(response.data)
+      } else {
+        console.error("Subscription failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -84,11 +115,13 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
           <form>
             <div className="input-group">
               <label htmlFor="name">이름</label>
-              <input type="text" id="name" name="name" required />
+              <input type="text" id="name" value={userName} name="name" onChange={(e) => setUserName(e.target.value)} 
+              required />
             </div>
             <div className="input-group">
               <label htmlFor="email">이메일</label>
-              <input type="email" id="email" name="email" required />
+              <input type="email" id="email" value={email} name="email" onChange={(e) => setEmail(e.target.value)}
+              required />
             </div>
             <div className="checkbox-group">
               <input type="checkbox" id="privacy" name="privacy" checked={privacyChecked} onChange={handlePrivacyChange} required />
@@ -101,8 +134,7 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
             <Button onClick={handleButtonClick} className="submit-button">구독하기</Button>
           </form>
         </div>
-      </div>
-      <PrivacyPopup
+        <PrivacyPopup
         isOpen={showPrivacyPopup}
         onClose={closePrivacyPopup}
           title="개인정보 수집 및 이용"
@@ -111,9 +143,10 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
       <PrivacyPopup
         isOpen={showMarketingPopup}
         onClose={closeMarketingPopup}
-        title="광고성 정보 수신."
+        title="광고성 정보 수신"
         content="제휴 판촉, 프로모션, 이벤트 정보 등의 광고성 정보를 수신합니다."
       />
+      </div>
     </Modal>
     </>
     

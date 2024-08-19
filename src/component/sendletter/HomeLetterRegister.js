@@ -38,16 +38,18 @@ const Button = styled.button`
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 3000;
 `;
 
 const PopupContainer = styled.div`
   background-color: white;
+  width: 400px;
+  height: 140px;
   padding: 20px;
-  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
+  margin-top: 120px;
 `;
 
 const PopupMessage = styled.p`

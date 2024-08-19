@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../header/Navbar";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from 'axios'; // axios 임포트
 
 const Container = styled.div`
 	margin-top: 140px; /* Navbar 높이 + 여백 */
@@ -111,38 +112,57 @@ const StyledButton = styled.button`
 function Step4Page() {
 	const navigate = useNavigate();
 	const [interiorConcern, setInteriorConcern] = useState(""); // 텍스트 영역 상태 추가
+	const [consultingId, setConsultingId] = useState(null);
+	const [userName, setUserName] = useState("");
 
 	useEffect(() => {
-		const userName = localStorage.getItem("userName");
-		if (userName) {
-			document.getElementById("userNameFinal").innerText = userName;
+		const storedConsultingId = localStorage.getItem("consultingId");
+		const storedUserName = localStorage.getItem("userName");
+		if (storedConsultingId) {
+			setConsultingId(parseInt(storedConsultingId));
+		} else {
+			console.error("consultingId가 로컬 스토리지에 없습니다.");
+			// 필요하다면 이전 단계로 리다이렉트 등의 처리를 할 수 있습니다.
+			// navigate("/consulting/step3Page");
 		}
-		// 이전 상태 복원
-		const savedConcern = localStorage.getItem("interiorConcern");
-		if (savedConcern) {
-			setInteriorConcern(savedConcern); // 저장된 상태로 설정
-		}
+		if (storedUserName) {
+			setUserName(storedUserName);
+			}
 	}, []);
 
 	const handleTextChange = (event) => {
 		setInteriorConcern(event.target.value); // 텍스트 영역 내용 업데이트
-		localStorage.setItem("interiorConcern", event.target.value); // 상태 저장
 	};
 
-	const clearText = (element) => {
-		if (element.placeholder === "여기를 클릭해 주세요") {
-			element.placeholder = "";
+	const handleSubmit = async () => {
+		if (!interiorConcern.trim()) {
+			alert("고민 내용을 입력해 주세요.");
+			return;
 		}
-	};
 
-	const restorePlaceholder = (element) => {
-		if (element.value === "") {
-			element.placeholder = "여기를 클릭해 주세요";
+		const requestBody = {
+			consulting_id: consultingId,
+			concern: interiorConcern,
+		};
+
+		try {
+			const response = await axios.patch('http://3.36.240.5:3000/consulting/requirements/concern', requestBody, {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			const data = response.data;
+			if (data.isSuccess) {
+				console.log("요구사항 저장 성공:", data.result);
+				navigate("/consulting/consultLoading"); // 다음 단계로 이동
+			} else {
+				alert("요구사항 저장 중 오류가 발생했습니다.");
+			}
+		} catch (error) {
+			console.error("API 호출 중 오류 발생:", error);
+			alert("서버 통신 중 오류가 발생했습니다.");
 		}
-	};
-
-	const handleExit = () => {
-		navigate('/'); // MainPage로 이동
 	};
 
 	return (
@@ -161,15 +181,13 @@ function Step4Page() {
 						<form id="step4Form">
 							<Option>
 								<Label id="finalLabel">
-									<span id="userNameFinal"></span>님, 가지고 있는 인테리어 관련 고민을 자유롭게 작성해 주세요.
+									<span id="userNameFinal">{userName}</span>님, 가지고 있는 인테리어 관련 고민을 자유롭게 작성해 주세요.
 								</Label>
 								<TextArea
 									id="interiorConcern"
 									placeholder="여기를 클릭해 주세요"
-									onClick={(e) => clearText(e.target)}
-									onBlur={(e) => restorePlaceholder(e.target)}
-									onChange={handleTextChange} // 내용 변경 핸들러 추가
-									value={interiorConcern} // 상태 값 설정
+									onChange={handleTextChange}
+									value={interiorConcern}
 								/>
 							</Option>
 						</form>
@@ -178,16 +196,14 @@ function Step4Page() {
 						<StyledButton type="button" onClick={() => navigate("/consulting/step3Page")}>
 							이전
 						</StyledButton>
-						<StyledButton type="button" onClick={handleExit}>
-							나가기
-						</StyledButton>
-						<StyledButton type="button" onClick={() => navigate("/consulting/consultLoading")} disabled={!interiorConcern.trim()}> {/* 내용이 있을 때만 활성화 */}
+						<StyledButton type="button" onClick={handleSubmit} disabled={!interiorConcern.trim()}>
 							제출하기
 						</StyledButton>
 					</ButtonContainer>
 				</Container>
 			</div>
-		);
-	}
+	
+	);
+}
 
-	export default Step4Page;
+export default Step4Page;
