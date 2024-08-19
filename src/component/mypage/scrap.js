@@ -116,23 +116,15 @@ export default function Myscrap() {
       console.log("API Response:", response.data);
       console.log("Unique Scraps Data:", uniqueScraps);
       setScraps(uniqueScraps);
-
     } catch (error) {
       console.error("스크랩 데이터를 가져오는 중 에러 발생:", error);
     }
   };
 
-  const getBasePath = (type) => {
-    return type === "자취레터" ? "homeletter" : "shareletter";
-  };
-
-  const handleTypeClick = (type) => {
-    setSelected(type);
-    navigate(`/myscrap/${getBasePath(type)}`);
-  };
-
   const handleClick = (id) => {
-    navigate(`/scrap/${getBasePath(selected)}/${id}`);
+    const path =
+      selected === "자취레터" ? "home-letter-story" : "share-letter-story";
+    navigate(`/${path}/${id}`);
   };
 
   return (
@@ -140,13 +132,19 @@ export default function Myscrap() {
       <Type>
         <TypeOption
           selected={selected === "자취레터"}
-          onClick={() => handleTypeClick("자취레터")}
+          onClick={() => {
+            setSelected("자취레터");
+            navigate("/myscrap/homeletter");
+          }}
         >
           자취레터
         </TypeOption>
         <TypeOption
           selected={selected === "공유레터"}
-          onClick={() => handleTypeClick("공유레터")}
+          onClick={() => {
+            setSelected("공유레터");
+            navigate("/myscrap/shareletter");
+          }}
         >
           공유레터
         </TypeOption>
@@ -166,10 +164,8 @@ export default function Myscrap() {
                 <TitleText>{scrap.title}</TitleText>
               </Title>
               <img
-
                 src={scrap.s3_url || "default-image-url.jpg"} // s3_url 사용, null인 경우 기본 이미지 표시 -> 넣어야됨
                 className="w-64 h-44 m-2 bg-mypageGray"
-
               />
             </ItemBox>
           ))
