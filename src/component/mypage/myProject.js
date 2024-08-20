@@ -135,7 +135,7 @@ export default function MyProject() {
           signmessage = "고민을 작성해주세요";
         } else if (status === "답변 대기중") {
           signmessage = "이전 화면으로 돌아가기";
-        } else if (status === "답변 완료") {
+        } else if (status === "답변완료") {
           signmessage = "답변 확인하기";
         }
 
@@ -173,7 +173,7 @@ export default function MyProject() {
         path = "/consulting/consultLoading";
         break;
       case "답변 확인하기":
-        path = "/"; //gpt화면
+        path = "/consulting/gptAnswer"; //gpt화면
         break;
     }
     navigate(path);
