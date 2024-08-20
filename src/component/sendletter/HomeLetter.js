@@ -38,7 +38,7 @@ function HomeLetter() {
 
 
   useEffect(() => {
-    // Fetch data when the component mounts
+
     async function fetchLetters() {
       try {
         const response = await axios.get('http://3.36.240.5:3000/home_letters', {
@@ -83,8 +83,8 @@ function HomeLetter() {
     setModalIsOpen(false);
   };
 
-  const handleThumbnailClick = (id) => {
-    navigate(`/home-letter-story/${id}`);
+  const handleThumbnailClick = (id, index) => {
+    navigate(`/home-letter-story/${id}`, { state: { letters, currentIndex: index } });
   }
 
 
@@ -106,7 +106,7 @@ function HomeLetter() {
             id={letter.letter_id}
             src={letter.s3_key ?  `http://3.36.240.5:3000/${letter.s3_key}`:localImages[index % localImages.length]}
             description={letter.title}
-            onClick={() => handleThumbnailClick(letter.letter_id)}
+            onClick={() => handleThumbnailClick(letter.letter_id, index)}
             publicationDate={new Date(letter.created_at).toLocaleDateString('ko-KR')}
           />
         ))}
