@@ -104,7 +104,7 @@ function MemberShareletter() {
     <div className="ShareLetter">
       <header className="ShareLetter-header">
         <img src={house} alt='house'/>
-        <h1>똑똑한 자취를 위한, 자취레터</h1>
+        <h1>똑똑한 자취를 위한, 공유레터</h1>
         <p>고민상담부터 생활 지식까지 매주 금요일에 만나요.</p>
         <SubscriptionModal isOpen={modalIsOpen} onRequestClose={closeModal} />
       </header>
@@ -130,6 +130,9 @@ function MemberShareletter() {
           description="이미 구매한 물건을 또 구매하고 있다면 !"
         />
       </div>
+      <Button onClick={handleButtonClick} className="subscribe-button">
+          내 고민 보내기
+      </Button>
       <Button onClick={handleButtonClick} className="subscribe-button">
           내 고민 보내기
       </Button>

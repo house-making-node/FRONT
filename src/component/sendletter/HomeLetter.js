@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import "./letter.css";
@@ -8,28 +8,61 @@ import mirror from "../img/mirror.png";
 import running from "../img/running.png";
 import room from "../img/room.png";
 import house from "../img/house.png";
+import axios from "axios";
 
-const Button = styled.button`
-    width: 217px;
-    height: 68px;
-    padding: 10px;
-    background-color: #CA904B69;
-    border: none;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 200px;
-    font-size: 18px;
-    font-weight: 400;
-    margin-left: 600px;
+// const Button = styled.button`
+//     width: 217px;
+//     height: 68px;
+//     padding: 10px;
+//     background-color: #CA904B69;
+//     border: none;
+//     color: white;
+//     border-radius: 6px;
+//     cursor: pointer;
+//     margin-top: 200px;
+//     font-size: 18px;
+//     font-weight: 400;
+//     margin-left: 600px;
 
-    &:hover {
-        background-color: #CA904B72;
-    }
-`;
+//     &:hover {
+//         background-color: #CA904B72;
+//     }
+// `;
+
+const localImages = [mirror, running,mirror, room];
+
 function HomeLetter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
+  const [letters, setLetters] = useState([]);
+
+
+  useEffect(() => {
+    // Fetch data when the component mounts
+    async function fetchLetters() {
+      try {
+        const response = await axios.get('http://3.36.240.5:3000/home_letters', {
+          params: {
+            page: 0, // Set the desired page
+            size: 4 // Set the desired size
+          }
+        });
+        console.log(response.data)
+
+        if (response.data.isSuccess && response.data.code === 2000) {
+          // Update state with fetched letters
+          setLetters(response.data.result.Letter.slice(0,4));
+          console.log("성공:", response.data);
+        } else {
+          console.error("Failed to fetch letters:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Failed to fetch letters:", error);
+      }
+    }
+
+    fetchLetters();
+  }, []);
 
   const isLoggedIn = localStorage.getItem('access_token') ? true : false;
 
@@ -51,7 +84,7 @@ function HomeLetter() {
   };
 
   const handleThumbnailClick = (id) => {
-    navigate('/home-letter-story');
+    navigate(`/home-letter-story/${id}`);
   }
 
 
@@ -67,30 +100,16 @@ function HomeLetter() {
         <SubscriptionModal isOpen={modalIsOpen} onRequestClose={closeModal} />
       </header>
       <div className="thumbnails">
-        <Thumbnail
-          id={1}
-          src={mirror}
-          description="독자님의 가장 큰 인테리어 고민은 무엇인가요 ?"
-          onClick={() => handleThumbnailClick(1)}
-        />
-        <Thumbnail
-          id={2}
-          src={running}
-          description="똑똑한 자취, OO이 필수라고 ?"
-          onClick={() => handleThumbnailClick(2)}
-        />
-        <Thumbnail
-          id={3}
-          src={mirror}
-          description="자취생을 위한 돈 관리 방법"
-          onClick={() => handleThumbnailClick(3)}
-        />
-        <Thumbnail
-          id={4}
-          src={room}
-          description="이미 구매한 물건을 또 구매하고 있다면 !"
-          onClick={() => handleThumbnailClick(4)}
-        />
+        {letters.map((letter,index) => (
+          <Thumbnail
+            key={letter.letter_id}
+            id={letter.letter_id}
+            src={letter.s3_key ?  `http://3.36.240.5:3000/${letter.s3_key}`:localImages[index % localImages.length]}
+            description={letter.title}
+            onClick={() => handleThumbnailClick(letter.letter_id)}
+            publicationDate={new Date(letter.created_at).toLocaleDateString('ko-KR')}
+          />
+        ))}
       </div>
     </div>
   );
