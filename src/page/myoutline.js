@@ -63,9 +63,33 @@ const Board = styled.div`
   background: rgba(239, 214, 187, 0.1);
   padding: 30px;
   margin-left: -10px;
+  position: relative; /* 추가: Pagination을 하단 중앙에 배치하기 위해 필요 */
 `;
 
-export default function Outline({ children }) {
+const PaginationWrapper = styled.div`
+  position: absolute;
+  bottom: 20px; /* Board 하단에서 20px 위로 배치 */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+`;
+
+const ArrowButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 0 20px;
+  color: ${(props) => (props.disabled ? "#ccc" : "#000")};
+`;
+
+export default function Outline({
+  children,
+  currentPage,
+  totalPages,
+  onPageChange,
+}) {
   const navigate = useNavigate();
   const location = useLocation();
   const [selected, setSelected] = useState(null);
@@ -128,6 +152,22 @@ export default function Outline({ children }) {
     navigate(path);
   };
 
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      onPageChange(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
+    }
+  };
+  const isProjectOrScrapPage = [
+    "/mypage",
+    "/myscrap/homeletter",
+    "/myscrap/shareletter",
+  ].includes(location.pathname);
   return (
     <Wrapper>
       <Profile>
@@ -169,7 +209,24 @@ export default function Outline({ children }) {
           </Item>
         </Sort>
       </Profile>
-      <Board>{children}</Board>
+      <Board>
+        {children}
+        {/* Pagination */}
+        {isProjectOrScrapPage && (
+          <PaginationWrapper>
+            <ArrowButton onClick={prevPage} disabled={currentPage === 1}>
+              &#8592;
+            </ArrowButton>
+            <span>{currentPage}</span>
+            <ArrowButton
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+            >
+              &#8594;
+            </ArrowButton>
+          </PaginationWrapper>
+        )}
+      </Board>
     </Wrapper>
   );
 }
