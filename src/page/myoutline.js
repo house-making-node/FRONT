@@ -8,17 +8,20 @@ import { useUser } from "../component/api/UserContext";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin: 120px 10px 10px;
-  padding: 10px;
+  justify-content: space-between;
+  margin: 5vh 5vw;
+  margin-top: 120px;
+  padding: 2vh 0;
+  width: 90vw;
+  box-sizing: border-box;
 `;
 
 const Profile = styled.div`
-  width: 300px;
+  width: 20vw;
+  min-width: 300px;
   height: 600px;
   background-color: rgba(239, 214, 187, 0.1);
-  padding: 20px;
+  padding: 2vh 2vw;
   margin-right: 20px;
   display: flex;
   flex-direction: column;
@@ -58,17 +61,20 @@ const Item = styled.div`
 `;
 
 const Board = styled.div`
-  width: 1000px;
-  height: 600px;
+  width: 1200px; /* 고정된 너비를 설정 */
+  height: 600px; /* 고정된 높이를 설정 */
   background: rgba(239, 214, 187, 0.1);
-  padding: 30px;
+  padding: 3vh 3vw;
+  box-sizing: border-box;
   margin-left: -10px;
-  position: relative; /* 추가: Pagination을 하단 중앙에 배치하기 위해 필요 */
+  position: relative;
+  overflow-y: ${(props) =>
+    props.noScroll ? "hidden" : "auto"}; /* 스크롤 조정 */
 `;
 
 const PaginationWrapper = styled.div`
   position: absolute;
-  bottom: 20px; /* Board 하단에서 20px 위로 배치 */
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -163,11 +169,15 @@ export default function Outline({
       onPageChange(currentPage - 1);
     }
   };
+
   const isProjectOrScrapPage = [
     "/mypage",
     "/myscrap/homeletter",
     "/myscrap/shareletter",
   ].includes(location.pathname);
+
+  const noScrollPages = ["/term-of-service", "/privacy-notice"];
+
   return (
     <Wrapper>
       <Profile>
@@ -209,7 +219,7 @@ export default function Outline({
           </Item>
         </Sort>
       </Profile>
-      <Board>
+      <Board noScroll={noScrollPages.includes(location.pathname)}>
         {children}
         {/* Pagination */}
         {isProjectOrScrapPage && (
