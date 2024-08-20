@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from 'styled-components';
 import houseimage from "../img/house.png";
 
@@ -63,9 +63,11 @@ const HouseImage = styled.img`
 const HomeLetterComplete = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const {letter_id} = location.state || {}; 
 
   const handleButtonClick = () => {
-    navigate('/home-letter-story');
+    navigate(`/home-letter-story/${letter_id}`);
   };
 
   return (

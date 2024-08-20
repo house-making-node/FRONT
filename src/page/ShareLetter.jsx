@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import "./letter1.css";
 import SubscriptionModal from "./SubscriptionalModal1";
-import Thumbnail from "./Thumbnail1";
+import Thumbnail1 from "./Thumbnail1";
 import shareletter_1 from "../component/img/shareletter_1.png";
 import shareletter_2 from "../component/img/shareletter_2.png";
 import shareletter_3 from "../component/img/shareletter_3.png";
@@ -30,7 +30,7 @@ function ShareLetter() {
             size: 4 // Set the desired size
           }
         });
-        console.log(response.data)
+        console.log("화면정보",response.data)
 
         if (response.data.isSuccess && response.data.code === 2000) {
           // Update state with fetched letters
@@ -74,9 +74,9 @@ function ShareLetter() {
       </header>
       <div className="thumbnails">
         {letters.map((letter,index) => (
-          <Thumbnail
+          <Thumbnail1
             key={letter.letter_id}
-            id={letter.share_id}
+            id={letter.letter_id}
             src={localImages[index % localImages.length]}
             description={letter.title}
             content = {letter.content}

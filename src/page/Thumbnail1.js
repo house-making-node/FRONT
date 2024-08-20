@@ -7,6 +7,7 @@ function Thumbnail1({ src, description, onClick, id, publicationDate }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     async function loadBookmarkStatus() {
@@ -19,21 +20,31 @@ function Thumbnail1({ src, description, onClick, id, publicationDate }) {
             },
           }
         );
-        console.log(response.data);
+        console.log("정보:", response.data);
 
         // response.data.result가 배열인지 확인하고, 배열이 아닌 경우 빈 배열로 설정
-        const bookmarkedLetters = Array.isArray(response.data.result)
-          ? response.data.result
-          : [];
+        const bookmarkedLetters = response.result.Letter || [];
 
         const isBookmarked = bookmarkedLetters.some(
-          (letter) => letter.letter_id === id
+          letter => letter.letter_id === id
         );
 
         // 서버로부터 북마크 상태를 받아와서 설정
         setIsBookmarked(isBookmarked);
+        setDataLoaded(true);
       } catch (error) {
-        console.error("북마크 상태를 불러오는 데 실패했습니다:", error);
+        if (error.response) {
+          if (error.response.status === 404) {
+            // 북마크 데이터가 없어서 404 오류가 발생하는 경우
+            console.warn("북마크 데이터가 없습니다.");
+            setIsBookmarked(false);
+          } else {
+            console.error('북마크 상태를 불러오는 데 실패했습니다:', error.response ? error.response.data : error.message);
+          }
+        } else {
+          console.error('북마크 상태를 불러오는 데 실패했습니다:', error.message);
+        }
+        setDataLoaded(true);
       }
     }
 
@@ -56,7 +67,7 @@ function Thumbnail1({ src, description, onClick, id, publicationDate }) {
 
       if (isBookmarked) {
         response = await axios.delete(
-          "http://3.36.240.5:3000/share_letters/scrapX",
+          "http://3.36.240.5:3000/share_letters/scrap",
           {
             data: { user_id: 1, letter_id: id },
             ...config,
@@ -70,18 +81,19 @@ function Thumbnail1({ src, description, onClick, id, publicationDate }) {
         );
       }
 
-      if (response.data.isSuccess && response.data.code === 2000) {
+      if (response.data.isSuccess) {
         setIsBookmarked(!isBookmarked);
         setPopupMessage(isBookmarked ? "저장 취소되었습니다" : "저장되었습니다");
         console.log("Response:", response.data);
         setShowPopup(true);
       } else {
-        setPopupMessage("오류가 발생했습니다. 다시 시도해주세요.");
+        setPopupMessage(`오류가 발생했습니다: ${response.data.message}`);
         setShowPopup(true);
       }
     } catch (error) {
       console.error("북마크 처리 중 오류 발생:", error);
       setPopupMessage("오류가 발생했습니다. 다시 시도해주세요.");
+      console.log('에러:',error.message)
       setShowPopup(true);
     }
   };

@@ -132,7 +132,9 @@ export default function Myscrap() {
   };
 
   const handleClick = (id) => {
-    navigate(`/scrap/${getBasePath(selected)}/${id}`);
+    const path =
+      selected === "자취레터" ? "home-letter-story" : "share-letter-story";
+    navigate(`/${path}/${id}`);
   };
 
   return (
