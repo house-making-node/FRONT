@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "../api/UserContext";
+import room from '../img/room.png';
 
 const Type = styled.div`
   display: flex;
@@ -169,7 +170,7 @@ export default function Myscrap() {
               </Title>
               <img
 
-                src={scrap.s3_url || "default-image-url.jpg"} // s3_url 사용, null인 경우 기본 이미지 표시 -> 넣어야됨
+                src={scrap.s3_url || room} // s3_url 사용, null인 경우 기본 이미지 표시 -> 넣어야됨
                 className="w-64 h-44 m-2 bg-mypageGray"
 
               />

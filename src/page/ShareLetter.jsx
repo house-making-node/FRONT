@@ -77,7 +77,7 @@ function ShareLetter() {
           <Thumbnail1
             key={letter.letter_id}
             id={letter.letter_id}
-            src={localImages[index % localImages.length]}
+            src={letter.s3_url}
             description={letter.title}
             content = {letter.content}
             onClick={() => handleThumbnailClick(letter.letter_id)}

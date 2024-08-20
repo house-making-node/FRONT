@@ -21,14 +21,14 @@ function Thumbnail1({ src, description, onClick, id, publicationDate }) {
           }
         );
         console.log("정보:", response.data);
-
+  
         // response.data.result가 배열인지 확인하고, 배열이 아닌 경우 빈 배열로 설정
-        const bookmarkedLetters = response.result.Letter || [];
-
+        const bookmarkedLetters = response.data.result?.Letter || []; // 수정된 부분
+  
         const isBookmarked = bookmarkedLetters.some(
           letter => letter.letter_id === id
         );
-
+  
         // 서버로부터 북마크 상태를 받아와서 설정
         setIsBookmarked(isBookmarked);
         setDataLoaded(true);
@@ -47,9 +47,10 @@ function Thumbnail1({ src, description, onClick, id, publicationDate }) {
         setDataLoaded(true);
       }
     }
-
+  
     loadBookmarkStatus();
   }, [id]);
+  
 
   const handleBookmarkClick = async (e) => {
     e.stopPropagation();
@@ -67,7 +68,7 @@ function Thumbnail1({ src, description, onClick, id, publicationDate }) {
 
       if (isBookmarked) {
         response = await axios.delete(
-          "http://3.36.240.5:3000/share_letters/scrap",
+          "http://3.36.240.5:3000/share_letters/scrapX",
           {
             data: { user_id: 1, letter_id: id },
             ...config,
@@ -135,3 +136,4 @@ function Thumbnail1({ src, description, onClick, id, publicationDate }) {
 }
 
 export default Thumbnail1;
+
