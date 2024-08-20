@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import houseimage from '../img/house.png';
 import axios from 'axios';
@@ -123,7 +123,7 @@ const HorizontalLine = styled.hr`
   margin-top: 150px;
 `;
 
-const ImageWrapper = styled.div`
+const ImageWrapper = styled.button`
   text-align: left;
   font-size: 20px;
   margin-left: -50px;
@@ -162,8 +162,14 @@ const HomeLetterStory = () => {
   const { letter_id } = useParams(); // URL에서 letter_id를 가져옴
   const navigate = useNavigate();
   const [letter, setLetter] = useState(null);
+  const location = useLocation(); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // const { letters = [], currentIndex = 0 } = location.state || {};
+  const [nextLetter, setNextLetter] = useState(null);
+  const [prevLetter, setPrevLetter] = useState(null);
+
+
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -172,8 +178,27 @@ const HomeLetterStory = () => {
         setLetter(response.data.result);
         console.log(response.data);
         console.log("아이디:",letter_id);
+
+        const fetchNextPrevLetter = async (id, fallbackId) => {
+          try {
+            const res = await axios.get(`http://3.36.240.5:3000/home_letters/${id}`);
+            if (res.data.result === -1) throw new Error('Invalid letter data');
+            return res.data.result;
+          } catch (err) {
+            const fallbackRes = await axios.get(`http://3.36.240.5:3000/home_letters/${fallbackId}`);
+            return fallbackRes.data.result;
+          }
+        };
+
+        const nextLetterData = await fetchNextPrevLetter(parseInt(letter_id) + 1, 40);
+        const prevLetterData = await fetchNextPrevLetter(parseInt(letter_id) - 1, 40);
+
+        setNextLetter(nextLetterData);
+        setPrevLetter(prevLetterData);
+
       } catch (err) {
         setError('데이터를 가져오는 중 오류가 발생했습니다.');
+        // navigate('http://3.36.240.5:3000/home_letters/40');
       } finally {
         setLoading(false);
       }
@@ -198,6 +223,21 @@ const HomeLetterStory = () => {
     navigate('/consulting');
   };
 
+const handleNavigateToNext = () => {
+  if (nextLetter) {
+    const nextId = nextLetter.letter_id !== -1 ? nextLetter.letter_id : 40;
+    navigate(`/home-letter-story/${nextId}`);
+  }
+};
+console.log(nextLetter.id);
+
+const handleNavigateToPrev = () => {
+  if (prevLetter) {
+    const prevId = prevLetter.letter_id !== -1 ? prevLetter.letter_id : 40;
+    navigate(`/home-letter-story/${prevId}`);
+  }
+};
+
   return (
     <PageContainer>
       <HouseImage src={houseimage} alt="House" />
@@ -214,16 +254,16 @@ const HomeLetterStory = () => {
       </MessageContainer>
       <HorizontalLine />
       <ImageContainer>
-        <ImageWrapper>
+        <ImageWrapper onClick={handleNavigateToNext}>
           <ShareLetter1 src={shareletter1} alt="Share Letter 1" />
-          <ImageDescription>자취생을 위한 돈 관리 방법</ImageDescription>
-          <ImageDay>2024년 05월 22일</ImageDay>
+          <ImageDescription>{nextLetter.title}</ImageDescription>
+          <ImageDay>{formatDate(nextLetter.created_at)}</ImageDay>
           <Button onClick={handleButtonClick1}>의견 보내기</Button>
         </ImageWrapper>
-        <ImageWrapper>
+        <ImageWrapper onClick={handleNavigateToPrev}>
           <ShareLetter2 src={shareletter2} alt="Share Letter 2" />
-          <ImageDescription>이미 구매한 물건을 또 구매하고 있다면 !</ImageDescription>
-          <ImageDay>2024년 05월 22일</ImageDay>
+          <ImageDescription>{prevLetter.title}</ImageDescription>
+          <ImageDay>{formatDate(prevLetter.created_at)}</ImageDay>
           <Button2 onClick={handleButtonClick2}>인테리어 컨설팅 신청하기</Button2>
         </ImageWrapper>
       </ImageContainer>

@@ -171,7 +171,6 @@ const HomeLetterPage = () => {
       formData.append('concern_detail', data.experience); // 공유레터 내용
       formData.append('concern_comment', data.comment); // 집꾸에게 보내는 의견
       formData.append('title', data.wishes);
-      // navigate('/home-letter-complete');
 
     const submitresponse = await axios.post('http://3.36.240.5:3000/home_letters/submit', formData, {
       headers: {
@@ -182,7 +181,9 @@ const HomeLetterPage = () => {
 
       if (submitresponse.data.isSuccess) {
         console.log('자취레터 제출 성공:', submitresponse.data);
+
         const concernId = submitresponse.data.result.concern_id;
+
         console.log('Concern ID:', concernId);
 
         const createResponse = await axios.post('http://3.36.240.5:3000/home_letters/create', {
@@ -190,12 +191,15 @@ const HomeLetterPage = () => {
         );
 
         console.log('답변 생성 요청 데이터:', { concern_id: concernId });
-        console.log('답변 생성 응답 본문:', JSON.stringify(createResponse.data, null, 2));
+        console.log('답변 생성 응답 본문:', createResponse.data);
 
         if (createResponse.data.message === "Home letter created successfully") {
           console.log('답변 생성 성공:', createResponse.data);
+
+          const letter_id = createResponse.data.letterId;
+
           setIsSubmitted(true);
-          navigate('/home-letter-complete');
+          navigate('/home-letter-complete', { state: { letter_id } });
         } else {
           console.error('답변 생성 실패:', createResponse.data.message, createResponse.data);
           alert('답변 생성에 실패했습니다: ' + createResponse.data.message);
