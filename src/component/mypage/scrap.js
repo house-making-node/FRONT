@@ -74,6 +74,8 @@ export default function Myscrap() {
   const location = useLocation();
   const [selected, setSelected] = useState("자취레터");
   const [scraps, setScraps] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [scrapsPerPage] = useState(6);
   const [userInfo] = useUser();
 
   useEffect(() => {
@@ -116,19 +118,9 @@ export default function Myscrap() {
       console.log("API Response:", response.data);
       console.log("Unique Scraps Data:", uniqueScraps);
       setScraps(uniqueScraps);
-
     } catch (error) {
       console.error("스크랩 데이터를 가져오는 중 에러 발생:", error);
     }
-  };
-
-  const getBasePath = (type) => {
-    return type === "자취레터" ? "homeletter" : "shareletter";
-  };
-
-  const handleTypeClick = (type) => {
-    setSelected(type);
-    navigate(`/myscrap/${getBasePath(type)}`);
   };
 
   const handleClick = (id) => {
@@ -136,19 +128,39 @@ export default function Myscrap() {
       selected === "자취레터" ? "home-letter-story" : "share-letter-story";
     navigate(`/${path}/${id}`);
   };
+  // 현재 페이지에 해당하는 스크랩 데이터 계산
+  const indexOfLastScrap = currentPage * scrapsPerPage;
+  const indexOfFirstScrap = indexOfLastScrap - scrapsPerPage;
+  const currentScraps = scraps.slice(indexOfFirstScrap, indexOfLastScrap);
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  // 총 페이지 수 계산
+  const totalPages = Math.ceil(scraps.length / scrapsPerPage);
 
   return (
-    <Outline>
+    <Outline
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    >
       <Type>
         <TypeOption
           selected={selected === "자취레터"}
-          onClick={() => handleTypeClick("자취레터")}
+          onClick={() => {
+            setSelected("자취레터");
+            navigate("/myscrap/homeletter");
+          }}
         >
           자취레터
         </TypeOption>
         <TypeOption
           selected={selected === "공유레터"}
-          onClick={() => handleTypeClick("공유레터")}
+          onClick={() => {
+            setSelected("공유레터");
+            navigate("/myscrap/shareletter");
+          }}
         >
           공유레터
         </TypeOption>
@@ -168,10 +180,8 @@ export default function Myscrap() {
                 <TitleText>{scrap.title}</TitleText>
               </Title>
               <img
-
                 src={scrap.s3_url || "default-image-url.jpg"} // s3_url 사용, null인 경우 기본 이미지 표시 -> 넣어야됨
                 className="w-64 h-44 m-2 bg-mypageGray"
-
               />
             </ItemBox>
           ))
