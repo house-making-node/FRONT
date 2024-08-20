@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';  
 import styled from 'styled-components';
 import kakaoLoginImage from '../img/kakaoLogin1.png';
 
@@ -9,7 +10,8 @@ const LoginContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #ffffff;
+  background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.5) 80.77%);
+
 `;
 
 const KakaoButton = styled.button`
@@ -29,45 +31,38 @@ const KakaoImage = styled.img`
 `;
 
 const KakaoLogin = () => {
+  const navigate = useNavigate();  
 
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get("code");
 
     if (code) {
       // 프론트 -> 백엔드로 GET 요청 전송
-      fetch(`${process.env.REACT_APP_SERVER_URL}/auth/kakao?code=${code}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.accessToken) {
-            // 토큰을 받아서 원하는 로직을 처리
-            console.log('Access Token:', data.accessToken);
-            // 로그인 후 환영페이지로 이동
-            window.location.href = '/welcome';
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/kakao/callback?code=${code}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // 로그인 성공 시 KakaoAgreement 페이지로 이동
+            navigate('/KakaoAgreement');
           } else {
-            // 토큰 발급 실패 처리
-            console.error('Failed to retrieve access token');
+            alert('로그인에 실패하였습니다.');
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('Error during Kakao login:', error);
+          alert('로그인 중 오류가 발생했습니다.');
         });
     }
-  }, []); 
+  }, [navigate]);
 
-  // 카카오 로그인 버튼 클릭 시 실행
-  const handleKakaoLogin = () => {
+  const handleLoginClick = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
 
   return (
     <LoginContainer>
-      <KakaoButton onClick={handleKakaoLogin}>
-        <KakaoImage src={kakaoLoginImage} alt="Kakao Login Button" />
+      <KakaoButton onClick={handleLoginClick}>
+        <KakaoImage src={kakaoLoginImage} alt="카카오 로그인" />
       </KakaoButton>
     </LoginContainer>
   );
