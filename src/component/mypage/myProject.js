@@ -187,20 +187,17 @@ export default function MyProject() {
     indexOfLastProject
   );
 
-  const nextPage = () => {
-    if (currentPage < Math.ceil(userProjects.length / projectsPerPage)) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  // 페이지 변경 핸들러
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
+  // 총 페이지 수 계산
+  const totalPages = Math.ceil(userProjects.length / projectsPerPage);
   return (
-    <Outline>
+    <Outline
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    >
       <Type>
         <TypeOption selected={selected === "All"}>All</TypeOption>
       </Type>
@@ -236,20 +233,6 @@ export default function MyProject() {
           ))
         )}
       </ItemWrapper>
-      <PaginationWrapper>
-        <ArrowButton onClick={prevPage} disabled={currentPage === 1}>
-          &#8592;
-        </ArrowButton>
-        <span>{currentPage}</span>
-        <ArrowButton
-          onClick={nextPage}
-          disabled={
-            currentPage === Math.ceil(userProjects.length / projectsPerPage)
-          }
-        >
-          &#8594;
-        </ArrowButton>
-      </PaginationWrapper>
     </Outline>
   );
 }
