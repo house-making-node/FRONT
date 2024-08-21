@@ -48,15 +48,34 @@ const App = () => {
           <Route path="/" element={<MainPage />} />
           <Route path="/consulting" element={<InteriorConsultingPage />} />
           <Route path="/faq" element={<QuestionBoard />} />
-          <Route path="/consulting/step1Page" element={<Step1Page />} />
-          <Route path="/consulting/step2Page" element={<Step2Page />} />
-          <Route path="/consulting/step3Page" element={<Step3Page />} />
-          <Route path="/consulting/step4Page" element={<Step4Page />} />
+          {/* 로그인 후 새로운 컨설팅을 시작할 때 */}
+          <Route path="/consulting/step1" element={<Step1Page />} />
+
+          {/* 기존 컨설팅을 이어서 할 때 */}
           <Route
-            path="/consulting/consultLoading"
+            path="/consulting/:consulting_id/step1"
+            element={<Step1Page />}
+          />
+          <Route
+            path="/consulting/:consulting_id/step2"
+            element={<Step2Page />}
+          />
+          <Route
+            path="/consulting/:consulting_id/step3"
+            element={<Step3Page />}
+          />
+          <Route
+            path="/consulting/:consulting_id/step4"
+            element={<Step4Page />}
+          />
+          <Route
+            path="/consulting/:consulting_id/consultLoading"
             element={<ConsultLoading />}
           />
-          <Route path="/consulting/gptAnswer" element={<GptAnswer />} />
+          <Route
+            path="/consulting/:consulting_id/gptAnswer"
+            element={<GptAnswer />}
+          />
 
           <Route path="/login" element={<KakaoLogin />} />
           <Route path="/agreement" element={<KakaoAgreement />} />
@@ -90,8 +109,14 @@ const App = () => {
             path="/share-letter-story"
             element={<ShareLetterStory addScrap={addScrap} />}
           /> */}
-          <Route path="/home-letter-story/:letter_id" element={<HomeLetterStory />} />
-          <Route path="/share-letter-story/:letter_id" element={<ShareLetterStory />} />
+          <Route
+            path="/home-letter-story/:letter_id"
+            element={<HomeLetterStory />}
+          />
+          <Route
+            path="/share-letter-story/:letter_id"
+            element={<ShareLetterStory />}
+          />
           <Route path="/share-letter-send" element={<ShareLetterSend />} />
           <Route
             path="/share-letter-send-complete"

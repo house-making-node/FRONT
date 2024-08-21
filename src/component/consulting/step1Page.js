@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../header/Navbar";
 import styled from "styled-components";
@@ -141,14 +141,14 @@ const HiddenRadio = styled.input`
 
 function Step1Page() {
   const navigate = useNavigate();
+  const { consulting_id: paramConsultingId } = useParams(); // URL에서 consulting_id를 가져옴
   const [isNextEnabled, setIsNextEnabled] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [consultingId, setConsultingId] = useState(null);
-  const [userName, setUserName] = useState("");
+  const [consultingId, setConsultingId] = useState(paramConsultingId || null);
+  const [userName, setUserName] = useState("박시현");
 
   useEffect(() => {
-    // const storedUserId = localStorage.getItem("userId");
-    const storedUserId = 1; // userId를 1로 임시 설정
+    const storedUserId = 1; // 예시로 userId를 1로 임시 설정
     const storedUserName = localStorage.getItem("userName");
     if (storedUserId) {
       setUserId(parseInt(storedUserId));
@@ -156,21 +156,22 @@ function Step1Page() {
     if (storedUserName) {
       setUserName(storedUserName);
     } else {
-      // userId가 없는 경우 처리
       console.error("userId가 로컬 스토리지에 없습니다.");
-      // 필요하다면 로그인 페이지로 리다이렉트 등의 처리를 할 수 있습니다.
-      // navigate("/login");
     }
   }, []);
 
   const handleOptionChange = () => {
-    const selectedPyeong = document.querySelector('input[name="pyeong"]:checked');
+    const selectedPyeong = document.querySelector(
+      'input[name="pyeong"]:checked'
+    );
     const selectedRooms = document.querySelector('input[name="rooms"]:checked');
     setIsNextEnabled(!!selectedPyeong && !!selectedRooms);
   };
 
   const handleNext = async () => {
-    const selectedPyeong = document.querySelector('input[name="pyeong"]:checked');
+    const selectedPyeong = document.querySelector(
+      'input[name="pyeong"]:checked'
+    );
     const selectedRooms = document.querySelector('input[name="rooms"]:checked');
 
     if (!selectedPyeong || !selectedRooms) {
@@ -179,32 +180,51 @@ function Step1Page() {
     }
 
     try {
-      const houseSizeResponse = await axios.post("http://3.36.240.5:3000/consulting/requirements/house_size", {
-        user_id: userId,
-        house_size: selectedPyeong.value
-      });
+      let currentConsultingId = consultingId || paramConsultingId;
 
-      if (houseSizeResponse.data.isSuccess) {
-        const consultingData = houseSizeResponse.data.result;
-        setConsultingId(consultingData.consulting_id);
-        localStorage.setItem("consultingId", consultingData.consulting_id);
-        localStorage.setItem("houseSize", consultingData.house_size);
+      if (!currentConsultingId) {
+        // consulting_id가 없는 경우, 평수를 저장할 때 생성됨
+        const houseSizeResponse = await axios.post(
+          "http://3.36.240.5:3000/consulting/requirements/house_size",
+          {
+            user_id: userId,
+            house_size: selectedPyeong.value,
+          }
+        );
 
-        const roomNumResponse = await axios.patch("http://3.36.240.5:3000/consulting/requirements/room_num", {
-          consulting_id: consultingData.consulting_id,
-          room_num: selectedRooms.value
-        });
+        if (houseSizeResponse.data.isSuccess) {
+          const consultingData = houseSizeResponse.data.result;
+          currentConsultingId = consultingData.consulting_id;
+          setConsultingId(currentConsultingId); // consulting_id 상태 업데이트
+          localStorage.setItem("consultingId", currentConsultingId);
+          localStorage.setItem("houseSize", consultingData.house_size);
 
-        if (roomNumResponse.data.isSuccess) {
-          const updatedConsultingData = roomNumResponse.data.result;
-          localStorage.setItem("roomNum", updatedConsultingData.room_num);
-          
-          navigate("/consulting/step2Page");
+          // consulting_id가 새로 생성된 경우, 해당 ID를 포함한 URL로 리다이렉트
+          navigate(`/consulting/${currentConsultingId}/step1`);
+          return; // 리다이렉트 후 handleNext 종료
         } else {
-          alert("방 개수 저장 중 오류가 발생했습니다.");
+          alert("집 평수 저장 중 오류가 발생했습니다.");
+          return;
         }
+      }
+
+      // 방 개수 업데이트
+      const roomNumResponse = await axios.patch(
+        "http://3.36.240.5:3000/consulting/requirements/room_num",
+        {
+          consulting_id: currentConsultingId,
+          room_num: selectedRooms.value,
+        }
+      );
+
+      if (roomNumResponse.data.isSuccess) {
+        const updatedConsultingData = roomNumResponse.data.result;
+        localStorage.setItem("roomNum", updatedConsultingData.room_num);
+
+        // 다음 단계로 이동
+        navigate(`/consulting/${currentConsultingId}/step2`);
       } else {
-        alert("집 평수 저장 중 오류가 발생했습니다.");
+        alert("방 개수 저장 중 오류가 발생했습니다.");
       }
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
