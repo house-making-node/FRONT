@@ -29,7 +29,7 @@ import axios from "axios";
 //     }
 // `;
 
-const localImages = [mirror, running,mirror, room];
+const localImages = [mirror, running, mirror, room];
 
 function HomeLetter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -38,7 +38,7 @@ function HomeLetter() {
 
 
   useEffect(() => {
-    // Fetch data when the component mounts
+
     async function fetchLetters() {
       try {
         const response = await axios.get('http://3.36.240.5:3000/home_letters', {
@@ -52,6 +52,7 @@ function HomeLetter() {
         if (response.data.isSuccess && response.data.code === 2000) {
           // Update state with fetched letters
           setLetters(response.data.result.Letter.slice(0,4));
+          console.log("성공:", response.data);
         } else {
           console.error("Failed to fetch letters:", response.data.message);
         }
@@ -82,11 +83,17 @@ function HomeLetter() {
     setModalIsOpen(false);
   };
 
-  const handleThumbnailClick = (id) => {
-    navigate('/home-letter-story');
+  const handleThumbnailClick = (id, index) => {
+    navigate(`/home-letter-story/${id}`, { state: { letters, currentIndex: index } });
   }
 
-
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}년 ${month}월 ${day}일`;
+  };
+  
   return (
     <div className="HomeLetter">
       <header className="HomeLetter-header">
@@ -104,9 +111,10 @@ function HomeLetter() {
             key={letter.letter_id}
             id={letter.letter_id}
             src={localImages[index % localImages.length]}
+            // src={letter.s3_key ? `http://3.36.240.5:3000/home_letters/${letter.s3_key}`:localImages[index % localImages.length]}
             description={letter.title}
-            onClick={() => handleThumbnailClick(letter.letter_id)}
-            publicationDate={new Date(letter.created_at).toLocaleDateString('ko-KR')}
+            onClick={() => handleThumbnailClick(letter.letter_id, index)}
+            publicationDate={formatDate(new Date(letter.created_at))}
           />
         ))}
       </div>

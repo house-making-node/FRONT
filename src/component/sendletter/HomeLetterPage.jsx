@@ -156,30 +156,59 @@ const HomeLetterPage = () => {
 
 
   const onSubmit = async (data) => {
-    const formData = new FormData();
-    formData.append('directory', 'share_letters'); // S3 폴더 경로
-    formData.append('image', data.thumbnail[0]); // 파일
-    formData.append('user_id', 1); // 사용자 ID (예시로 1 사용)
-    formData.append('nickname', data.name); // 사용자 닉네임
-    formData.append('age', data.age); // 사용자 나이
-    formData.append('experience_detail', data.experience); // 공유레터 내용
-    formData.append('experience_comment', data.wishes); // 집꾸에게 보내는 의견
-    formData.append('title', '제목'); // 공유레터 제목 (원하는 제목으로 변경)
-    navigate('/home-letter-complete');
+    try{
+      const formData = new FormData();
 
-    try {
-      const response = await axios.post('http://3.36.240.5:3000/home_letters/submit', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      if (data.thumbnail[0]) {
+        // Append the file with its name
+        formData.append('image', data.thumbnail[0], data.thumbnail[0].name); 
+      }
+
+      // formData.append('image', data.thumbnail[0]); // 파일
+      formData.append('user_id', 1); // 사용자 ID (예시로 1 사용)
+      formData.append('nickname', data.name); // 사용자 닉네임
+      formData.append('age', data.age); // 사용자 나이
+      formData.append('concern_detail', data.experience); // 공유레터 내용
+      formData.append('concern_comment', data.comment); // 집꾸에게 보내는 의견
+      formData.append('title', data.wishes);
+
+    const submitresponse = await axios.post('http://3.36.240.5:3000/home_letters/submit', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        }
+
       });
 
-      if (response.data.isSuccess) {
-        console.log('공유레터 제출 성공:', response.data);
-        setIsSubmitted(true);
+      if (submitresponse.data.isSuccess) {
+        console.log('자취레터 제출 성공:', submitresponse.data);
+
+        const concernId = submitresponse.data.result.concern_id;
+
+        console.log('Concern ID:', concernId);
+
+        const createResponse = await axios.post('http://3.36.240.5:3000/home_letters/create', {
+          concern_id: concernId}
+        );
+
+        console.log('답변 생성 요청 데이터:', { concern_id: concernId });
+        console.log('답변 생성 응답 본문:', createResponse.data);
+
+        if (createResponse.data.message === "Home letter created successfully") {
+          console.log('답변 생성 성공:', createResponse.data);
+
+          const letter_id = createResponse.data.letterId;
+
+          setIsSubmitted(true);
+          navigate('/home-letter-complete', { state: { letter_id } });
+        } else {
+          console.error('답변 생성 실패:', createResponse.data.message, createResponse.data);
+          alert('답변 생성에 실패했습니다: ' + createResponse.data.message);
+          console.log(createResponse.data);
+        }
+
       } else {
-        console.error('제출 실패:', response.data.message);
-        alert('제출에 실패했습니다: ' + response.data.message);
+        console.error('제출 실패:', submitresponse.data.message);
+        alert('제출에 실패했습니다: ' + submitresponse.data.message);
       }
     } catch (error) {
       console.error('API 호출 중 오류 발생:', error);
@@ -249,13 +278,13 @@ const HomeLetterPage = () => {
             />
             {errors.wishes && <ErrorMessage>{errors.wishes.message}</ErrorMessage>}
 
-            <Label htmlFor="wishes">고민 외에 집꾸 팀에게 하고싶은 말</Label>
+            <Label htmlFor="comment">고민 외에 집꾸 팀에게 하고싶은 말</Label>
             <TextArea 
               placeholder="여기를 클릭해주세요"
-              {...register("wishes", { required: "말씀을 적어주세요." })} 
+              {...register("comment", { required: "말씀을 적어주세요." })} 
               rows="4"
             />
-            {errors.wishes && <ErrorMessage>{errors.wishes.message}</ErrorMessage>}
+            {errors.comment && <ErrorMessage>{errors.comment.message}</ErrorMessage>}
 
             <Button type="submit">제출하기</Button>
           </Form>

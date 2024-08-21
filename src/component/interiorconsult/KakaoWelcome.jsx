@@ -1,6 +1,7 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Cookies from "js-cookie";
 
 const Container = styled.div`
   display: flex;
@@ -57,15 +58,23 @@ const Button = styled.button`
 
 const KakaoWelcome = () => {
   const navigate = useNavigate();
+  const [userName, setUserName] = useState("박시현");
+
+  useEffect(() => {
+    const userId = Cookies.get("userId");
+    if (userId) {
+      setUserName(userId);
+    }
+  }, []);
 
   const handleConfirm = () => {
-    navigate('/consulting/step1Page');
+    navigate("/consulting/step1");
   };
 
   return (
     <Container>
       <Box>
-        <Message>000님 반가워요! 로그인이 완료 되었어요.</Message>
+        <Message>{userName}님 반가워요! 로그인이 완료 되었어요.</Message>
         <SubMessage>
           이제 인테리어 전문가에게 받는 컨설팅 서비스를 이용할 수 있어요.
         </SubMessage>

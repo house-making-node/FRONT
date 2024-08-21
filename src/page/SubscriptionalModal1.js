@@ -79,7 +79,7 @@ function SubscriptionModal1({ isOpen, onRequestClose }) {
     };
 
     try {
-      const response = await axios.post('http://3.36.240.5:3000/share_letters/subscribe', subscriptionData, {
+      const response = await axios.put('http://3.36.240.5:3000/share_letters/subscribe', subscriptionData, {
         headers: {
           'Content-Type': 'application/json',
         },

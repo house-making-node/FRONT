@@ -135,7 +135,7 @@ export default function MyProject() {
           signmessage = "고민을 작성해주세요";
         } else if (status === "답변 대기중") {
           signmessage = "이전 화면으로 돌아가기";
-        } else if (status === "답변 완료") {
+        } else if (status === "답변완료") {
           signmessage = "답변 확인하기";
         }
 
@@ -154,26 +154,26 @@ export default function MyProject() {
     }
   };
 
-  const handleClick = (signmessage) => {
+  const handleClick = (consultingId, signmessage) => {
     let path = "/";
     switch (signmessage) {
       case "집의 상태를 선택해주세요":
-        path = "/consulting/step1Page";
+        path = `/consulting/${consultingId}/step1`;
         break;
       case "좋아하는 분위기를 선택해주세요":
-        path = "/consulting/step2Page";
+        path = `/consulting/${consultingId}/step2`;
         break;
       case "사진을 첨부해주세요":
-        path = "/consulting/step3Page";
+        path = `/consulting/${consultingId}/step3`;
         break;
       case "고민을 작성해주세요":
-        path = "/consulting/step4Page";
+        path = `/consulting/${consultingId}/step4`;
         break;
       case "이전 화면으로 돌아가기":
-        path = "/consulting/consultLoading";
+        path = `/consulting/${consultingId}/consultLoading`;
         break;
       case "답변 확인하기":
-        path = "/"; //gpt화면
+        path = `/consulting/${consultingId}/gptAnswer`; //gpt화면
         break;
     }
     navigate(path);
@@ -187,20 +187,17 @@ export default function MyProject() {
     indexOfLastProject
   );
 
-  const nextPage = () => {
-    if (currentPage < Math.ceil(userProjects.length / projectsPerPage)) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  // 페이지 변경 핸들러
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
+  // 총 페이지 수 계산
+  const totalPages = Math.ceil(userProjects.length / projectsPerPage);
   return (
-    <Outline>
+    <Outline
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    >
       <Type>
         <TypeOption selected={selected === "All"}>All</TypeOption>
       </Type>
@@ -228,7 +225,11 @@ export default function MyProject() {
                 <div className="text-xl m-3">
                   {userInfo?.user_name || "프로젝트 이름 없음"}
                 </div>
-                <Choice onClick={() => handleClick(project.signmessage)}>
+                <Choice
+                  onClick={() =>
+                    handleClick(project.consulting_id, project.signmessage)
+                  }
+                >
                   {project.signmessage || "메시지 없음"}
                 </Choice>
               </RoomType>
@@ -236,20 +237,6 @@ export default function MyProject() {
           ))
         )}
       </ItemWrapper>
-      <PaginationWrapper>
-        <ArrowButton onClick={prevPage} disabled={currentPage === 1}>
-          &#8592;
-        </ArrowButton>
-        <span>{currentPage}</span>
-        <ArrowButton
-          onClick={nextPage}
-          disabled={
-            currentPage === Math.ceil(userProjects.length / projectsPerPage)
-          }
-        >
-          &#8594;
-        </ArrowButton>
-      </PaginationWrapper>
     </Outline>
   );
 }

@@ -65,7 +65,7 @@ const HomeLetterComplete = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate('/share-letter-story');
+    navigate('/home-letter-story');
   };
 
 

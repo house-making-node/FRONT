@@ -61,7 +61,7 @@ const HouseImage = styled.img`
 `;
 
 const ShareLetterComplete = () => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  // const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
 
   const handleButtonClick = () => {

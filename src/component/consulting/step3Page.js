@@ -345,6 +345,7 @@ function Step3Page() {
                   />
                 </div>
               )}
+
               <FileButton isFileSelected={isBlueprintUploaded}>
                 <FileButtonText>
                   {isBlueprintUploaded ? "✔️ 파일 선택됨" : "파일 선택"} {/* 체크표시와 텍스트 중앙 정렬 */}

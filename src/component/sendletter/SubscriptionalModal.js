@@ -78,6 +78,8 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
       name: userName
     };
 
+    console.log("전송된 데이터:", subscriptionData);
+
     try {
       const response = await axios.post('http://3.36.240.5:3000/home_letters/subscribe', subscriptionData, {
         headers: {
@@ -85,11 +87,12 @@ function SubscriptionModal({ isOpen, onRequestClose }) {
         }
       });
 
-      console.log("Response:", response);
+      console.log("Response:", response.data);
 
       if (response.status === 200) {
         console.log("Subscription successful");
         navigate('/member-home-letter', { state: { subscriptionCompleted: true } });
+        console.log(response.data)
       } else {
         console.error("Subscription failed");
       }

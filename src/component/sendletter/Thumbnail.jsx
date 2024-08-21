@@ -7,6 +7,7 @@ function Thumbnail({ src, description, onClick, id, publicationDate}) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     async function loadBookmarkStatus() {
@@ -18,14 +19,26 @@ function Thumbnail({ src, description, onClick, id, publicationDate}) {
         });
         console.log(response.data);
 
-        const bookmarkedLetters = response.data.result;
+        const bookmarkedLetters = response.data.result || [];
 
         const isBookmarked = bookmarkedLetters.some(letter => letter.letter_id === id);
 
         // 서버로부터 북마크 상태를 받아와서 설정
         setIsBookmarked(isBookmarked);
+        setDataLoaded(true);
       } catch (error) {
-        console.error('북마크 상태를 불러오는 데 실패했습니다:', error);
+        if (error.response) {
+          if (error.response.status === 404) {
+            // 북마크 데이터가 없어서 404 오류가 발생하는 경우
+            console.warn("북마크 데이터가 없습니다.");
+            setIsBookmarked(false);
+          } else {
+            console.error('북마크 상태를 불러오는 데 실패했습니다:', error.response ? error.response.data : error.message);
+          }
+        } else {
+          console.error('북마크 상태를 불러오는 데 실패했습니다:', error.message);
+        }
+        setDataLoaded(true);
       }
     }
 
@@ -38,8 +51,6 @@ function Thumbnail({ src, description, onClick, id, publicationDate}) {
 
 
   console.log('letter_id:', id);
-  // console.log('id:', id);
-  // console.log('num:', num);
 
     try {
       let response;

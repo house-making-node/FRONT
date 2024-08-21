@@ -8,6 +8,7 @@ import mirror from "../img/mirror.png";
 import running from "../img/running.png";
 import room from "../img/room.png";
 import house from "../img/house.png";
+import axios from "axios";
 import { BsFillExclamationDiamondFill } from "react-icons/bs";
 
 const Button = styled.button`
@@ -35,7 +36,7 @@ const Button = styled.button`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(204, 204, 204, 0);
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -44,7 +45,7 @@ const Button = styled.button`
 
 const PopupContainer = styled.div`
   background-color: white;
-  width: 400px;
+  width: 500px;
   height: 140px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -69,33 +70,72 @@ const CloseButton = styled.button`
     background-color: #CA904B72;
   }
 `;
+const localImages = [mirror, running, mirror, room];
 
 function MemberHomeletter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showSubscriptionCompletedPopup, setShowSubscriptionCompletedPopup] = useState(false);
-
   const navigate = useNavigate();
   const location = useLocation();
+  const [letters, setLetters] = useState([]);
+
 
   useEffect(() => {
-    console.log("Location state:", location.state);
-    if (location.state?.subscriptionCompleted) {
-      console.log("Popup should be displayed");
-      setShowSubscriptionCompletedPopup(true);
+
+    async function fetchLetters() {
+      try {
+        const response = await axios.get('http://3.36.240.5:3000/home_letters', {
+          params: {
+            page: 0, // Set the desired page
+            size: 4 // Set the desired size
+          }
+        });
+        console.log(response.data)
+
+        if (response.data.isSuccess && response.data.code === 2000) {
+          // Update state with fetched letters
+          setLetters(response.data.result.Letter.slice(0,4));
+          console.log("성공:", response.data);
+        } else {
+          console.error("Failed to fetch letters:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Failed to fetch letters:", error);
+      }
     }
-  }, [location.state]);
+
+    fetchLetters();
+  }, []);
 
   const openModal = () => {
     setModalIsOpen(true);
+  };
+
+  const handleButtonClick = () => {
+    navigate('/home-letter-page');
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
   };
 
-  const handleButtonClick = () => {
-    navigate('/home-letter-page');
+  const handleThumbnailClick = (id, index) => {
+    navigate(`/home-letter-story/${id}`, { state: { letters, currentIndex: index } });
+  }
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}년 ${month}월 ${day}일`;
   };
+
+  useEffect(() => {
+    // 구독 완료 상태 확인
+    if (location.state?.subscriptionCompleted) {
+      setShowSubscriptionCompletedPopup(true);  // 팝업 표시
+    }
+  }, [location.state]);
 
   const closeSubscriptionCompletedPopup = () => {
     setShowSubscriptionCompletedPopup(false);
@@ -111,26 +151,17 @@ function MemberHomeletter() {
         <SubscriptionModal isOpen={modalIsOpen} onRequestClose={closeModal} />
       </header>
       <div className="thumbnails">
-        <Thumbnail
-          id={1}
-          src={mirror}
-          description="독자님의 가장 큰 인테리어 고민은 무엇인가요 ?"
-        />
-        <Thumbnail
-          id={2}
-          src={running}
-          description="똑똑한 자취, OO이 필수라고 ?"
-        />
-        <Thumbnail
-          id={3}
-          src={mirror}
-          description="자취생을 위한 돈 관리 방법"
-        />
-        <Thumbnail
-          id={4}
-          src={room}
-          description="이미 구매한 물건을 또 구매하고 있다면 !"
-        />
+        {letters.map((letter,index) => (
+          <Thumbnail
+            key={letter.letter_id}
+            id={letter.letter_id}
+            src={localImages[index % localImages.length]}
+            // src={letter.s3_key ? `http://3.36.240.5:3000/home_letters/${letter.s3_key}`:localImages[index % localImages.length]}
+            description={letter.title}
+            onClick={() => handleThumbnailClick(letter.letter_id, index)}
+            publicationDate={formatDate(new Date(letter.created_at))}
+          />
+        ))}
       </div>
       <Button onClick={handleButtonClick} className="subscribe-button">
           내 고민 보내기
