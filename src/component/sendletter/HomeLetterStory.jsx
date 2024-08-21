@@ -3,8 +3,8 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import houseimage from '../img/house.png';
 import axios from 'axios';
-import shareletter1 from '../img/shareletter1.png';
-import shareletter2 from '../img/shareletter2.png';
+import shareletter1 from '../img/room.png';
+import shareletter2 from '../img/running.png';
 
 const PageContainer = styled.div`
   background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.2) 40.77%);
