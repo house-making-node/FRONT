@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "../api/UserContext";
+import room from '../img/room.png';
 
 const Type = styled.div`
   display: flex;

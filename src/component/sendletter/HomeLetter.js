@@ -86,6 +86,7 @@ function HomeLetter() {
   const handleThumbnailClick = (id, index) => {
     navigate(`/home-letter-story/${id}`, { state: { letters, currentIndex: index } });
   }
+  
 
 
   return (
