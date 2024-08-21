@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import Cookies from 'js-cookie';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Cookies from "js-cookie";
 
 const Container = styled.div`
   display: flex;
@@ -58,18 +58,17 @@ const Button = styled.button`
 
 const KakaoWelcome = () => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState('강동균'); 
+  const [userName, setUserName] = useState("박시현");
 
   useEffect(() => {
-    
-    const userId = Cookies.get('userId');  
+    const userId = Cookies.get("userId");
     if (userId) {
-      setUserName(userId);    
+      setUserName(userId);
     }
   }, []);
 
   const handleConfirm = () => {
-    navigate('/consulting/step1Page');
+    navigate("/consulting/step1");
   };
 
   return (

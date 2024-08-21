@@ -154,26 +154,26 @@ export default function MyProject() {
     }
   };
 
-  const handleClick = (signmessage) => {
+  const handleClick = (consultingId, signmessage) => {
     let path = "/";
     switch (signmessage) {
       case "집의 상태를 선택해주세요":
-        path = "/consulting/step1Page";
+        path = `/consulting/${consultingId}/step1`;
         break;
       case "좋아하는 분위기를 선택해주세요":
-        path = "/consulting/step2Page";
+        path = `/consulting/${consultingId}/step2`;
         break;
       case "사진을 첨부해주세요":
-        path = "/consulting/step3Page";
+        path = `/consulting/${consultingId}/step3`;
         break;
       case "고민을 작성해주세요":
-        path = "/consulting/step4Page";
+        path = `/consulting/${consultingId}/step4`;
         break;
       case "이전 화면으로 돌아가기":
-        path = "/consulting/consultLoading";
+        path = `/consulting/${consultingId}/consultLoading`;
         break;
       case "답변 확인하기":
-        path = "/consulting/gptAnswer"; //gpt화면
+        path = `/consulting/${consultingId}/gptAnswer`; //gpt화면
         break;
     }
     navigate(path);
@@ -225,7 +225,11 @@ export default function MyProject() {
                 <div className="text-xl m-3">
                   {userInfo?.user_name || "프로젝트 이름 없음"}
                 </div>
-                <Choice onClick={() => handleClick(project.signmessage)}>
+                <Choice
+                  onClick={() =>
+                    handleClick(project.consulting_id, project.signmessage)
+                  }
+                >
                   {project.signmessage || "메시지 없음"}
                 </Choice>
               </RoomType>
