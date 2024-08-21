@@ -94,7 +94,7 @@ const Option = styled.div`
 const FileButton = styled.label`
   width: 217px;
   height: 40px;
-  background: #e9e9e9;
+  background: ${(props) => (props.isFileSelected ? "#ca904b69" : "#e0e0e0")}; /* 파일 선택 시 진한 회색으로 변경 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,11 +104,9 @@ const FileButton = styled.label`
 `;
 
 const FileButtonText = styled.span`
-  width: 69px;
-  height: 26px;
   font-size: 18px;
   line-height: 25.72px;
-  text-align: left;
+  text-align: center; /* 텍스트 중앙 정렬 */
   color: #00000099;
 `;
 
@@ -200,6 +198,8 @@ function Step3Page() {
     formData.append("directory", "room_images");
     formData.append("image", file);
 
+    setIsPhotoUploaded(!!file); // 파일 선택 여부에 따라 상태 업데이트
+
     try {
       const response = await axios.post(
         "http://3.36.240.5:3000/consulting/requirements/room_image",
@@ -226,6 +226,8 @@ function Step3Page() {
     formData.append("consulting_id", consultingId);
     formData.append("folder_name", "blueprints");
     formData.append("image", file);
+
+    setIsBlueprintUploaded(!!file); // 파일 선택 여부에 따라 상태 업데이트
 
     try {
       const response = await axios.post(
@@ -298,8 +300,10 @@ function Step3Page() {
                 <span id="userNamePhoto">{userName}</span>님, 사진을 업로드해
                 주세요.
               </Label>
-              <FileButton>
-                <FileButtonText>파일 선택</FileButtonText>
+              <FileButton isFileSelected={isPhotoUploaded}>
+                <FileButtonText>
+                  {isPhotoUploaded ? "✔️ 파일 선택됨" : "파일 선택"} {/* 체크표시와 텍스트 중앙 정렬 */}
+                </FileButtonText>
                 <HiddenInput
                   type="file"
                   id="photoUpload"
@@ -341,8 +345,11 @@ function Step3Page() {
                   />
                 </div>
               )}
-              <FileButton>
-                <FileButtonText>파일 선택</FileButtonText>
+
+              <FileButton isFileSelected={isBlueprintUploaded}>
+                <FileButtonText>
+                  {isBlueprintUploaded ? "✔️ 파일 선택됨" : "파일 선택"} {/* 체크표시와 텍스트 중앙 정렬 */}
+                </FileButtonText>
                 <HiddenInput
                   type="file"
                   id="blueprintUpload"
