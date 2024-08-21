@@ -29,7 +29,7 @@ import axios from "axios";
 //     }
 // `;
 
-const localImages = [mirror, running,mirror, room];
+const localImages = [mirror, running, mirror, room];
 
 function HomeLetter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -105,7 +105,8 @@ function HomeLetter() {
           <Thumbnail
             key={letter.letter_id}
             id={letter.letter_id}
-            src={letter.s3_key ?  `http://3.36.240.5:3000/${letter.s3_key}`:localImages[index % localImages.length]}
+            src={localImages[index % localImages.length]}
+            // src={letter.s3_key ? `http://3.36.240.5:3000/home_letters/${letter.s3_key}`:localImages[index % localImages.length]}
             description={letter.title}
             onClick={() => handleThumbnailClick(letter.letter_id, index)}
             publicationDate={new Date(letter.created_at).toLocaleDateString('ko-KR')}
