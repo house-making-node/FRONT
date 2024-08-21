@@ -6,13 +6,16 @@
   box-sizing: border-box;
   position: relative;
   z-index: 1;
-
 }
 
 .ShareLetter-header {
   text-align: center;
   margin-bottom: 20px;
-  background: linear-gradient(to bottom, rgba(239, 214, 187, 0.25) ,rgba(255, 255, 255, 0.5) );
+  background: linear-gradient(
+    to bottom,
+    rgba(239, 214, 187, 0.25),
+    rgba(255, 255, 255, 0.5)
+  );
 }
 
 .header-content {
@@ -25,15 +28,15 @@
   display: inline-block;
   margin-right: 10px;
   vertical-align: middle;
-  margin-bottom:0px;
-  margin-top:160px;
+  margin-bottom: 0px;
+  margin-top: 160px;
 }
 
 .ShareLetter-header h1 {
   padding-top: 20px;
   font-size: 24px;
   margin-bottom: 10px;
-  margin-top:0px;
+  margin-top: 0px;
 }
 
 .ShareLetter-header p {
@@ -59,21 +62,20 @@
 .thumbnails {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; 
+  gap: 20px;
   justify-content: space-between;
-  width: 816px; 
+  width: 816px;
   height: 847px;
   overflow: auto;
-  margin: 0 auto; 
-  box-sizing: border-box; 
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .thumbnail {
   width: 332px;
-  height: 293px; 
+  height: 293px;
   box-sizing: border-box;
   position: relative;
-  /* overflow: hidden; */
 }
 
 .thumbnail-image-container {
@@ -91,7 +93,7 @@
 .thumbnail-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; 
+  object-fit: cover;
   display: block;
 }
 
@@ -109,21 +111,21 @@
   width: 24px;
   height: 24px;
   z-index: 2;
-  padding: 2px; 
+  padding: 2px;
 }
 
 /* .bookmark-button::before {
   content: url('../img/bookmark.png') no-repeat center center;
   background-size: cover; 
   font-size: 24px; /* 아이콘 크기 */
-  /* color: rgb(250, 246, 246); /* 기본 아이콘 색상 */
-/* } */ */
+/* color: rgb(250, 246, 246); /* 기본 아이콘 색상 */
+/* } */
 
 /* .bookmark-button.bookmarked::before {
   content:  '\2661';
   background-size: cover;
   color: rgb(188, 34, 34); 
-} */ */
+} */
 
 .modal {
   position: absolute;
@@ -149,7 +151,7 @@
 .modal-content {
   text-align: left;
 }
-  
+
 .modal h2 {
   font-size: 24px;
   color: #333;
@@ -242,7 +244,7 @@
   background-color: white;
   padding: 20px;
   border-radius: 0px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   display: flex;
   justify-content: center;
@@ -304,12 +306,11 @@
   align-self: center;
 }
 
-
 .confirm-button {
   position: absolute;
   margin-top: 10px;
   padding: 5px 15px;
-  background-color:#dcb88d;
+  background-color: #dcb88d;
   color: white;
   border: none;
   cursor: pointer;
