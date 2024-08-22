@@ -58,7 +58,7 @@ const Button = styled.button`
 
 const KakaoWelcome = () => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState('강동균'); 
+  const [userName, setUserName] = useState(); 
 
   useEffect(() => {
     
@@ -75,7 +75,7 @@ const KakaoWelcome = () => {
   return (
     <Container>
       <Box>
-        <Message>{userName}님 반가워요! 로그인이 완료 되었어요.</Message>
+        <Message>박시현님 반가워요! 로그인이 완료 되었어요.</Message>
         <SubMessage>
           이제 인테리어 전문가에게 받는 컨설팅 서비스를 이용할 수 있어요.
         </SubMessage>

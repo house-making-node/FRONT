@@ -46,8 +46,9 @@ const KakaoLogin = () => {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.success) {  
-          Cookies.set('userId', data.userId);
+        console.log('Backend response:', data);
+        if (data.success && data.user_id) {  
+          Cookies.set('user_id', data.user_id);
           console.log('userId stored in cookie:', Cookies.get('userId'));
           navigate('/KakaoAgreement');  
         } else {
