@@ -199,6 +199,14 @@ const ShareLetterStory = ({ addScrap }) => {
     navigate('/myscrap/shareletter');
   };
 
+  const handleNavigate1 = () => {
+    navigate(`/share-letter-story/35`);
+  };
+
+  const handleNavigate2 = () => {
+    navigate(`/share-letter-story/34`);
+  };
+
   return (
     <PageContainer>
       <HouseImage src={houseimage} alt="House" />
@@ -214,13 +222,17 @@ const ShareLetterStory = ({ addScrap }) => {
       <HorizontalLine />
       <ImageContainer>
         <ImageWrapper>
-          <ShareLetter1 src={shareletter1} alt="Share Letter 1" />
-          <ImageDescription>일주일에 두 번 0원 쓰기, 지출 감소에 효과가 있을까 ?</ImageDescription>
+          <button onClick={handleNavigate1} style={{ border: 'none', background: 'none', padding: '0' }}>
+            <ShareLetter1 src={shareletter1} alt="Share Letter 1" />
+          </button>
+          <ImageDescription>일주일에 두 번 0원 쓰기, 지출 감소에 효과가 있을까?</ImageDescription>
           <ImageDay>2024년 05월 22일</ImageDay>
           <Button onClick={handleButtonClick1}>의견 보내기</Button>
         </ImageWrapper>
         <ImageWrapper>
-          <ShareLetter2 src={shareletter2} alt="Share Letter 2" />
+          <button onClick={handleNavigate2} style={{ border: 'none', background: 'none', padding: '0' }}>
+            <ShareLetter2 src={shareletter2} alt="Share Letter 2" />
+          </button>
           <ImageDescription>식물 덕후가 알려주는 키우기 좋은 식물들 🪴</ImageDescription>
           <ImageDay>2024년 05월 22일</ImageDay>
           <Button onClick={handleButtonClick2}>공유레터 저장하기</Button>
@@ -231,3 +243,4 @@ const ShareLetterStory = ({ addScrap }) => {
 };
 
 export default ShareLetterStory;
+
