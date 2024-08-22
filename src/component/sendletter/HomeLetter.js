@@ -29,7 +29,8 @@ import axios from "axios";
 //     }
 // `;
 
-const localImages = [mirror, running, mirror, room];
+const localImages = ['https://i.pinimg.com/564x/32/6f/d8/326fd8b7bcbeb1be72dc248ac82dee43.jpg',
+  'https://i.pinimg.com/564x/e7/79/48/e77948d60aaac31ebf258b79c78bdb53.jpg', 'https://i.pinimg.com/564x/9e/e5/10/9ee51065f6b9845648f237caee6f0ef8.jpg', 'https://i.pinimg.com/736x/11/17/c8/1117c89ca52078eb33d5be633eff929f.jpg'];
 
 function HomeLetter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);

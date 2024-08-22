@@ -283,7 +283,6 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  background-color: rgba(204, 204, 204, 0);
 }
 
 .popup-content h2 {

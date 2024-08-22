@@ -3,8 +3,12 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import houseimage from '../img/house.png';
 import axios from 'axios';
-import shareletter1 from '../img/room.png';
-import shareletter2 from '../img/running.png';
+// import shareletter1 from 'https://i.pinimg.com/564x/32/6f/d8/326fd8b7bcbeb1be72dc248ac82dee43.jpg';
+// import shareletter2 from 'https://i.pinimg.com/564x/9e/e5/10/9ee51065f6b9845648f237caee6f0ef8.jpg';
+
+
+const shareletter1 = ['https://i.pinimg.com/564x/32/6f/d8/326fd8b7bcbeb1be72dc248ac82dee43.jpg'];
+const shareletter2 = ['https://i.pinimg.com/736x/11/17/c8/1117c89ca52078eb33d5be633eff929f.jpg'];
 
 const PageContainer = styled.div`
   background: linear-gradient(180deg, rgba(239, 214, 187, 0.25) 20.82%, rgba(255, 255, 255, 0.2) 40.77%);
@@ -123,7 +127,7 @@ const HorizontalLine = styled.hr`
   margin-top: 150px;
 `;
 
-const ImageWrapper = styled.button`
+const ImageWrapper = styled.div`
   text-align: left;
   font-size: 20px;
   margin-left: -50px;
@@ -198,7 +202,7 @@ const HomeLetterStory = () => {
 
       } catch (err) {
         setError('데이터를 가져오는 중 오류가 발생했습니다.');
-        // navigate('http://3.36.240.5:3000/home_letters/40');
+        // navigate('http://3.36.240.5:3000/home_letters/57');
       } finally {
         setLoading(false);
       }
@@ -254,14 +258,20 @@ const handleNavigateToPrev = () => {
       </MessageContainer>
       <HorizontalLine />
       <ImageContainer>
-        <ImageWrapper onClick={handleNavigateToNext}>
-          <ShareLetter1 src={shareletter1} alt="Share Letter 1" />
+      <ImageWrapper>
+          <button onClick={handleNavigateToNext} style={{ border: 'none', background: 'none', padding: '0' }}>
+            <ShareLetter1 src={shareletter1[0]} alt="Share Letter 1" />
+          </button>
           <ImageDescription>{nextLetter.title}</ImageDescription>
           <ImageDay>{formatDate(nextLetter.created_at)}</ImageDay>
           <Button onClick={handleButtonClick1}>의견 보내기</Button>
         </ImageWrapper>
-        <ImageWrapper onClick={handleNavigateToPrev}>
-          <ShareLetter2 src={shareletter2} alt="Share Letter 2" />
+
+        {/* 두 번째 이미지와 버튼 */}
+        <ImageWrapper>
+          <button onClick={handleNavigateToPrev} style={{ border: 'none', background: 'none', padding: '0' }}>
+            <ShareLetter2 src={shareletter2[0]} alt="Share Letter 2" />
+          </button>
           <ImageDescription>{prevLetter.title}</ImageDescription>
           <ImageDay>{formatDate(prevLetter.created_at)}</ImageDay>
           <Button2 onClick={handleButtonClick2}>인테리어 컨설팅 신청하기</Button2>
@@ -269,6 +279,6 @@ const handleNavigateToPrev = () => {
       </ImageContainer>
     </PageContainer>
   );
-}
+};
 
 export default HomeLetterStory;
